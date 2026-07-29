@@ -26,6 +26,31 @@ export type MindNode = {
 
 export class MindmapError extends Error {}
 
+/* ── 装饰兼容层 ────────────────────────────────────────────────────────────
+ * 编辑器（blog-editor/src/components/MindmapCanvas.tsx）会把节点元数据写成行尾
+ * {p1 60% note="…"}，把外框/概要/联系线写在 `---` 之后的指令区。静态渲染只画树，
+ * 这里先把这些装饰摘掉，免得它们作为文字漏进标签、或者被当成第二个中心主题。
+ * ------------------------------------------------------------------------ */
+
+const META_TOKEN = /^(?:#\S+|p[1-7]|\d{1,3}%|collapsed|(?:note|link|img|flag)=[\s\S]*)$/;
+const META_SPLIT = /(?:[^\s"]|"(?:\\.|[^"\\])*")+/g;
+
+function stripDecorations(source: string): string {
+  const lines = source.replace(/\r\n?/g, '\n').split('\n');
+  const cut = lines.findIndex((line) => /^\s*---+\s*$/.test(line));
+  const body = cut >= 0 ? lines.slice(0, cut) : lines;
+  return body.map(stripMeta).join('\n');
+}
+
+function stripMeta(line: string): string {
+  const m = /^(.*?)\s*\{([^{}]*)\}$/.exec(line);
+  if (!m) return line;
+  const tokens = m[2].match(META_SPLIT) || [];
+  // 有一个 token 认不出来就整段当普通文字，老文章里的 `foo {bar}` 不会被吃掉
+  if (!tokens.every((token) => META_TOKEN.test(token))) return line;
+  return m[1];
+}
+
 /* ── 解析 ──────────────────────────────────────────────────────────────── */
 
 /**
@@ -35,7 +60,7 @@ export class MindmapError extends Error {}
 export function parseMindmap(source: string): MindNode {
   const rows: { indent: number; label: string }[] = [];
 
-  source.split(/\r?\n/).forEach((rawLine, i) => {
+  stripDecorations(source).split(/\r?\n/).forEach((rawLine, i) => {
     const line = rawLine.replace(/\t/g, '  ');
     if (!line.trim()) return;
 
