@@ -237,17 +237,57 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   const progressLabel = document.getElementById('reading-progress-label');
   const remainingLabel = document.getElementById('reading-remaining-label');
 
+  async function renderMindmapBlocks() {
+    if (!(articleContent instanceof HTMLElement)) return;
+
+    // Shiki 不认识 mindmap，靠 astro.config.mjs 的 langAlias 把语言标记保留在
+    // pre[data-language] 上。注意不能用 code.language-mindmap —— Shiki 的输出里
+    // <code> 上没有语言类。
+    const blocks = Array.from(
+      articleContent.querySelectorAll('pre[data-language="mindmap"]'),
+    );
+    if (blocks.length === 0) return;
+
+    const { renderMindmap } = await import('../scripts/mindmap');
+    const mounted: Array<{ host: HTMLElement; source: string }> = [];
+
+    blocks.forEach((pre) => {
+      if (!(pre instanceof HTMLPreElement)) return;
+      const code = pre.querySelector(':scope > code');
+      const source = code?.textContent || '';
+
+      const frame = document.createElement('div');
+      frame.className = 'mindmap-frame';
+      pre.replaceWith(frame);
+
+      renderMindmap(frame, source);
+      mounted.push({ host: frame, source });
+    });
+
+    // 视口变化会改变单侧／双侧布局和画布宽度，防抖后整张重画
+    let timer = 0;
+    let lastWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        mounted.forEach(({ host, source }) => renderMindmap(host, source));
+      }, 200);
+    });
+  }
+
   async function renderMermaidBlocks() {
     if (!(articleContent instanceof HTMLElement)) return;
 
-    const blocks = articleContent.querySelectorAll('pre > code.language-mermaid');
-    blocks.forEach((code) => {
-      const pre = code.parentElement;
+    const blocks = articleContent.querySelectorAll('pre[data-language="mermaid"]');
+    blocks.forEach((pre) => {
       if (!(pre instanceof HTMLPreElement)) return;
+      const code = pre.querySelector(':scope > code');
 
       const diagram = document.createElement('div');
       diagram.className = 'mermaid';
-      diagram.textContent = code.textContent || '';
+      diagram.textContent = code?.textContent || '';
 
       const frame = document.createElement('div');
       frame.className = 'mermaid-diagram';
@@ -360,7 +400,9 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     remainingLabel.textContent = percent >= 96 ? '即将读完' : `预计剩余约 ${remaining} 分钟`;
   }
 
-  renderMermaidBlocks().then(enhanceCodeBlocks);
+  renderMindmapBlocks()
+    .then(renderMermaidBlocks)
+    .then(enhanceCodeBlocks);
   updateReadingProgress();
   window.addEventListener('scroll', updateReadingProgress, { passive: true });
   window.addEventListener('resize', updateReadingProgress);
@@ -576,5 +618,170 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   .article-prose :global(.mermaid svg) {
     height: auto;
     max-width: 100%;
+  }
+
+  /* ───────────────────────────────────────────────────────────────────────
+     思维导图（方案 B「稿纸」）
+     与编辑器 blog-editor/src/index.css 内的 .mindmap 样式保持一致，
+     改这里请同步改那边，否则编辑器预览和线上呈现会长得不一样。
+     渲染逻辑在 src/scripts/mindmap.ts。
+     ─────────────────────────────────────────────────────────────────────── */
+  .article-prose :global(.mindmap-frame) {
+    margin: 1.9rem 0;
+    /* 稿纸略微溢出正文栏，给双侧展开多留 48px —— 放不下时渲染器会自动改单侧 */
+    margin-inline: -1.5rem;
+  }
+
+  .article-prose :global(.mindmap) {
+    position: relative;
+    border-radius: 3px 10px 4px 9px;
+    /* 横格纸纹压到几乎看不见，只提供纸的暗示 */
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 27px,
+        rgba(120, 104, 74, 0.055) 27px 28px
+      ),
+      radial-gradient(120% 90% at 18% 0%, #fdfbf6 0%, #fbf7ef 46%, #f6f0e4 100%);
+    box-shadow:
+      0 1px 0 rgba(120, 104, 74, 0.1),
+      0 14px 32px -20px rgba(120, 104, 74, 0.5);
+    padding: 22px 20px 26px;
+    overflow: hidden;
+  }
+
+  .article-prose :global(.mindmap__label) {
+    font-family: 'KaiTi', 'STKaiti', 'Kaiti SC', 'TW-Kai', 'AR PL UKai CN', Georgia, 'Noto Serif SC', serif;
+    font-size: 0.85rem;
+    color: #9c8a68;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    padding-left: 4px;
+  }
+
+  .article-prose :global(.mindmap__scroll) {
+    overflow-x: auto;
+  }
+
+  .article-prose :global(.mindmap__stage) {
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .article-prose :global(.mindmap__links) {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .article-prose :global(.mindmap-node) {
+    position: absolute;
+    transform: translateY(-50%);
+    font-family: 'KaiTi', 'STKaiti', 'Kaiti SC', 'TW-Kai', 'AR PL UKai CN', Georgia, 'Noto Serif SC', serif;
+    overflow-wrap: break-word;
+    /* 换行时避免末行只剩一个字 */
+    text-wrap: pretty;
+    margin: 0;
+  }
+
+  /* 中心主题：唯一的赤陶橙，描边式投影 = 马克笔压痕 */
+  .article-prose :global(.mindmap-node--root) {
+    background: #c04a1a;
+    color: #fdf6ee;
+    font-size: 1.06rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.35;
+    text-align: center;
+    padding: 9px 16px 10px;
+    border-radius: 13px 8px 14px 9px;
+    box-shadow: 1.5px 2px 0 rgba(58, 52, 43, 0.85);
+  }
+
+  /* 分支：圆角四角不等 + 微旋转（JS 注入）= 手绘不规则 */
+  .article-prose :global(.mindmap-node--branch) {
+    background: #fffdf8;
+    color: #3a342b;
+    font-size: 0.94rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    padding: 6px 13px 7px;
+    border: 1.6px solid #3a342b;
+    border-radius: 11px 7px 12px 8px;
+    box-shadow: 1px 1.5px 0 rgba(58, 52, 43, 0.55);
+  }
+
+  .article-prose :global(.mindmap-node--leaf) {
+    font-size: 0.85rem;
+    color: #5a5145;
+    line-height: 1.5;
+  }
+
+  .article-prose :global(.mindmap-node--leaf)::before {
+    content: '·';
+    color: #c04a1a;
+    font-weight: 700;
+    margin-right: 5px;
+    font-size: 1.06rem;
+    line-height: 0;
+  }
+
+  .article-prose :global(.mindmap-node--leaf.is-left) {
+    text-align: right;
+  }
+
+  .article-prose :global(.mindmap-node--leaf.is-left)::before {
+    content: none;
+  }
+
+  .article-prose :global(.mindmap-node--leaf.is-left)::after {
+    content: '·';
+    color: #c04a1a;
+    font-weight: 700;
+    margin-left: 5px;
+    font-size: 1.06rem;
+    line-height: 0;
+  }
+
+  .article-prose :global(.mindmap__empty),
+  .article-prose :global(.mindmap__error) {
+    font-family: 'KaiTi', 'STKaiti', 'Kaiti SC', Georgia, serif;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: #9c8a68;
+    padding: 10px 4px 6px;
+    white-space: pre-wrap;
+    margin: 0;
+  }
+
+  .article-prose :global(.mindmap__error) {
+    color: #9b2c2c;
+  }
+
+  /* 窄屏：把字号和内边距各收一档，换回横向空间，减少叶子折行 */
+  @media (max-width: 640px) {
+    .article-prose :global(.mindmap-frame) {
+      margin-inline: -1rem;
+    }
+
+    .article-prose :global(.mindmap) {
+      padding: 16px 12px 18px;
+    }
+
+    .article-prose :global(.mindmap-node--root) {
+      font-size: 0.98rem;
+      padding: 7px 12px 8px;
+    }
+
+    .article-prose :global(.mindmap-node--branch) {
+      font-size: 0.88rem;
+      padding: 5px 10px 6px;
+    }
+
+    .article-prose :global(.mindmap-node--leaf) {
+      font-size: 0.8rem;
+    }
   }
 </style>
