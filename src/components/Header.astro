@@ -1,109 +1,64 @@
 ---
 import LocalIcon from './LocalIcon.astro';
 const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: '/', label: '首页', icon: 'house', active: currentPath === '/' },
+  { href: '/blog', label: '文章', icon: 'book-open', active: currentPath.startsWith('/blog') },
+  { href: '/categories', label: '分类', icon: 'layout-grid', active: currentPath.startsWith('/categories') },
+  { href: '/#tags', label: '标签', icon: 'tag', active: false },
+  { href: '/#about', label: '关于', icon: 'user', active: false },
+  { href: '/search', label: '搜索', icon: 'search', active: currentPath.startsWith('/search') },
+];
 ---
 
-<header class="sticky top-0 z-50 border-b border-stone-200/80 backdrop-blur-xl bg-white/82 shadow-[0_14px_40px_rgba(148,163,184,0.10)]">
+<header class="sticky top-0 z-50 border-b border-stone-200/70 bg-[#fffdf8]/85 shadow-[0_10px_32px_rgba(120,102,72,0.08)] backdrop-blur-xl">
   <nav class="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3 md:px-6 md:py-4">
-    <a href="/" class="flex items-center group">
-      <span class="font-['Ma_Shan_Zheng','Noto_Serif_SC',cursive] text-2xl font-normal tracking-normal text-slate-800 transition-colors duration-200 group-hover:text-amber-500 md:text-3xl">
+    <a href="/" class="group flex items-center">
+      <span class="font-['Ma_Shan_Zheng','Noto_Serif_SC',cursive] text-2xl font-normal tracking-wide text-stone-800 transition-colors duration-200 group-hover:text-amber-700 md:text-3xl">
         晨熠
       </span>
     </a>
-    <div class="hidden items-center gap-7 text-base lg:flex">
-      <a
-        href="/"
-        class:list={[
-          'flex items-center gap-2 transition-colors duration-200',
-          currentPath === '/' ? 'text-orange-500' : 'text-stone-500 hover:text-orange-500',
-        ]}
-      >
-        <LocalIcon name="house" class="w-4 h-4" />
-        首页
-      </a>
-      <a
-        href="/blog"
-        class:list={[
-          'flex items-center gap-2 transition-colors duration-200',
-          currentPath.startsWith('/blog') ? 'text-sky-600' : 'text-stone-500 hover:text-sky-600',
-        ]}
-      >
-        <LocalIcon name="book-open" class="w-4 h-4" />
-        文章
-      </a>
-      <a
-        href="/categories"
-        class:list={[
-          'flex items-center gap-2 transition-colors duration-200',
-          currentPath.startsWith('/categories') ? 'text-emerald-600' : 'text-stone-500 hover:text-emerald-600',
-        ]}
-      >
-        <LocalIcon name="layout-grid" class="w-4 h-4" />
-        分类
-      </a>
-      <a
-        href="/#tags"
-        class="flex items-center gap-2 text-stone-500 transition-colors duration-200 hover:text-violet-600"
-      >
-        <LocalIcon name="tag" class="w-4 h-4" />
-        标签
-      </a>
+    <div class="hidden items-center gap-7 text-[15px] lg:flex">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'relative flex items-center gap-1.5 pb-0.5 transition-colors duration-200',
+            item.active
+              ? 'font-medium text-amber-700 after:absolute after:inset-x-1 after:-bottom-1 after:h-[2px] after:rounded-full after:bg-amber-500/80'
+              : 'text-stone-500 hover:text-amber-700',
+          ]}
+        >
+          <LocalIcon name={item.icon} class="h-4 w-4" />
+          {item.label}
+        </a>
+      ))}
       <a
         href="https://github.com/rain1andsnow2a"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-2 text-stone-500 hover:text-slate-700 transition-colors duration-200"
+        class="flex items-center gap-1.5 text-stone-500 transition-colors duration-200 hover:text-stone-800"
       >
-        <LocalIcon name="github" class="w-4 h-4" />
+        <LocalIcon name="github" class="h-4 w-4" />
         GitHub
-      </a>
-      <a
-        href="/#about"
-        class="flex items-center gap-2 text-stone-500 transition-colors duration-200 hover:text-slate-700"
-      >
-        <LocalIcon name="user" class="w-4 h-4" />
-        关于
-      </a>
-      <a
-        href="/search"
-        class:list={[
-          'flex items-center gap-2 transition-colors duration-200',
-          currentPath.startsWith('/search') ? 'text-orange-500' : 'text-stone-500 hover:text-orange-500',
-        ]}
-      >
-        <LocalIcon name="search" class="w-4 h-4" />
-        搜索
       </a>
     </div>
 
     <details class="group relative lg:hidden">
-      <summary class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-2xl border border-stone-200 bg-white/80 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition-colors hover:text-orange-500">
+      <summary class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-2xl border border-stone-200 bg-white/80 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition-colors hover:text-amber-700">
         <LocalIcon name="menu" class="h-5 w-5" />
       </summary>
       <div class="absolute right-0 top-12 w-56 overflow-hidden rounded-2xl border border-stone-200 bg-white p-2 text-base shadow-[0_20px_50px_rgba(15,23,42,0.16)]">
-        <a href="/" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-orange-50 hover:text-orange-500">
-          <LocalIcon name="house" class="w-4 h-4" />
-          首页
-        </a>
-        <a href="/blog" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-sky-50 hover:text-sky-600">
-          <LocalIcon name="book-open" class="w-4 h-4" />
-          文章
-        </a>
-        <a href="/categories" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-emerald-50 hover:text-emerald-600">
-          <LocalIcon name="layout-grid" class="w-4 h-4" />
-          分类
-        </a>
-        <a href="/#tags" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-violet-50 hover:text-violet-600">
-          <LocalIcon name="tag" class="w-4 h-4" />
-          标签
-        </a>
-        <a href="/#about" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-slate-50 hover:text-slate-800">
-          <LocalIcon name="user" class="w-4 h-4" />
-          关于
-        </a>
-        <a href="/search" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-orange-50 hover:text-orange-500">
-          <LocalIcon name="search" class="w-4 h-4" />
-          搜索
+        {navItems.map((item) => (
+          <a href={item.href} class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-amber-50 hover:text-amber-700">
+            <LocalIcon name={item.icon} class="h-4 w-4" />
+            {item.label}
+          </a>
+        ))}
+        <a href="https://github.com/rain1andsnow2a" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-stone-50 hover:text-stone-800">
+          <LocalIcon name="github" class="h-4 w-4" />
+          GitHub
         </a>
       </div>
     </details>

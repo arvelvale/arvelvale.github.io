@@ -34,7 +34,7 @@ const coverImages = [
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(251,146,60,0.12),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(56,189,248,0.10),transparent_22%)]"></div>
         <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
           <div>
-            <h1 class="text-5xl font-bold tracking-tight text-slate-900">文章</h1>
+            <h1 class="font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-5xl font-semibold tracking-tight text-stone-800">文章</h1>
             <p class="archive-intro">
               把技术探索、学习札记与思考片段按时间展开。这里更像一条长长的航迹，能看到我最近在追逐什么、停留什么、又在重新理解什么。
             </p>
@@ -130,7 +130,7 @@ const coverImages = [
 
         <aside class="space-y-6">
           <section class="rounded-[1.7rem] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-            <h3 class="text-3xl font-semibold text-slate-900">分类总览</h3>
+            <h3 class="font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-2xl font-semibold text-stone-800">分类总览</h3>
             <div class="mt-5 space-y-3">
               {categories.map(([name, count], index) => {
                 const meta = getCategoryMeta(name, index);
@@ -168,12 +168,12 @@ const coverImages = [
     --article-card-min-height: 284px;
     --article-card-image-height: 128px;
     --article-title-size: 19px;
-    --article-desc-size: 12px;
+    --article-desc-size: 13.5px;
     --article-card-letter-spacing: 0.01em;
     --archive-copy-size: 18px;
     --archive-copy-line-height: 1.43;
     --archive-copy-letter-spacing: 0.01em;
-    --archive-copy-color: #642ce8;
+    --archive-copy-color: #92724f;
     --archive-copy-margin-top: 31px;
     --archive-copy-max-width: 611px;
   }
@@ -215,19 +215,21 @@ const coverImages = [
     min-height: var(--article-card-min-height);
     overflow: hidden;
     flex-direction: column;
-    border: 1px solid rgb(226 232 240);
-    border-radius: 1rem;
+    border: 1px solid rgb(231 229 228);
+    border-radius: 1.25rem;
     background: #fff;
-    box-shadow: 0 14px 36px rgba(15, 23, 42, 0.07);
+    box-shadow: 0 10px 30px rgba(87, 73, 58, 0.06);
     letter-spacing: var(--article-card-letter-spacing);
     transition:
       transform 300ms ease,
-      box-shadow 300ms ease;
+      box-shadow 300ms ease,
+      border-color 300ms ease;
   }
 
   .article-card:hover {
     transform: translateY(-0.25rem);
-    box-shadow: 0 22px 48px rgba(15, 23, 42, 0.1);
+    border-color: rgb(254 215 170);
+    box-shadow: 0 20px 44px rgba(87, 73, 58, 0.1);
   }
 
   .article-card-media {
@@ -243,15 +245,15 @@ const coverImages = [
   }
 
   .article-card-title {
-    color: #0f172a;
+    color: #292524;
     font-size: var(--article-title-size);
-    font-weight: 700;
-    line-height: 1.32;
+    font-weight: 600;
+    line-height: 1.42;
     overflow-wrap: anywhere;
   }
 
   .article-card-desc {
-    color: #64748b;
+    color: #78716c;
     font-size: var(--article-desc-size);
     overflow-wrap: anywhere;
   }
@@ -262,7 +264,7 @@ const coverImages = [
   }
 
   .blog-archive-surface[data-card-font='serif'] .article-card {
-    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
+    font-family: 'LXGW WenKai Screen', 'Noto Serif SC', 'Noto Sans SC', serif;
   }
 
   @media (max-width: 768px) {

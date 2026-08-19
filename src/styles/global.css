@@ -40,3 +40,17 @@
     border-radius: 2px;
   }
 }
+
+@layer base {
+  /* 全局排版基调：温润字距 + 抗锯齿 */
+  body {
+    letter-spacing: 0.015em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: 0.01em;
+  }
+}

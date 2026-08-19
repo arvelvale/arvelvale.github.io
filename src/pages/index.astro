@@ -151,7 +151,7 @@ const cardImages = [
       <div class="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div>
           <div class="mb-5 flex items-center justify-between">
-            <h2 class="flex items-center gap-2 text-3xl font-semibold text-slate-900">
+            <h2 class="flex items-center gap-2 font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-3xl font-semibold text-stone-800">
               <LocalIcon name="book-open" class="h-6 w-6 text-orange-500" />
               最近文章
             </h2>
@@ -275,7 +275,7 @@ const cardImages = [
       <section id="about" class="mt-12 rounded-[1.8rem] border border-slate-200 bg-white px-8 py-7 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div class="max-w-3xl">
-            <h2 class="text-3xl font-semibold text-slate-900">关于</h2>
+            <h2 class="font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-3xl font-semibold text-stone-800">关于</h2>
             <p class="mt-3 text-lg leading-8 text-slate-600">
               我是晨熠，一个热爱技术的探索者。这个博客是我的数字花园，记录学习路上的点滴收获，也记录那些在宇宙般的信息海洋中被我真正抓住的火花。
             </p>
@@ -303,7 +303,7 @@ const cardImages = [
     --hero-title-size: 68px;
     --hero-subtitle-size: 25px;
     --hero-copy-size: 15px;
-    --hero-copy-color: #d2e826;
+    --hero-copy-color: #f3e9d7;
     --hero-copy-letter-spacing: 0.05em;
     --profile-width: 291px;
     --section-gap: 18px;
@@ -313,10 +313,10 @@ const cardImages = [
     --article-card-min-height: 284px;
     --article-card-image-height: 128px;
     --article-title-size: 19px;
-    --article-desc-size: 12px;
+    --article-desc-size: 13.5px;
     --article-card-letter-spacing: 0.01em;
     --side-panel-padding: 20px;
-    --side-title-size: 25px;
+    --side-title-size: 21px;
     --category-list-gap: 6px;
     --category-item-x: 12px;
     --category-item-y: 7px;
@@ -475,19 +475,21 @@ const cardImages = [
     min-height: var(--article-card-min-height);
     overflow: hidden;
     flex-direction: column;
-    border: 1px solid rgb(226 232 240);
-    border-radius: 1rem;
+    border: 1px solid rgb(231 229 228);
+    border-radius: 1.25rem;
     background: #fff;
-    box-shadow: 0 14px 36px rgba(15, 23, 42, 0.07);
+    box-shadow: 0 10px 30px rgba(87, 73, 58, 0.06);
     letter-spacing: var(--article-card-letter-spacing);
     transition:
       transform 300ms ease,
-      box-shadow 300ms ease;
+      box-shadow 300ms ease,
+      border-color 300ms ease;
   }
 
   .article-card:hover {
     transform: translateY(-0.25rem);
-    box-shadow: 0 22px 48px rgba(15, 23, 42, 0.1);
+    border-color: rgb(254 215 170);
+    box-shadow: 0 20px 44px rgba(87, 73, 58, 0.1);
   }
 
   .article-card-media {
@@ -503,15 +505,15 @@ const cardImages = [
   }
 
   .article-card-title {
-    color: #0f172a;
+    color: #292524;
     font-size: var(--article-title-size);
-    font-weight: 700;
-    line-height: 1.32;
+    font-weight: 600;
+    line-height: 1.42;
     overflow-wrap: anywhere;
   }
 
   .article-card-desc {
-    color: #64748b;
+    color: #78716c;
     font-size: var(--article-desc-size);
     overflow-wrap: anywhere;
   }
@@ -526,7 +528,7 @@ const cardImages = [
   }
 
   .home-design-surface[data-card-font='serif'] .article-card {
-    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
+    font-family: 'LXGW WenKai Screen', 'Noto Serif SC', 'Noto Sans SC', serif;
   }
 
   .home-design-surface[data-card-font='brush'] .article-card-title {

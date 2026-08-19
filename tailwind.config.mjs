@@ -20,7 +20,8 @@ export default {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       fontFamily: {
-        sans: ['Inter', 'Noto Sans SC', 'system-ui', 'sans-serif'],
+        sans: ['Inter', '"LXGW WenKai Screen"', 'Noto Sans SC', 'system-ui', 'sans-serif'],
+        serif: ['"LXGW WenKai Screen"', 'Noto Serif SC', '"Songti SC"', 'serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       typography: ({ theme }) => ({
