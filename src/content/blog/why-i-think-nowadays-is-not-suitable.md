@@ -17,7 +17,7 @@ Even We are in a carnival of AI,But today I want to talk about another demension
 
 ## 2. The other side of prosperity
 
-Because AI is powerful,so most of people think ai can do almost anything,but we forget that the default output of ai is equally to gravitate the statistically likely and conventional pattern without strong human direction. 
+Because AI is powerful,so most of people think ai can do almost anything,but we forget that the default output of ai is equally to gravitate the statistically likely and conventional pattern without strong human direction.
 
 So if we don't have our own idea,knowledge and thoughts,we may get many homogeneous product and article.Now we can see many article on the Internet is homegenous.
 
@@ -35,7 +35,7 @@ The bubble will bring destory,but will also bring opportunity.In last dot-com bu
 
 And besides the fundmental infra,also we can receive four kinds of leaves:
 
-[1.technology](http://1.technology)
+1.technology
 
 2.talent people,such as a group of research
 

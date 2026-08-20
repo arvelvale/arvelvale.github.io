@@ -8,7 +8,7 @@ export interface Props {
   pubDate?: Date;
 }
 
-const { title, description = '晨熠的个人博客 - 深空中的丁火', pubDate } = Astro.props;
+const { title, description = 'Thoughts on AI, Building, Markets, and Life.', pubDate } = Astro.props;
 ---
 
 <!doctype html>
@@ -24,7 +24,7 @@ const { title, description = '晨熠的个人博客 - 深空中的丁火', pubDa
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&family=Zhi+Mang+Xing&family=Liu+Jian+Mao+Cao&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <title>{title} | 晨熠的博客</title>
+    <title>{title} | Aerchen</title>
   </head>
   <body class="min-h-screen flex flex-col antialiased bg-[radial-gradient(circle_at_top_left,_rgba(249,115,22,0.08),_transparent_24%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.08),_transparent_28%),linear-gradient(180deg,_#fffdf8_0%,_#f7f2e9_100%)] text-slate-700">
     <slot />

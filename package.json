@@ -9,9 +9,9 @@
     "astro": "astro"
   },
   "keywords": [],
-  "author": "晨熠",
+  "author": "Aerchen",
   "license": "MIT",
-  "description": "晨熠的个人博客 - 深空中的丁火",
+  "description": "Aerchen's blog - Thoughts on AI, Building, Markets, and Life.",
   "dependencies": {
     "@astrojs/mdx": "^4.3.14",
     "@astrojs/preact": "^4.1.3",
