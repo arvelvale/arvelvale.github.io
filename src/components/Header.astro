@@ -3,12 +3,12 @@ import LocalIcon from './LocalIcon.astro';
 const currentPath = Astro.url.pathname;
 
 const navItems = [
-  { href: '/', label: '首页', icon: 'house', active: currentPath === '/' },
-  { href: '/blog', label: '文章', icon: 'book-open', active: currentPath.startsWith('/blog') },
-  { href: '/categories', label: '分类', icon: 'layout-grid', active: currentPath.startsWith('/categories') },
-  { href: '/#tags', label: '标签', icon: 'tag', active: false },
-  { href: '/#about', label: '关于', icon: 'user', active: false },
-  { href: '/search', label: '搜索', icon: 'search', active: currentPath.startsWith('/search') },
+  { href: '/', label: 'Home', icon: 'house', active: currentPath === '/' },
+  { href: '/blog', label: 'Articles', icon: 'book-open', active: currentPath.startsWith('/blog') },
+  { href: '/categories', label: 'Categories', icon: 'layout-grid', active: currentPath.startsWith('/categories') },
+  { href: '/#tags', label: 'Tags', icon: 'tag', active: false },
+  { href: '/#about', label: 'About', icon: 'user', active: false },
+  { href: '/search', label: 'Search', icon: 'search', active: currentPath.startsWith('/search') },
 ];
 ---
 

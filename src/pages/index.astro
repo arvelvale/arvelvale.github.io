@@ -90,14 +90,14 @@ const cardImages = [
                 class="inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#fb923c,#f97316)] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_38px_rgba(249,115,22,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_46px_rgba(249,115,22,0.42)]"
               >
                 <LocalIcon name="rocket" class="h-4 w-4" />
-                探索文章
+                Explore Articles
               </a>
               <a
                 href="#about"
                 class="inline-flex items-center gap-2 rounded-2xl border border-white/55 bg-white/8 px-6 py-3 text-base font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/14"
               >
                 <LocalIcon name="file-text" class="h-4 w-4" />
-                关于我
+                About Me
               </a>
             </div>
           </div>
@@ -153,13 +153,13 @@ const cardImages = [
           <div class="mb-5 flex items-center justify-between">
             <h2 class="flex items-center gap-2 font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-3xl font-semibold text-stone-800">
               <LocalIcon name="book-open" class="h-6 w-6 text-orange-500" />
-              最近文章
+              Recent Articles
             </h2>
             <a
               href="/blog"
               class="group inline-flex items-center gap-2 text-base font-medium text-orange-500 transition-colors hover:text-orange-600"
             >
-              查看全部
+              View All
               <LocalIcon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
           </div>
@@ -203,9 +203,11 @@ const cardImages = [
                     <h3 class="article-card-title">
                       {post.data.title}
                     </h3>
-                    <p class="article-card-desc mt-2 line-clamp-2 leading-6">
-                      {post.data.description || '继续向更深处走，记录路上的思考、技术与光。'}
-                    </p>
+                    {post.data.description && (
+                      <p class="article-card-desc mt-2 line-clamp-2 leading-6">
+                        {post.data.description}
+                      </p>
+                    )}
 
                     <div class="article-card-meta mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
                       <span class="inline-flex items-center gap-1.5">
