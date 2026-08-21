@@ -3,29 +3,29 @@
 @tailwind utilities;
 
 @layer base {
-  /* 自定义滚动条 - 浅色纸面主题 */
+  /* 自定义滚动条 - 暖纸主题 */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #eee7db;
+    background: #f3ecdd;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #c7b9a4;
+    background: #d6cab2;
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #b49a78;
+    background: #c04a1a;
   }
 
-  /* 选中文本的颜色 */
+  /* 选中文本：赤陶橙淡染 */
   ::selection {
-    background-color: rgba(14, 165, 233, 0.16);
-    color: #0f172a;
+    background-color: rgba(192, 74, 26, 0.14);
+    color: #2c2620;
   }
 
   /* 平滑滚动 */
@@ -35,7 +35,7 @@
 
   /* 链接焦点样式 */
   a:focus-visible {
-    outline: 2px solid #FBBF24;
+    outline: 2px solid #c04a1a;
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -50,7 +50,29 @@
     text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+
+  /* typography 插件的墨色变量（正文细节由 BlogPost 的 .article-prose 精调） */
+  .prose {
+    --tw-prose-body: #4a4237;
+    --tw-prose-headings: #2c2620;
+    --tw-prose-lead: #5d5346;
+    --tw-prose-links: #c04a1a;
+    --tw-prose-bold: #2c2620;
+    --tw-prose-counters: #8b7f6d;
+    --tw-prose-bullets: #d6cab2;
+    --tw-prose-hr: #e7dfcf;
+    --tw-prose-quotes: #5d5346;
+    --tw-prose-quote-borders: #c04a1a;
+    --tw-prose-captions: #8b7f6d;
+    --tw-prose-code: #9c3a12;
+    --tw-prose-th-borders: #d6cab2;
+    --tw-prose-td-borders: #e7dfcf;
   }
 }

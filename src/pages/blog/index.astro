@@ -2,8 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import LocalIcon from '../../components/LocalIcon.astro';
-import { getCategoryMeta } from '../../utils/categoryMeta';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog')).sort(
@@ -15,261 +13,106 @@ const categoryMap = posts.reduce((acc, post) => {
   acc.set(key, (acc.get(key) || 0) + 1);
   return acc;
 }, new Map<string, number>());
-
 const categories = Array.from(categoryMap.entries()).sort((a, b) => b[1] - a[1]);
-const coverImages = [
-  '/article-cover-knowledge-01.png',
-  '/article-cover-knowledge-02.png',
-  '/article-cover-knowledge-03.png',
-  '/article-cover-knowledge-04.png',
-];
+
+// 按年分组，时间线式归档
+const postsByYear = new Map<number, typeof posts>();
+for (const post of posts) {
+  const year = post.data.pubDate.getFullYear();
+  if (!postsByYear.has(year)) postsByYear.set(year, []);
+  postsByYear.get(year)?.push(post);
+}
+const years = Array.from(postsByYear.keys()).sort((a, b) => b - a);
+
+function formatDot(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}.${m}.${d}`;
+}
 ---
 
 <BaseLayout title="文章" description="Aerchen 的所有博客文章">
   <Header />
 
-  <main class="blog-archive-surface flex-1" data-card-font="serif" data-archive-copy-font="brush">
-    <section class="mx-auto max-w-[1500px] px-6 pb-8 pt-6">
-      <div class="relative overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(135deg,#ffffff_0%,#fff9f0_48%,#f7fbff_100%)] px-8 py-10 shadow-[0_28px_70px_rgba(15,23,42,0.10)]">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(251,146,60,0.12),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(56,189,248,0.10),transparent_22%)]"></div>
-        <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
-          <div>
-            <h1 class="font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-5xl font-semibold tracking-tight text-stone-800">文章</h1>
-            <p class="archive-intro">
-              把技术探索、学习札记与思考片段按时间展开。这里更像一条长长的航迹，能看到我最近在追逐什么、停留什么、又在重新理解什么。
-            </p>
-          </div>
-
-          <div class="rounded-[1.8rem] border border-slate-200 bg-white/85 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
-            <div class="grid grid-cols-2 gap-4 text-center">
-              <div class="rounded-2xl bg-slate-50 px-4 py-4">
-                <div class="text-3xl font-bold text-slate-900">{posts.length}</div>
-                <div class="mt-1 text-sm text-slate-500">文章总数</div>
-              </div>
-              <div class="rounded-2xl bg-slate-50 px-4 py-4">
-                <div class="text-3xl font-bold text-slate-900">{categories.length}</div>
-                <div class="mt-1 text-sm text-slate-500">分类数量</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <main class="mx-auto w-full max-w-5xl flex-1 px-6">
+    <section class="pb-4 pt-14 md:pt-20">
+      <h1 class="font-serif text-4xl font-bold text-ink">文章</h1>
+      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint">
+        把技术探索、学习札记与思考片段按时间展开，共
+        <span class="tabular-nums text-ink">{posts.length}</span> 篇。
+      </p>
     </section>
 
-    <section class="mx-auto max-w-[1500px] px-6 pb-16">
-      <div class="grid gap-8 xl:grid-cols-[minmax(0,1fr)_300px]">
-        <div>
-          <div class="article-card-grid">
-            {posts.map((post, index) => {
-              const formattedDate = post.data.pubDate.toLocaleDateString('zh-CN', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-              });
-              const readingMinutes = Math.max(4, Math.ceil((post.body?.length || 800) / 420));
-              const cover = post.data.cover || coverImages[index % coverImages.length];
-
-              return (
-                <a
-                  href={`/blog/${post.id}`}
-                  class="article-card group"
-                >
-                  <div class="article-card-media relative overflow-hidden">
-                    <img
-                      src={cover}
-                      alt={post.data.title}
-                      class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div class="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(15,23,42,0.6)_100%)]"></div>
-                  </div>
-
-                  <div class="article-card-body">
-                    <div class="mb-2 flex flex-wrap gap-2">
-                      <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-                        {post.data.category}
-                      </span>
-                      {post.data.tags.slice(0, 2).map((tag) => (
-                        <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-600">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <h2 class="article-card-title transition-colors duration-200 group-hover:text-orange-500">
-                      {post.data.title}
-                    </h2>
-
-                    {post.data.description && (
-                      <p class="article-card-desc mt-2 line-clamp-2 leading-6">
-                        {post.data.description}
-                      </p>
-                    )}
-
-                    <div class="article-card-meta mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
-                      <span class="inline-flex items-center gap-1.5">
-                        <LocalIcon name="calendar-days" class="h-4 w-4" />
-                        {formattedDate}
-                      </span>
-                      <span class="inline-flex items-center gap-1.5">
-                        <LocalIcon name="clock-3" class="h-4 w-4" />
-                        {readingMinutes} 分钟阅读
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-
-          {posts.length === 0 && (
-            <p class="rounded-[1.6rem] border border-slate-200 bg-white px-6 py-16 text-center text-slate-500 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-              暂无文章，敬请期待...
-            </p>
-          )}
-        </div>
-
-        <aside class="space-y-6">
-          <section class="rounded-[1.7rem] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-            <h3 class="font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-2xl font-semibold text-stone-800">分类总览</h3>
-            <div class="mt-5 space-y-3">
-              {categories.map(([name, count], index) => {
-                const meta = getCategoryMeta(name, index);
-
+    <div class="grid gap-12 pb-20 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-14">
+      <div>
+        {years.map((year) => (
+          <section class="mt-10 first:mt-8" aria-label={`${year} 年的文章`}>
+            <div class="flex items-center gap-4">
+              <h2 class="shrink-0 font-mono text-sm tabular-nums tracking-[0.12em] text-ink-ghost">
+                {year}
+              </h2>
+              <span class="h-px flex-1 bg-line" aria-hidden="true"></span>
+            </div>
+            <ul class="mt-2 divide-y divide-line/70">
+              {postsByYear.get(year)?.map((post) => {
+                const readingMinutes = Math.max(1, Math.ceil((post.body?.length || 800) / 420));
                 return (
-                  <a
-                    href={`/categories/${encodeURIComponent(name)}`}
-                    class="flex items-center justify-between rounded-2xl px-3 py-3 transition-colors hover:bg-slate-50"
-                  >
-                    <span class="flex items-center gap-3">
-                      <span class={`flex h-9 w-9 items-center justify-center rounded-xl border ${meta.soft} ${meta.accent} ${meta.ring}`}>
-                        <LocalIcon name={meta.icon} class="h-4 w-4" />
-                      </span>
-                      <span class="text-lg font-medium text-slate-700">{name}</span>
-                    </span>
-                    <span class="text-lg font-semibold text-slate-400">{count}</span>
-                  </a>
+                  <li>
+                    <a href={`/blog/${post.id}`} class="group block py-4 sm:flex sm:items-baseline sm:gap-6">
+                      <time
+                        datetime={post.data.pubDate.toISOString()}
+                        class="block font-mono text-[13px] tabular-nums text-ink-ghost sm:w-[88px] sm:shrink-0"
+                      >
+                        {formatDot(post.data.pubDate)}
+                      </time>
+                      <div class="mt-1 min-w-0 sm:mt-0">
+                        <h3 class="text-[17px] font-medium leading-snug text-ink transition-colors group-hover:text-ember">
+                          {post.data.title}
+                        </h3>
+                        {post.data.description && (
+                          <p class="mt-1 line-clamp-1 text-sm leading-6 text-ink-faint">
+                            {post.data.description}
+                          </p>
+                        )}
+                        <p class="mt-1.5 text-xs text-ink-ghost">
+                          {post.data.category}
+                          <span class="mx-1 text-line-strong">·</span>
+                          约 {readingMinutes} 分钟
+                        </p>
+                      </div>
+                    </a>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </section>
-        </aside>
-      </div>
-    </section>
+        ))}
 
+        {posts.length === 0 && (
+          <p class="py-16 text-center text-ink-faint">暂无文章，敬请期待。</p>
+        )}
+      </div>
+
+      <aside class="lg:pt-[4.7rem]">
+        <div class="lg:sticky lg:top-24">
+          <h2 class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">分类总览</h2>
+          <ul class="mt-4 space-y-2.5">
+            {categories.map(([name, count]) => (
+              <li>
+                <a
+                  href={`/categories/${encodeURIComponent(name)}`}
+                  class="group flex items-baseline justify-between gap-3 text-[14px]"
+                >
+                  <span class="text-ink-soft transition-colors group-hover:text-ember">{name}</span>
+                  <span class="font-mono text-xs tabular-nums text-ink-ghost">{count}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
   </main>
 
   <Footer />
 </BaseLayout>
-
-<style>
-  .blog-archive-surface {
-    --article-card-gap: 14px;
-    --article-card-width: 250px;
-    --article-card-min-height: 284px;
-    --article-card-image-height: 128px;
-    --article-title-size: 19px;
-    --article-desc-size: 13.5px;
-    --article-card-letter-spacing: 0.01em;
-    --archive-copy-size: 18px;
-    --archive-copy-line-height: 1.43;
-    --archive-copy-letter-spacing: 0.01em;
-    --archive-copy-color: #92724f;
-    --archive-copy-margin-top: 31px;
-    --archive-copy-max-width: 611px;
-  }
-
-  .archive-intro {
-    max-width: var(--archive-copy-max-width);
-    margin-top: var(--archive-copy-margin-top);
-    color: var(--archive-copy-color);
-    font-size: var(--archive-copy-size);
-    line-height: var(--archive-copy-line-height);
-    letter-spacing: var(--archive-copy-letter-spacing);
-    overflow-wrap: anywhere;
-  }
-
-  .blog-archive-surface[data-archive-copy-font='serif'] .archive-intro {
-    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
-  }
-
-  .blog-archive-surface[data-archive-copy-font='sans'] .archive-intro {
-    font-family: 'Noto Sans SC', system-ui, sans-serif;
-  }
-
-  .blog-archive-surface[data-archive-copy-font='brush'] .archive-intro {
-    font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
-  }
-
-  .blog-archive-surface[data-archive-copy-font='mono'] .archive-intro {
-    font-family: 'JetBrains Mono', 'Noto Sans SC', monospace;
-  }
-
-  .article-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--article-card-width)), 1fr));
-    gap: var(--article-card-gap);
-  }
-
-  .article-card {
-    display: flex;
-    min-height: var(--article-card-min-height);
-    overflow: hidden;
-    flex-direction: column;
-    border: 1px solid rgb(231 229 228);
-    border-radius: 1.25rem;
-    background: #fff;
-    box-shadow: 0 10px 30px rgba(87, 73, 58, 0.06);
-    letter-spacing: var(--article-card-letter-spacing);
-    transition:
-      transform 300ms ease,
-      box-shadow 300ms ease,
-      border-color 300ms ease;
-  }
-
-  .article-card:hover {
-    transform: translateY(-0.25rem);
-    border-color: rgb(254 215 170);
-    box-shadow: 0 20px 44px rgba(87, 73, 58, 0.1);
-  }
-
-  .article-card-media {
-    height: var(--article-card-image-height);
-    flex: 0 0 var(--article-card-image-height);
-  }
-
-  .article-card-body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    padding: 1rem 1.25rem 1.25rem;
-  }
-
-  .article-card-title {
-    color: #292524;
-    font-size: var(--article-title-size);
-    font-weight: 600;
-    line-height: 1.42;
-    overflow-wrap: anywhere;
-  }
-
-  .article-card-desc {
-    color: #78716c;
-    font-size: var(--article-desc-size);
-    overflow-wrap: anywhere;
-  }
-
-  .article-card-meta {
-    margin-top: auto;
-    padding-top: 1rem;
-  }
-
-  .blog-archive-surface[data-card-font='serif'] .article-card {
-    font-family: 'LXGW WenKai Screen', 'Noto Serif SC', 'Noto Sans SC', serif;
-  }
-
-  @media (max-width: 768px) {
-    .article-card-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

@@ -6,23 +6,14 @@ export async function getStaticPaths() {
   const posts = (await getCollection('blog')).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
-  const detailCoverImages = [
-    '/article-cover-knowledge-01.png',
-    '/article-cover-knowledge-02.png',
-    '/article-cover-knowledge-03.png',
-    '/article-cover-knowledge-04.png',
-  ];
 
-  return posts.map((post, index) => ({
+  return posts.map((post) => ({
     params: { slug: post.id },
-    props: {
-      ...post,
-      cover: post.data.cover || detailCoverImages[index % detailCoverImages.length],
-    },
+    props: { ...post },
   }));
 }
 
-type Props = CollectionEntry<'blog'> & { cover?: string };
+type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
 const { Content, headings } = await post.render();
@@ -57,7 +48,6 @@ const enrichedHeadings = headings.map((h) => {
   updatedDate={post.data.updatedDate}
   category={post.data.category}
   tags={post.data.tags}
-  cover={post.cover}
   headings={enrichedHeadings}
   body={post.body}
 >

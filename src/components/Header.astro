@@ -3,34 +3,32 @@ import LocalIcon from './LocalIcon.astro';
 const currentPath = Astro.url.pathname;
 
 const navItems = [
-  { href: '/', label: 'Home', icon: 'house', active: currentPath === '/' },
-  { href: '/blog', label: 'Articles', icon: 'book-open', active: currentPath.startsWith('/blog') },
-  { href: '/categories', label: 'Categories', icon: 'layout-grid', active: currentPath.startsWith('/categories') },
-  { href: '/#tags', label: 'Tags', icon: 'tag', active: false },
-  { href: '/#about', label: 'About', icon: 'user', active: false },
-  { href: '/search', label: 'Search', icon: 'search', active: currentPath.startsWith('/search') },
+  { href: '/', label: '首页', active: currentPath === '/' },
+  { href: '/blog', label: '文章', active: currentPath.startsWith('/blog') },
+  { href: '/categories', label: '分类', active: currentPath.startsWith('/categories') },
+  { href: '/search', label: '搜索', active: currentPath.startsWith('/search') },
 ];
 ---
 
-<header class="sticky top-0 z-50 border-b border-stone-200/70 bg-[#fffdf8]/85 shadow-[0_10px_32px_rgba(120,102,72,0.08)] backdrop-blur-xl">
-  <nav class="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3 md:px-6 md:py-4">
-    <a href="/" class="group flex items-center">
-      <span class="font-['Ma_Shan_Zheng','Noto_Serif_SC',cursive] text-2xl font-normal tracking-wide text-stone-800 transition-colors duration-200 group-hover:text-amber-700 md:text-3xl">
-        Aerchen
-      </span>
+<header class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">
+  <nav class="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
+    <a
+      href="/"
+      class="font-serif text-[22px] font-bold tracking-wide text-ink transition-colors hover:text-ember"
+    >
+      Aerchen
     </a>
-    <div class="hidden items-center gap-7 text-[15px] lg:flex">
+    <div class="hidden items-center gap-8 text-[15px] md:flex">
       {navItems.map((item) => (
         <a
           href={item.href}
           class:list={[
-            'relative flex items-center gap-1.5 pb-0.5 transition-colors duration-200',
+            'relative pb-1 transition-colors duration-200',
             item.active
-              ? 'font-medium text-amber-700 after:absolute after:inset-x-1 after:-bottom-1 after:h-[2px] after:rounded-full after:bg-amber-500/80'
-              : 'text-stone-500 hover:text-amber-700',
+              ? 'font-medium text-ember after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:rounded-full after:bg-ember/70'
+              : 'text-ink-faint hover:text-ink',
           ]}
         >
-          <LocalIcon name={item.icon} class="h-4 w-4" />
           {item.label}
         </a>
       ))}
@@ -38,26 +36,39 @@ const navItems = [
         href="https://github.com/rain1andsnow2a"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-1.5 text-stone-500 transition-colors duration-200 hover:text-stone-800"
+        aria-label="GitHub"
+        class="text-ink-faint transition-colors hover:text-ink"
       >
-        <LocalIcon name="github" class="h-4 w-4" />
-        GitHub
+        <LocalIcon name="github" class="h-[18px] w-[18px]" />
       </a>
     </div>
 
-    <details class="group relative lg:hidden">
-      <summary class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-2xl border border-stone-200 bg-white/80 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition-colors hover:text-amber-700">
-        <LocalIcon name="menu" class="h-5 w-5" />
+    <details class="group relative md:hidden">
+      <summary
+        class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-md border border-line text-ink-faint transition-colors hover:text-ink"
+      >
+        <LocalIcon name="menu" class="h-[18px] w-[18px]" />
       </summary>
-      <div class="absolute right-0 top-12 w-56 overflow-hidden rounded-2xl border border-stone-200 bg-white p-2 text-base shadow-[0_20px_50px_rgba(15,23,42,0.16)]">
+      <div
+        class="absolute right-0 top-11 w-44 rounded-md border border-line bg-raised p-1.5 text-[15px] shadow-[0_12px_32px_rgba(44,38,32,0.12)]"
+      >
         {navItems.map((item) => (
-          <a href={item.href} class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-amber-50 hover:text-amber-700">
-            <LocalIcon name={item.icon} class="h-4 w-4" />
+          <a
+            href={item.href}
+            class:list={[
+              'block rounded px-3 py-2 transition-colors',
+              item.active ? 'bg-ember/5 text-ember' : 'text-ink-soft hover:bg-paper-deep',
+            ]}
+          >
             {item.label}
           </a>
         ))}
-        <a href="https://github.com/rain1andsnow2a" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 rounded-xl px-3 py-2 text-stone-600 hover:bg-stone-50 hover:text-stone-800">
-          <LocalIcon name="github" class="h-4 w-4" />
+        <a
+          href="https://github.com/rain1andsnow2a"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block rounded px-3 py-2 text-ink-soft transition-colors hover:bg-paper-deep"
+        >
           GitHub
         </a>
       </div>

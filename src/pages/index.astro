@@ -2,26 +2,22 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import LocalIcon from '../components/LocalIcon.astro';
-import { getCategoryMeta } from '../utils/categoryMeta';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const featuredPosts = posts.slice(0, 6);
+const featuredPosts = posts.slice(0, 8);
 const postCount = posts.length;
+
 const categoryMap = posts.reduce((acc, post) => {
   const key = post.data.category || '未分类';
-  if (!acc.has(key)) acc.set(key, []);
-  acc.get(key)?.push(post);
+  acc.set(key, (acc.get(key) || 0) + 1);
   return acc;
-}, new Map<string, typeof posts>());
-
-const categories = Array.from(categoryMap.entries())
-  .map(([name, items]) => ({ name, count: items.length }))
-  .sort((a, b) => b.count - a.count);
+}, new Map<string, number>());
+const categories = Array.from(categoryMap.entries()).sort((a, b) => b[1] - a[1]);
+const categoryCount = categories.length;
 
 const tagMap = posts.reduce((acc, post) => {
   for (const tag of post.data.tags) {
@@ -29,655 +25,157 @@ const tagMap = posts.reduce((acc, post) => {
   }
   return acc;
 }, new Map<string, number>());
-
 const tags = Array.from(tagMap.entries())
   .map(([name, count]) => ({ name, count }))
   .sort((a, b) => b.count - a.count);
-
 const tagCount = tags.length;
-const categoryCount = categories.length;
-const profileBadges = [
-  { href: 'https://github.com/rain1andsnow2a', label: 'GitHub', icon: 'github' },
-  { href: 'mailto:rain1andsnow2a@outlook.com', label: 'Email', icon: 'mail' },
-  { href: '/categories', label: '分类', icon: 'rss' },
-];
 
-const cardImages = [
-  '/article-cover-knowledge-01.png',
-  '/article-cover-knowledge-02.png',
-  '/article-cover-knowledge-03.png',
-  '/article-cover-knowledge-04.png',
-];
+function formatDot(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}.${m}.${d}`;
+}
 ---
 
 <BaseLayout title="首页" description="Thoughts on AI, Building, Markets, and Life.">
   <Header />
 
-  <main id="home-design-surface" class="home-design-surface flex-1" data-title-font="brush" data-copy-font="brush" data-card-font="serif">
-    <section class="mx-auto max-w-[1500px] px-4 pb-7 pt-4 sm:px-6 sm:pt-6">
-      <div class="hero-shell relative overflow-hidden rounded-[1.6rem] border border-white/60 shadow-[0_22px_56px_rgba(15,23,42,0.14)]">
+  <main class="mx-auto w-full max-w-5xl flex-1 px-6">
+    <!-- 开场：头像 + 名字 + 一句自我介绍 -->
+    <section class="pb-14 pt-14 md:pt-20">
+      <div class="flex items-center gap-5">
         <img
-          src="/ChatGPT Image 2026年4月24日 09_09_29.png"
-          alt="深空中的丁火"
-          class="absolute inset-0 h-full w-full object-cover"
+          src="/头像.png"
+          alt="Aerchen 的头像"
+          class="h-16 w-16 rounded-full object-cover ring-1 ring-line-strong md:h-[72px] md:w-[72px]"
         />
-        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.76)_0%,rgba(15,23,42,0.46)_38%,rgba(30,41,59,0.22)_100%)]"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,197,86,0.25),transparent_18%),radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.16),transparent_16%)]"></div>
-
-        <div class="hero-layout relative z-10 grid gap-8 px-5 py-7 sm:px-8 sm:py-8 lg:px-11 lg:py-9">
-          <div class="flex flex-col justify-center">
-            <div class="hero-reveal hero-delay-0">
-              <h1 class="hero-title text-white">Aerchen</h1>
-              <div class="hero-title-rule mt-3 h-1.5 rounded-full bg-[linear-gradient(90deg,#fb923c_0%,#fdba74_52%,transparent_100%)]"></div>
-            </div>
-
-            <p class="hero-subtitle hero-reveal hero-delay-1 mt-6 font-semibold tracking-tight text-white/95">
-              深空中的丁火，寒夜里的极光
-            </p>
-
-            <p class="hero-copy hero-reveal hero-delay-2 mt-5 max-w-2xl leading-relaxed">
-              <span
-                id="hero-typed"
-                class="typewriter-copy"
-                data-text="Thoughts on AI, Building, Markets, and Life."
-              ></span>
-              <span class="typewriter-caret" aria-hidden="true"></span>
-            </p>
-
-            <div class="hero-reveal hero-delay-3 mt-8 flex flex-wrap items-center gap-4">
-              <a
-                href="/blog"
-                class="inline-flex items-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#fb923c,#f97316)] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_38px_rgba(249,115,22,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_46px_rgba(249,115,22,0.42)]"
-              >
-                <LocalIcon name="rocket" class="h-4 w-4" />
-                Explore Articles
-              </a>
-              <a
-                href="#about"
-                class="inline-flex items-center gap-2 rounded-2xl border border-white/55 bg-white/8 px-6 py-3 text-base font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/14"
-              >
-                <LocalIcon name="file-text" class="h-4 w-4" />
-                About Me
-              </a>
-            </div>
-          </div>
-
-          <aside class="hero-reveal hero-delay-2 flex items-center lg:justify-end">
-            <div class="profile-card w-full rounded-[1.7rem] border border-white/20 bg-[linear-gradient(180deg,rgba(36,50,104,0.62),rgba(18,29,69,0.56))] p-6 text-white shadow-[0_24px_50px_rgba(15,23,42,0.22)] backdrop-blur-xl">
-              <div class="mx-auto h-24 w-24 overflow-hidden rounded-full border-4 border-white/40 shadow-[0_18px_42px_rgba(15,23,42,0.25)]">
-                <img
-                  src="/头像.png"
-                  alt="Aerchen's avatar"
-                  class="h-full w-full object-cover"
-                />
-              </div>
-              <h2 class="profile-name mt-4 text-center font-semibold text-white">Aerchen</h2>
-
-              <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-                <div>
-                  <div class="text-2xl font-bold text-white">{postCount}</div>
-                  <div class="mt-1 text-sm text-slate-200/80">文章</div>
-                </div>
-                <div>
-                  <div class="text-2xl font-bold text-white">{categoryCount}</div>
-                  <div class="mt-1 text-sm text-slate-200/80">分类</div>
-                </div>
-                <div>
-                  <div class="text-2xl font-bold text-white">{tagCount}</div>
-                  <div class="mt-1 text-sm text-slate-200/80">标签</div>
-                </div>
-              </div>
-
-              <div class="mt-6 flex items-center justify-center gap-3">
-                {profileBadges.map((item) => (
-                  <a
-                    href={item.href}
-                    target={item.href.startsWith('http') || item.href.startsWith('mailto:') ? '_blank' : undefined}
-                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    aria-label={item.label}
-                    class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/18 bg-white/12 text-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20"
-                  >
-                    <LocalIcon name={item.icon} class="h-5 w-5" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </aside>
+        <div>
+          <h1 class="font-serif text-4xl font-bold leading-tight text-ink md:text-[42px]">
+            Aerchen<span class="ml-2 align-middle text-xl text-ember" aria-hidden="true">✦</span>
+          </h1>
+          <p class="mt-1.5 text-[15px] text-ink-faint">深空中的丁火，寒夜里的极光</p>
         </div>
       </div>
+
+      <p class="mt-7 max-w-xl font-kai text-[17px] leading-8 text-ink-soft">
+        记录我在 AI、软件构建、市场与生活里真正抓住的那些火花。
+      </p>
+      <p class="mt-3 font-mono text-[13px] tracking-wide text-ink-ghost">
+        Thoughts on AI, Building, Markets, and Life.
+      </p>
+
+      <p class="mt-6 text-sm text-ink-faint">
+        <span class="font-medium tabular-nums text-ink">{postCount}</span> 篇文章
+        <span class="mx-1.5 text-line-strong">·</span>
+        <span class="font-medium tabular-nums text-ink">{categoryCount}</span> 个分类
+        <span class="mx-1.5 text-line-strong">·</span>
+        <span class="font-medium tabular-nums text-ink">{tagCount}</span> 个标签
+      </p>
     </section>
 
-    <section class="mx-auto max-w-[1500px] px-6 pb-16">
-      <div class="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
-        <div>
-          <div class="mb-5 flex items-center justify-between">
-            <h2 class="flex items-center gap-2 font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-3xl font-semibold text-stone-800">
-              <LocalIcon name="book-open" class="h-6 w-6 text-orange-500" />
-              Recent Articles
-            </h2>
-            <a
-              href="/blog"
-              class="group inline-flex items-center gap-2 text-base font-medium text-orange-500 transition-colors hover:text-orange-600"
-            >
-              View All
-              <LocalIcon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
-          </div>
+    <div class="grid gap-12 pb-16 lg:grid-cols-[minmax(0,1fr)_230px] lg:gap-14">
+      <!-- 最近写作：列表式索引 -->
+      <section aria-labelledby="recent-heading">
+        <div class="flex items-center gap-4">
+          <h2 id="recent-heading" class="shrink-0 font-serif text-xl font-bold text-ink">最近写作</h2>
+          <span class="h-px flex-1 bg-line" aria-hidden="true"></span>
+          <a href="/blog" class="group shrink-0 text-[13px] text-ink-faint transition-colors hover:text-ember">
+            全部文章
+            <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
+          </a>
+        </div>
 
-          <div class="article-card-grid">
-            {featuredPosts.map((post, index) => {
-              const formattedDate = post.data.pubDate.toLocaleDateString('zh-CN', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-              });
-              const readingMinutes = Math.max(4, Math.ceil((post.body?.length || 800) / 420));
-              const cover = post.data.cover || cardImages[index % cardImages.length];
-
-              return (
-                <a
-                  href={`/blog/${post.id}`}
-                  class="article-card group"
-                >
-                  <div class="article-card-media relative overflow-hidden">
-                    <img
-                      src={cover}
-                      alt={post.data.title}
-                      class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div class="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(15,23,42,0.55)_100%)]"></div>
-                  </div>
-
-                  <div class="article-card-body">
-                    <div class="mb-2 flex flex-wrap gap-2">
-                      <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
-                        {post.data.category}
-                      </span>
-                      {post.data.tags[0] && (
-                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-                          {post.data.tags[0]}
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 class="article-card-title">
+        <ul class="mt-3 divide-y divide-line/70">
+          {featuredPosts.map((post) => {
+            const readingMinutes = Math.max(1, Math.ceil((post.body?.length || 800) / 420));
+            return (
+              <li>
+                <a href={`/blog/${post.id}`} class="group block py-4 sm:flex sm:items-baseline sm:gap-6">
+                  <time
+                    datetime={post.data.pubDate.toISOString()}
+                    class="block font-mono text-[13px] tabular-nums text-ink-ghost sm:w-[88px] sm:shrink-0"
+                  >
+                    {formatDot(post.data.pubDate)}
+                  </time>
+                  <div class="mt-1 min-w-0 sm:mt-0">
+                    <h3 class="text-[17px] font-medium leading-snug text-ink transition-colors group-hover:text-ember">
                       {post.data.title}
                     </h3>
                     {post.data.description && (
-                      <p class="article-card-desc mt-2 line-clamp-2 leading-6">
-                        {post.data.description}
-                      </p>
+                      <p class="mt-1 line-clamp-1 text-sm leading-6 text-ink-faint">{post.data.description}</p>
                     )}
-
-                    <div class="article-card-meta mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
-                      <span class="inline-flex items-center gap-1.5">
-                        <LocalIcon name="calendar-days" class="h-4 w-4" />
-                        {formattedDate}
-                      </span>
-                      <span class="inline-flex items-center gap-1.5">
-                        <LocalIcon name="clock-3" class="h-4 w-4" />
-                        {readingMinutes} 分钟阅读
-                      </span>
-                    </div>
+                    <p class="mt-1.5 text-xs text-ink-ghost">
+                      {post.data.category}
+                      <span class="mx-1 text-line-strong">·</span>
+                      约 {readingMinutes} 分钟
+                    </p>
                   </div>
                 </a>
-              );
-            })}
-          </div>
-        </div>
-
-        <aside class="space-y-6">
-          <section class="side-tune-section rounded-[1.7rem] border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-            <h3 class="side-tune-title font-semibold text-slate-900">分类</h3>
-            <div class="category-list">
-              {categories.slice(0, 6).map((category, index) => {
-                const meta = getCategoryMeta(category.name, index);
-
-                return (
-                  <a
-                    href={`/categories/${encodeURIComponent(category.name)}`}
-                    class="category-item flex items-center justify-between rounded-2xl transition-colors hover:bg-slate-50"
-                  >
-                    <span class="flex items-center gap-3">
-                      <span class={`category-icon flex items-center justify-center rounded-xl border ${meta.soft} ${meta.accent} ${meta.ring}`}>
-                        <LocalIcon name={meta.icon} class="h-4 w-4" />
-                      </span>
-                      <span class="category-name font-medium text-slate-700">{category.name}</span>
-                    </span>
-                    <span class="category-count font-semibold text-slate-400">{category.count}</span>
-                  </a>
-                );
-              })}
-            </div>
-          </section>
-
-          <section id="tags" class="side-tune-section rounded-[1.7rem] border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-            <h3 class="side-tune-title font-semibold text-slate-900">标签云</h3>
-            <div class="tag-cloud flex flex-wrap">
-              {tags.map((tag, index) => {
-                const palette = [
-                  'bg-sky-50 text-sky-600',
-                  'bg-emerald-50 text-emerald-600',
-                  'bg-violet-50 text-violet-600',
-                  'bg-orange-50 text-orange-600',
-                  'bg-rose-50 text-rose-600',
-                  'bg-indigo-50 text-indigo-600',
-                ];
-                return (
-                  <span class={`tag-pill rounded-full font-medium ${palette[index % palette.length]}`}>
-                    {tag.name}
-                  </span>
-                );
-              })}
-            </div>
-          </section>
-        </aside>
-      </div>
-
-      <section id="about" class="mt-12 rounded-[1.8rem] border border-slate-200 bg-white px-8 py-7 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div class="max-w-3xl">
-            <h2 class="font-['LXGW_WenKai_Screen','Noto_Serif_SC',serif] text-3xl font-semibold text-stone-800">关于</h2>
-            <p class="mt-3 text-lg leading-8 text-slate-600">
-              我是 Aerchen，一个热爱技术的探索者。这个博客是我的数字花园，记录学习路上的点滴收获，也记录那些在宇宙般的信息海洋中被我真正抓住的火花。
-            </p>
-          </div>
-          <a
-            href="https://github.com/rain1andsnow2a"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-6 py-3 text-base font-medium text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-orange-300 hover:text-orange-500"
-          >
-            <LocalIcon name="github" class="h-5 w-5" />
-            访问 GitHub
-          </a>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
-    </section>
 
+      <!-- 侧栏：分类 + 标签 -->
+      <aside class="space-y-10">
+        <section aria-labelledby="aside-categories">
+          <h2
+            id="aside-categories"
+            class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost"
+          >
+            分类
+          </h2>
+          <ul class="mt-4 space-y-2.5">
+            {categories.slice(0, 7).map(([name, count]) => (
+              <li>
+                <a
+                  href={`/categories/${encodeURIComponent(name)}`}
+                  class="group flex items-baseline justify-between gap-3 text-[14px]"
+                >
+                  <span class="text-ink-soft transition-colors group-hover:text-ember">{name}</span>
+                  <span class="font-mono text-xs tabular-nums text-ink-ghost">{count}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section id="tags" aria-labelledby="aside-tags">
+          <h2 id="aside-tags" class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">
+            标签
+          </h2>
+          <div class="mt-4 flex flex-wrap gap-2">
+            {tags.map(({ name }) => (
+              <a
+                href={`/search?q=${encodeURIComponent(name)}`}
+                class="rounded border border-line px-2 py-0.5 text-xs text-ink-faint transition-colors hover:border-ember/40 hover:text-ember"
+              >
+                {name}
+              </a>
+            ))}
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- 关于 -->
+    <section id="about" aria-labelledby="about-heading" class="border-t border-line pb-20 pt-12">
+      <h2 id="about-heading" class="font-serif text-xl font-bold text-ink">关于</h2>
+      <p class="mt-4 max-w-2xl font-kai text-[15.5px] leading-8 text-ink-soft">
+        我是 Aerchen，一个热爱技术的探索者。这个博客是我的数字花园，记录学习路上的点滴收获，也记录那些在宇宙般的信息海洋中被我真正抓住的火花。
+      </p>
+      <a
+        href="https://github.com/rain1andsnow2a"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-5 inline-flex items-center gap-1.5 text-sm text-ember transition-colors hover:text-ember-deep"
+      >
+        GitHub
+        <span aria-hidden="true">→</span>
+      </a>
+    </section>
   </main>
 
   <Footer />
 </BaseLayout>
-
-<style>
-  .home-design-surface {
-    --hero-title-size: 68px;
-    --hero-subtitle-size: 25px;
-    --hero-copy-size: 15px;
-    --hero-copy-color: #f3e9d7;
-    --hero-copy-letter-spacing: 0.05em;
-    --profile-width: 291px;
-    --section-gap: 18px;
-    --hero-copy-fr: 1.1fr;
-    --article-card-gap: 14px;
-    --article-card-width: 250px;
-    --article-card-min-height: 284px;
-    --article-card-image-height: 128px;
-    --article-title-size: 19px;
-    --article-desc-size: 13.5px;
-    --article-card-letter-spacing: 0.01em;
-    --side-panel-padding: 20px;
-    --side-title-size: 21px;
-    --category-list-gap: 6px;
-    --category-item-x: 12px;
-    --category-item-y: 7px;
-    --category-icon-size: 33px;
-    --category-text-size: 17px;
-    --tag-cloud-gap: 9px;
-    --tag-pill-x: 16px;
-    --tag-pill-y: 8px;
-    --tag-font-size: 13px;
-  }
-
-  .hero-layout {
-    min-height: 430px;
-  }
-
-  @media (min-width: 1024px) {
-    .hero-layout {
-      grid-template-columns: minmax(0, var(--hero-copy-fr)) minmax(240px, var(--profile-width));
-    }
-  }
-
-  .profile-card {
-    max-width: var(--profile-width);
-  }
-
-  .home-design-surface[data-title-font='serif'] .hero-title,
-  .home-design-surface[data-title-font='serif'] .profile-name {
-    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
-  }
-
-  .home-design-surface[data-title-font='brush'] .hero-title,
-  .home-design-surface[data-title-font='brush'] .profile-name {
-    font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
-    font-weight: 400;
-  }
-
-  .home-design-surface[data-title-font='playful'] .hero-title,
-  .home-design-surface[data-title-font='playful'] .profile-name {
-    font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
-    font-weight: 400;
-  }
-
-  .home-design-surface[data-title-font='sans'] .hero-title,
-  .home-design-surface[data-title-font='sans'] .profile-name {
-    font-family: 'Noto Sans SC', system-ui, sans-serif;
-  }
-
-  .hero-shell::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.26), transparent 20%),
-      radial-gradient(circle at 86% 24%, rgba(147, 197, 253, 0.24), transparent 16%),
-      radial-gradient(circle at 80% 78%, rgba(251, 191, 36, 0.12), transparent 18%);
-    mix-blend-mode: screen;
-  }
-
-  .hero-title {
-    font-size: clamp(3.15rem, 6vw, var(--hero-title-size));
-    line-height: 0.94;
-    letter-spacing: 0;
-    font-weight: 900;
-    text-shadow: 0 10px 36px rgba(15, 23, 42, 0.24);
-  }
-
-  .hero-title-rule {
-    width: min(12rem, 58vw);
-  }
-
-  .hero-subtitle {
-    font-size: clamp(1.55rem, 3.2vw, var(--hero-subtitle-size));
-    line-height: 1.2;
-  }
-
-  .hero-copy {
-    font-size: var(--hero-copy-size);
-    color: var(--hero-copy-color);
-  }
-
-  .profile-name {
-    font-size: clamp(2rem, 3vw, calc(var(--hero-title-size) * 0.45));
-    line-height: 1;
-    text-shadow: 0 8px 28px rgba(15, 23, 42, 0.22);
-  }
-
-  .home-design-surface > section + section {
-    padding-top: var(--section-gap);
-  }
-
-  .home-design-surface > section:first-of-type {
-    padding-bottom: calc(var(--section-gap) * 0.55);
-  }
-
-  .hero-reveal {
-    animation: heroRise 0.82s ease-out forwards;
-    opacity: 0;
-    transform: translateY(22px);
-  }
-
-  .hero-delay-0 { animation-delay: 0.05s; }
-  .hero-delay-1 { animation-delay: 0.18s; }
-  .hero-delay-2 { animation-delay: 0.3s; }
-  .hero-delay-3 { animation-delay: 0.42s; }
-
-  @keyframes heroRise {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .typewriter-copy {
-    display: inline;
-    min-height: 1.75rem;
-    letter-spacing: var(--hero-copy-letter-spacing);
-  }
-
-  .home-design-surface[data-copy-font='mono'] .typewriter-copy {
-    font-family: 'JetBrains Mono', 'Noto Sans SC', monospace;
-  }
-
-  .home-design-surface[data-copy-font='serif'] .typewriter-copy {
-    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
-    font-weight: 700;
-  }
-
-  .home-design-surface[data-copy-font='brush'] .typewriter-copy {
-    font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
-    font-size: 1.18em;
-  }
-
-  .home-design-surface[data-copy-font='wild'] .typewriter-copy {
-    font-family: 'Liu Jian Mao Cao', 'Zhi Mang Xing', cursive;
-    font-size: 1.32em;
-  }
-
-  .home-design-surface[data-copy-font='playful'] .typewriter-copy {
-    font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
-  }
-
-  .home-design-surface[data-copy-font='techno'] .typewriter-copy {
-    font-family: 'ZCOOL QingKe HuangYou', 'JetBrains Mono', sans-serif;
-    text-transform: uppercase;
-  }
-
-  .article-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--article-card-width)), 1fr));
-    gap: var(--article-card-gap);
-  }
-
-  .article-card {
-    display: flex;
-    min-height: var(--article-card-min-height);
-    overflow: hidden;
-    flex-direction: column;
-    border: 1px solid rgb(231 229 228);
-    border-radius: 1.25rem;
-    background: #fff;
-    box-shadow: 0 10px 30px rgba(87, 73, 58, 0.06);
-    letter-spacing: var(--article-card-letter-spacing);
-    transition:
-      transform 300ms ease,
-      box-shadow 300ms ease,
-      border-color 300ms ease;
-  }
-
-  .article-card:hover {
-    transform: translateY(-0.25rem);
-    border-color: rgb(254 215 170);
-    box-shadow: 0 20px 44px rgba(87, 73, 58, 0.1);
-  }
-
-  .article-card-media {
-    height: var(--article-card-image-height);
-    flex: 0 0 var(--article-card-image-height);
-  }
-
-  .article-card-body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    padding: 1rem 1.25rem 1.25rem;
-  }
-
-  .article-card-title {
-    color: #292524;
-    font-size: var(--article-title-size);
-    font-weight: 600;
-    line-height: 1.42;
-    overflow-wrap: anywhere;
-  }
-
-  .article-card-desc {
-    color: #78716c;
-    font-size: var(--article-desc-size);
-    overflow-wrap: anywhere;
-  }
-
-  .article-card-meta {
-    margin-top: auto;
-    padding-top: 1rem;
-  }
-
-  .home-design-surface[data-card-font='sans'] .article-card {
-    font-family: 'Noto Sans SC', system-ui, sans-serif;
-  }
-
-  .home-design-surface[data-card-font='serif'] .article-card {
-    font-family: 'LXGW WenKai Screen', 'Noto Serif SC', 'Noto Sans SC', serif;
-  }
-
-  .home-design-surface[data-card-font='brush'] .article-card-title {
-    font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
-    font-weight: 400;
-  }
-
-  .home-design-surface[data-card-font='brush'] .article-card-desc,
-  .home-design-surface[data-card-font='brush'] .article-card-meta {
-    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
-  }
-
-  .home-design-surface[data-card-font='playful'] .article-card {
-    font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
-  }
-
-  .home-design-surface[data-card-font='mono'] .article-card {
-    font-family: 'JetBrains Mono', 'Noto Sans SC', monospace;
-  }
-
-  .side-tune-section {
-    padding: var(--side-panel-padding);
-  }
-
-  .side-tune-title {
-    font-size: var(--side-title-size);
-    line-height: 1.15;
-  }
-
-  .category-list {
-    display: grid;
-    gap: var(--category-list-gap);
-    margin-top: 1.25rem;
-  }
-
-  .category-item {
-    padding: var(--category-item-y) var(--category-item-x);
-  }
-
-  .category-icon {
-    width: var(--category-icon-size);
-    height: var(--category-icon-size);
-  }
-
-  .category-name,
-  .category-count {
-    font-size: var(--category-text-size);
-  }
-
-  .tag-cloud {
-    gap: var(--tag-cloud-gap);
-    margin-top: 1.25rem;
-  }
-
-  .tag-pill {
-    padding: var(--tag-pill-y) var(--tag-pill-x);
-    font-size: var(--tag-font-size);
-  }
-
-  .typewriter-caret {
-    display: inline-block;
-    width: 0.7ch;
-    height: 1.1em;
-    margin-left: 0.18rem;
-    vertical-align: text-bottom;
-    border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(251, 191, 36, 0.82));
-    box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
-    animation: blinkCaret 1s steps(1) infinite;
-  }
-
-  @keyframes blinkCaret {
-    0%, 48% { opacity: 1; }
-    50%, 100% { opacity: 0.18; }
-  }
-
-  @media (max-width: 1024px) {
-    .hero-shell {
-      border-radius: 1.5rem;
-    }
-
-  }
-
-  @media (max-width: 768px) {
-    .hero-layout {
-      min-height: auto;
-    }
-
-    .profile-card {
-      max-width: none;
-      padding: 1.25rem;
-    }
-
-    .hero-copy {
-      font-size: 1rem;
-    }
-
-    .article-card-grid {
-      grid-template-columns: 1fr;
-    }
-
-  }
-
-  @media (max-width: 520px) {
-    .hero-shell {
-      border-radius: 1.15rem;
-    }
-
-    .hero-title {
-      font-size: clamp(3rem, 18vw, 4.5rem);
-    }
-
-    .hero-subtitle {
-      margin-top: 1.1rem;
-      font-size: 1.35rem;
-    }
-
-  }
-</style>
-
-<script>
-  const typedTarget = document.getElementById('hero-typed');
-  const caret = document.querySelector('.typewriter-caret');
-
-  function runTypewriter() {
-    if (!typedTarget) return;
-
-    const fullText = typedTarget.getAttribute('data-text') ?? '';
-    typedTarget.textContent = '';
-
-    if (!fullText) {
-      if (caret instanceof HTMLElement) caret.style.display = 'none';
-      return;
-    }
-
-    let index = 0;
-    const typeNext = () => {
-      index += 1;
-      typedTarget.textContent = fullText.slice(0, index);
-
-      if (index < fullText.length) {
-        window.setTimeout(typeNext, index < 8 ? 95 : 50);
-      }
-    };
-
-    window.setTimeout(typeNext, 500);
-  }
-
-  runTypewriter();
-</script>

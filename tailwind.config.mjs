@@ -5,53 +5,34 @@ export default {
   theme: {
     extend: {
       colors: {
-        // 星际深蓝配色体系 - 提亮版
-        'navy': {
-          950: '#142a56ff',  // 主背景（更亮的深蓝）
-          900: '#162744',  // 稍亮背景
-          800: '#1e3354',  // 卡片/内容区背景
-          700: '#2e4470',  // 边框/分割线
-          600: '#405a8a',  // hover 边框
+        // 暖纸文人风色板 —— 与文章页思维导图「稿纸」组件同源（赤陶橙 #c04a1a）
+        paper: {
+          DEFAULT: '#faf6ee', // 页面底色：暖米白纸面
+          deep: '#f3ecdd', // 略深的纸（代码块、井格底）
+          raised: '#fffdf9', // 抬升的纸面（正文容器）
         },
-        // 丁火琥珀金 - 强调色
-        'ding-fire': '#FBBF24',
-      },
-      animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        ink: {
+          DEFAULT: '#2c2620', // 墨字：标题
+          soft: '#4a4237', // 正文
+          faint: '#8b7f6d', // 次要信息
+          ghost: '#b8ac97', // 占位符、极弱信息
+        },
+        ember: {
+          DEFAULT: '#c04a1a', // 赤陶橙：全站唯一强调色
+          deep: '#9c3a12',
+        },
+        line: {
+          DEFAULT: '#e7dfcf', // 发丝分隔线
+          strong: '#d6cab2',
+        },
       },
       fontFamily: {
-        sans: ['Inter', '"LXGW WenKai Screen"', 'Noto Sans SC', 'system-ui', 'sans-serif'],
-        serif: ['"LXGW WenKai Screen"', 'Noto Serif SC', '"Songti SC"', 'serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['Noto Sans SC', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        serif: ['Noto Serif SC', 'LXGW WenKai Screen', 'Songti SC', 'serif'],
+        kai: ['LXGW WenKai Screen', 'Noto Serif SC', 'Songti SC', 'serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
-      typography: ({ theme }) => ({
-        DEFAULT: {
-          css: {
-            '--tw-prose-body': theme('colors.slate.300'),
-            '--tw-prose-headings': theme('colors.slate.100'),
-            '--tw-prose-links': theme('colors.amber.400'),
-            '--tw-prose-bold': theme('colors.slate.100'),
-            '--tw-prose-code': theme('colors.amber.400'),
-            '--tw-prose-pre-bg': theme('colors.slate.800'),
-            '--tw-prose-pre-code': theme('colors.slate.300'),
-            '--tw-prose-quotes': theme('colors.slate.300'),
-            '--tw-prose-quote-borders': theme('colors.amber.400'),
-            '--tw-prose-hr': theme('colors.slate.700'),
-            a: {
-              textDecoration: 'none',
-              '&:hover': {
-                color: theme('colors.amber.300'),
-                textDecoration: 'underline',
-              },
-            },
-            'code::before': { content: '""' },
-            'code::after': { content: '""' },
-          },
-        },
-      }),
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require('@tailwindcss/typography')],
 };

@@ -2,8 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import LocalIcon from '../../components/LocalIcon.astro';
-import { getCategoryMeta } from '../../utils/categoryMeta';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog')).sort(
@@ -26,230 +24,36 @@ const categories = Array.from(categoryMap.entries()).sort((a, b) => {
 
 <BaseLayout title="分类" description="按分类浏览 Aerchen 的博客文章">
   <Header />
-  <main
-    class="category-tune-surface flex-1"
-    data-category-title-font="serif"
-    data-category-copy-font="sans"
-    data-category-badge-font="sans"
-    data-category-card-font="sans"
-  >
-    <section class="relative overflow-hidden border-b border-stone-200 bg-white">
-      <img
-        src="/category_background.png"
-        alt=""
-        aria-hidden="true"
-        class="absolute inset-0 h-full w-full object-cover"
-      />
-      <div class="absolute inset-0 bg-white/45"></div>
-      <div class="relative max-w-6xl mx-auto px-6 py-16 lg:py-20">
-        <div class="category-hero-badge inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/85 px-4 py-2 font-medium shadow-[0_10px_28px_rgba(16,185,129,0.14)] backdrop-blur-sm">
-          <LocalIcon name="layout-grid" class="h-4 w-4" />
-          分类导航
-        </div>
-        <h1 class="category-hero-title">Categories</h1>
-        <p class="category-hero-copy">
-          把技术探索按主题整理成更清晰的知识分区，你可以从这里按分类进入对应文章集合。
-        </p>
-        <div class="category-hero-rule"></div>
-      </div>
+
+  <main class="mx-auto w-full max-w-3xl flex-1 px-6">
+    <section class="pt-14 md:pt-20">
+      <h1 class="font-serif text-4xl font-bold text-ink">分类</h1>
+      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint">
+        把技术探索按主题整理成更清晰的知识分区。分类不是为了把内容关进盒子，而是为了更快找到下一条值得深入的线索。
+      </p>
     </section>
 
-    <section class="bg-[linear-gradient(180deg,#fffaf2_0%,#ffffff_58%,#f8fffc_100%)]">
-      <div class="max-w-6xl mx-auto px-6 py-8 lg:py-10">
-        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px]">
-          <div class="space-y-3">
-            {categories.map(([category, items], index) => {
-              const meta = getCategoryMeta(category, index);
-
-              return (
-              <a
-                href={`/categories/${encodeURIComponent(category)}`}
-                class="category-card group flex items-center justify-between rounded-2xl border border-stone-200 bg-white/92 px-5 py-4 shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-[0_16px_36px_rgba(16,185,129,0.10)]"
-              >
-                <span class="flex items-center gap-3 min-w-0">
-                  <span class={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border ${meta.soft} ${meta.accent} ${meta.ring}`}>
-                    <LocalIcon name={meta.icon} class="h-5 w-5" />
-                  </span>
-                  <span class="min-w-0">
-                    <span class="category-card-title block truncate font-semibold text-slate-800 group-hover:text-emerald-800">
-                      {category}
-                    </span>
-                    <span class="category-card-desc block mt-1 text-slate-500">
-                      最近更新：{items[0]?.data.title}
-                    </span>
-                  </span>
-                </span>
-                <span class="flex shrink-0 items-center gap-4">
-                  <span class="rounded-full border border-emerald-200 bg-white px-3 py-1 text-sm font-medium text-emerald-700">
-                    {items.length} 篇
-                  </span>
-                  <LocalIcon name="chevron-right" class="h-5 w-5 text-slate-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-emerald-500" />
-                </span>
-              </a>
-              );
-            })}
-          </div>
-
-          <aside class="space-y-4">
-            <section class="rounded-[1.6rem] border border-stone-200 bg-white/92 p-6 text-center shadow-[0_16px_40px_rgba(15,23,42,0.07)]">
-              <div class="mx-auto h-24 w-24 overflow-hidden rounded-full border-4 border-emerald-100 shadow-[0_18px_32px_rgba(16,185,129,0.16)]">
-                <img
-                  src="/头像.png"
-                  alt="Aerchen's avatar"
-                  class="h-full w-full object-cover"
-                />
-              </div>
-              <h2 class="mt-4 text-2xl font-semibold text-slate-900">Aerchen <span class="text-amber-300">✦</span></h2>
-              <p class="mt-3 text-sm leading-7 text-slate-600">
-                分类不是为了把内容关进盒子，而是为了更快找到下一条值得深入的线索。
+    <ul class="divide-y divide-line/70 pb-20 pt-6">
+      {categories.map(([category, items]) => (
+        <li>
+          <a
+            href={`/categories/${encodeURIComponent(category)}`}
+            class="group flex items-baseline justify-between gap-6 py-5"
+          >
+            <div class="min-w-0">
+              <h2 class="text-lg font-medium text-ink transition-colors group-hover:text-ember">
+                {category}
+              </h2>
+              <p class="mt-1 line-clamp-1 text-sm text-ink-faint">
+                最近：<span class="font-kai">{items[0]?.data.title}</span>
               </p>
-
-              <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-                <div>
-                  <div class="text-xs text-slate-400">文章</div>
-                  <div class="mt-1 text-2xl font-semibold text-slate-900">{posts.length}</div>
-                </div>
-                <div>
-                  <div class="text-xs text-slate-400">标签</div>
-                  <div class="mt-1 text-2xl font-semibold text-slate-900">{new Set(posts.flatMap((post) => post.data.tags)).size}</div>
-                </div>
-                <div>
-                  <div class="text-xs text-slate-400">分类</div>
-                  <div class="mt-1 text-2xl font-semibold text-slate-900">{categories.length}</div>
-                </div>
-              </div>
-
-              <a
-                href="https://github.com/rain1andsnow2a"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 font-medium text-white transition-colors hover:bg-slate-800"
-              >
-                <LocalIcon name="github" class="h-4 w-4" />
-                GitHub
-                <LocalIcon name="chevron-right" class="h-4 w-4" />
-              </a>
-            </section>
-
-            <section class="rounded-[1.4rem] border border-stone-200 bg-white/90 p-5 shadow-[0_12px_30px_rgba(15,23,42,0.05)]">
-              <h3 class="flex items-center gap-2 text-base font-semibold text-slate-800">
-                <LocalIcon name="compass" class="h-4 w-4 text-slate-500" />
-                快速导航
-              </h3>
-              <div class="mt-4 flex flex-wrap gap-2">
-                {categories.slice(0, 5).map(([category, _items], index) => {
-                  const meta = getCategoryMeta(category, index);
-                  return (
-                    <a
-                      href={`/categories/${encodeURIComponent(category)}`}
-                      class={`rounded-full px-3 py-1.5 text-sm font-medium ${meta.soft} ${meta.accent}`}
-                    >
-                      {category}
-                    </a>
-                  );
-                })}
-              </div>
-            </section>
-          </aside>
-        </div>
-      </div>
-    </section>
-
+            </div>
+            <span class="shrink-0 font-mono text-sm tabular-nums text-ink-ghost">{items.length} 篇</span>
+          </a>
+        </li>
+      ))}
+    </ul>
   </main>
+
   <Footer />
 </BaseLayout>
-
-<style>
-  .category-tune-surface {
-    --category-title-size: 44px;
-    --category-title-color: #36e259;
-    --category-title-letter-spacing: 0.01em;
-    --category-copy-size: 16px;
-    --category-copy-line-height: 1.2;
-    --category-copy-color: #159fc1;
-    --category-copy-letter-spacing: 0em;
-    --category-badge-size: 13px;
-    --category-card-title-size: 18px;
-    --category-card-desc-size: 14px;
-  }
-
-  .category-hero-badge {
-    color: #047857;
-    font-size: var(--category-badge-size);
-  }
-
-  .category-hero-title {
-    margin-top: 1.25rem;
-    color: var(--category-title-color);
-    font-size: var(--category-title-size);
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: var(--category-title-letter-spacing);
-    overflow-wrap: anywhere;
-  }
-
-  .category-hero-copy {
-    max-width: 42rem;
-    margin-top: 1rem;
-    color: var(--category-copy-color);
-    font-size: var(--category-copy-size);
-    line-height: var(--category-copy-line-height);
-    letter-spacing: var(--category-copy-letter-spacing);
-    overflow-wrap: anywhere;
-  }
-
-  .category-hero-rule {
-    width: 6rem;
-    height: 0.125rem;
-    margin-top: 1.25rem;
-    border-radius: 999px;
-    background: #10b981;
-  }
-
-  .category-card-title {
-    font-size: var(--category-card-title-size);
-  }
-
-  .category-card-desc {
-    font-size: var(--category-card-desc-size);
-  }
-
-  .category-tune-surface[data-category-title-font='sans'] .category-hero-title,
-  .category-tune-surface[data-category-copy-font='sans'] .category-hero-copy,
-  .category-tune-surface[data-category-badge-font='sans'] .category-hero-badge,
-  .category-tune-surface[data-category-card-font='sans'] .category-card {
-    font-family: 'Noto Sans SC', system-ui, sans-serif;
-  }
-
-  .category-tune-surface[data-category-title-font='serif'] .category-hero-title,
-  .category-tune-surface[data-category-copy-font='serif'] .category-hero-copy,
-  .category-tune-surface[data-category-badge-font='serif'] .category-hero-badge,
-  .category-tune-surface[data-category-card-font='serif'] .category-card {
-    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
-  }
-
-  .category-tune-surface[data-category-title-font='brush'] .category-hero-title,
-  .category-tune-surface[data-category-copy-font='brush'] .category-hero-copy,
-  .category-tune-surface[data-category-badge-font='brush'] .category-hero-badge,
-  .category-tune-surface[data-category-card-font='brush'] .category-card {
-    font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
-  }
-
-  .category-tune-surface[data-category-title-font='playful'] .category-hero-title,
-  .category-tune-surface[data-category-card-font='playful'] .category-card {
-    font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', cursive;
-  }
-
-  .category-tune-surface[data-category-title-font='mono'] .category-hero-title,
-  .category-tune-surface[data-category-copy-font='mono'] .category-hero-copy,
-  .category-tune-surface[data-category-badge-font='mono'] .category-hero-badge,
-  .category-tune-surface[data-category-card-font='mono'] .category-card {
-    font-family: 'JetBrains Mono', 'Noto Sans SC', monospace;
-  }
-
-  @media (max-width: 768px) {
-    .category-hero-title {
-      font-size: clamp(2.5rem, 14vw, var(--category-title-size));
-    }
-  }
-</style>
