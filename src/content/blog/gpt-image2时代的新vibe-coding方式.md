@@ -1,5 +1,5 @@
 ---
-title: GPT-image2时代的新vibe coding方式
+title: GPT-Image 2 时代的新 Vibe Coding 方式
 description: 最近用codex过程中发现用image-2+gpt5.5真的能够给前端省去很多事情
 pubDate: '2026-04-26'
 category: AI

@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+
+const seriesMap = posts.reduce((acc, post) => {
+  const key = post.data.series;
+  if (!key) return acc;
+  if (!acc.has(key)) acc.set(key, []);
+  acc.get(key)?.push(post);
+  return acc;
+}, new Map<string, typeof posts>());
+
+const seriesList = Array.from(seriesMap.entries())
+  .map(([name, items]) => ({
+    name,
+    items: items.sort(
+      (a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0)
+    ),
+    latest: items.reduce((a, b) => (b.data.pubDate > a.data.pubDate ? b : a)),
+  }))
+  .sort((a, b) => b.latest.data.pubDate.valueOf() - a.latest.data.pubDate.valueOf());
+---
+
+<BaseLayout title="专栏" description="Aerchen 的系列文章专栏">
+  <Header />
+
+  <main class="mx-auto w-full max-w-3xl flex-1 px-6">
+    <section class="pt-14 md:pt-20">
+      <h1 class="font-serif text-4xl font-bold text-ink">专栏</h1>
+      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint">
+        值得连续写的话题，按顺序沉淀成专栏。连载比散篇更能看清一条思考的轨迹。
+      </p>
+    </section>
+
+    <div class="space-y-14 pb-20 pt-10">
+      {seriesList.map((series) => (
+        <section>
+          <div class="flex items-baseline justify-between gap-6 border-b border-ink/80 pb-3">
+            <h2 class="font-serif text-2xl font-bold text-ink">{series.name}</h2>
+            <span class="shrink-0 font-mono text-sm tabular-nums text-ink-ghost">
+              {series.items.length} 篇 · 更新至 {series.latest.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric' })}
+            </span>
+          </div>
+          <ol class="divide-y divide-line/70">
+            {series.items.map((post, index) => (
+              <li>
+                <a
+                  href={`/blog/${post.id}`}
+                  class="group flex items-baseline gap-5 py-4"
+                >
+                  <span class="shrink-0 font-mono text-sm tabular-nums text-ink-ghost">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span class="min-w-0 flex-1 text-[16px] font-medium text-ink transition-colors group-hover:text-ember">
+                    {post.data.title}
+                  </span>
+                  <span class="shrink-0 font-mono text-[13px] tabular-nums text-ink-ghost">
+                    {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric' })}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+
+      {seriesList.length === 0 && (
+        <p class="pt-10 text-center text-ink-faint">暂无专栏，敬请期待……</p>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

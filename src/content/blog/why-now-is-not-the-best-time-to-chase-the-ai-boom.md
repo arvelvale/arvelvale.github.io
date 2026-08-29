@@ -1,10 +1,12 @@
 ---
-title: Why I think Now is not the best time to chase AI boom?
+title: Why Now Is Not the Best Time to Chase the AI Boom
 description: ''
 cover: /uploads/1787129241643-pcvvg4.png
 pubDate: '2026-08-19'
 category: 思考
-tags: []
+tags:
+  - 思考
+  - AI
 updatedDate: '2026-08-19'
 ---
 ## 1. This year we have experience

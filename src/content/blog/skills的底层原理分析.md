@@ -3,7 +3,9 @@ title: Skills的底层原理分析
 description: ''
 pubDate: '2026-05-09'
 category: AI
-tags: []
+tags:
+  - AI
+  - Skills
 updatedDate: '2026-05-09'
 ---
 ## 一.什么是skills

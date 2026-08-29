@@ -40,6 +40,11 @@ export interface Props {
   category?: string;
   tags?: string[];
   body?: string;
+  seriesNav?: {
+    series: string;
+    prev?: { slug: string; title: string };
+    next?: { slug: string; title: string };
+  };
   headings?: Array<{
     depth: number;
     slug: string;
@@ -47,7 +52,7 @@ export interface Props {
   }>;
 }
 
-const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '' } = Astro.props;
+const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav } = Astro.props;
 
 function formatCN(date: Date): string {
   return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -90,33 +95,31 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   </div>
 
   <main class="mx-auto w-full max-w-5xl flex-1 px-6">
-    <div class="grid gap-10 pb-16 pt-10 lg:grid-cols-[200px_minmax(0,1fr)]">
-      <!-- 目录 -->
+    <div class:list={['grid gap-10 pb-16 pt-10', tocItems.length > 0 && 'lg:grid-cols-[200px_minmax(0,1fr)]']}>
+      <!-- 目录：无章节时整栏不渲染，正文占满 -->
+      {tocItems.length > 0 && (
       <aside class="hidden lg:block">
         <div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pb-4">
           <h2 class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">目录</h2>
-          {tocItems.length > 0 ? (
-            <nav class="mt-4 space-y-1 border-l border-line" aria-label="文章目录">
-              {tocItems.map((item, index) => (
-                <a
-                  href={`#${item.slug}`}
-                  data-toc-link
-                  data-toc-target={item.slug}
-                  class:list={[
-                    '-ml-px block border-l-2 border-transparent pl-4 leading-6 text-ink-faint transition-colors hover:text-ink',
-                    'text-[13px]',
-                    item.depth === 3 && 'pl-7',
-                    index === 0 && 'border-ember/70 text-ember',
-                  ]}
-                  set:html={renderTocItem(item.text)}
-                />
-              ))}
-            </nav>
-          ) : (
-            <p class="mt-4 text-[13px] leading-6 text-ink-ghost">本文没有章节目录。</p>
-          )}
+          <nav class="mt-4 space-y-1 border-l border-line" aria-label="文章目录">
+            {tocItems.map((item, index) => (
+              <a
+                href={`#${item.slug}`}
+                data-toc-link
+                data-toc-target={item.slug}
+                class:list={[
+                  '-ml-px block border-l-2 border-transparent pl-4 leading-6 text-ink-faint transition-colors hover:text-ink',
+                  'text-[13px]',
+                  item.depth === 3 && 'pl-7',
+                  index === 0 && 'border-ember/70 text-ember',
+                ]}
+                set:html={renderTocItem(item.text)}
+              />
+            ))}
+          </nav>
         </div>
       </aside>
+      )}
 
       <div class="min-w-0">
         <!-- 文章头 -->
@@ -178,6 +181,33 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
             <slot />
           </div>
         </article>
+
+        {/* 系列内上一篇 / 下一篇 */}
+        {seriesNav && (
+          <nav class="mt-14 border-t border-line pt-8" aria-label="系列导航">
+            <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">
+              专栏 · {seriesNav.series}
+            </p>
+            <div class="mt-4 flex flex-wrap items-start justify-between gap-4">
+              {seriesNav.prev ? (
+                <a href={`/blog/${seriesNav.prev.slug}`} class="group max-w-[46%]">
+                  <span class="block text-[13px] text-ink-ghost">上一篇</span>
+                  <span class="mt-1 block text-[15px] font-medium text-ink transition-colors group-hover:text-ember">
+                    {seriesNav.prev.title}
+                  </span>
+                </a>
+              ) : <span />}
+              {seriesNav.next ? (
+                <a href={`/blog/${seriesNav.next.slug}`} class="group max-w-[46%] text-right">
+                  <span class="block text-[13px] text-ink-ghost">下一篇</span>
+                  <span class="mt-1 block text-[15px] font-medium text-ink transition-colors group-hover:text-ember">
+                    {seriesNav.next.title}
+                  </span>
+                </a>
+              ) : <span />}
+            </div>
+          </nav>
+        )}
 
         {/* 文末签名档 */}
         <footer class="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-8">

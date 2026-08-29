@@ -3,7 +3,9 @@ title: 在vibe coding中使用html的利与弊
 description: 基于A社工程师Thariq文章所获得的收获
 pubDate: '2026-05-10'
 category: AI
-tags: []
+tags:
+  - AI
+  - vibe coding
 updatedDate: '2026-05-11'
 ---
 在vibe coding中，AI 经常会用又长又臭的MD文档输出计划、总结、PR 说明和执行报告。MD的确简洁、省 token、适合版本管理，但它的问题是：它更适合生成文本，不一定适合让人审阅复杂决策。

@@ -39,6 +39,22 @@ const enrichedHeadings = headings.map((h) => {
   }
   return h;
 });
+
+// 系列导航：同 series 内按 seriesOrder 找前后篇
+let seriesNav;
+if (post.data.series) {
+  const siblings = (await getCollection('blog'))
+    .filter((p) => p.data.series === post.data.series)
+    .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
+  const index = siblings.findIndex((p) => p.id === post.id);
+  const toRef = (p: (typeof siblings)[number] | undefined) =>
+    p ? { slug: p.id, title: p.data.title } : undefined;
+  seriesNav = {
+    series: post.data.series,
+    prev: toRef(index > 0 ? siblings[index - 1] : undefined),
+    next: toRef(index >= 0 && index < siblings.length - 1 ? siblings[index + 1] : undefined),
+  };
+}
 ---
 
 <BlogPost
@@ -50,6 +66,7 @@ const enrichedHeadings = headings.map((h) => {
   tags={post.data.tags}
   headings={enrichedHeadings}
   body={post.body}
+  seriesNav={seriesNav}
 >
   <Content />
 </BlogPost>

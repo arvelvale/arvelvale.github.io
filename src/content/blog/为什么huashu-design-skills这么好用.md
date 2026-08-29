@@ -3,7 +3,9 @@ title: 为什么huashu-design skills这么好用
 description: 最近用kimi code做开发时，遇到页页面设计相关的内容，会用一下huashu-design 这个skills，很好奇它为什么这么好用，所以就做了一下拆解
 pubDate: '2026-07-28'
 category: AI
-tags: []
+tags:
+  - AI
+  - Skills
 updatedDate: '2026-07-28'
 ---
 ## 一.AI slop：默认即平庸

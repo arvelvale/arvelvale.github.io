@@ -3,7 +3,9 @@ title: 什么是graph engineering？
 description: 继Loop engineering之后，又一个被造出来的新词
 pubDate: '2026-07-28'
 category: AI
-tags: []
+tags:
+  - AI
+  - 知识工程
 updatedDate: '2026-07-29'
 ---
 ## 一.什么是图工程
