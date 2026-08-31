@@ -22,7 +22,7 @@ updatedDate: '2026-04-26'
 
 
 
-![](/uploads/1777165381305-dohtxe.png)
+![](/uploads/1777165381305-dohtxe.webp)
 
 上面这张图片就是image-2生成的效果，可以看到还是非常的精美的。
 
@@ -40,7 +40,7 @@ updatedDate: '2026-04-26'
 
 像这种如果对前端不满意的话，可以直接把目前的效果截图发给gpt官网或者是codex，但建议还是用codex，因为如果是gpt官网的话，它生成的页面中可能有一些按键是压根当前项目没有的功能。
 
-![](/uploads/1777167978949-rftzg7.png)
+![](/uploads/1777167978949-rftzg7.webp)
 
 图片生成完后直接扔给GPT5.5或者claude，glm，干就完了
 

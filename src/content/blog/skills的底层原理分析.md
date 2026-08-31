@@ -89,7 +89,7 @@ skills的核心是渐进式披露，至于为什么能够渐进式披露，其�
 
 <p>&nbsp;</p>
 
-![](/uploads/1778332172801-cr2oy3.png)
+![](/uploads/1778332172801-cr2oy3.webp)
 
 并且skill 可以放在个人、项目、插件、企业等位置，例如个人目录 `~/.claude/skills//SKILL.md`，项目目录 `.claude/skills//SKILL.md`；并且它会监听这些 skill 目录的变化，新增、修改、删除可以在当前 session 生效。
 
