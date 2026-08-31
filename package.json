@@ -9,9 +9,9 @@
     "astro": "astro"
   },
   "keywords": [],
-  "author": "Aerchen",
+  "author": "ArvelVale",
   "license": "MIT",
-  "description": "Aerchen's blog - Thoughts on AI, Building, Markets, and Life.",
+  "description": "ArvelVale's blog - Thoughts on AI, Building, Markets, and Life.",
   "dependencies": {
     "@astrojs/mdx": "^4.3.14",
     "@astrojs/preact": "^4.1.3",

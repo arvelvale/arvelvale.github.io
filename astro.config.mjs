@@ -5,7 +5,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
-  site: 'https://rain1andsnow2a.github.io',
+  site: 'https://arvelvale.github.io',
   base: '/',
   integrations: [
     mdx(),
