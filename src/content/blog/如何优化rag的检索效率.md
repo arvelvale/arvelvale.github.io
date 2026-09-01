@@ -219,7 +219,7 @@ Please give a short succinct context to situate this chunk within the overall do
 
 
 
-![](/uploads/1776673786034-f2x11a.png)
+![](/uploads/1776673786034-f2x11a.webp)
 
 第三步优化：
 
@@ -235,4 +235,4 @@ rerank是对召回的所有结果，进行一次精细的排序。
 
 
 
-![](/uploads/1776673765533-hupnim.png)
+![](/uploads/1776673765533-hupnim.webp)

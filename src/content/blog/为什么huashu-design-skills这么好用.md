@@ -98,15 +98,13 @@ hi-fi：high fidelity，即高保真，与此对应的有Lo-fi(低保真)和Mid-
 
 huashu-design这个skills不是一条流水线，而是一个决策树，同一个命令，如帮我做一个xx页面，会根据你手里的上下文，进入3条完全不同的路径。
 
-<p>&nbsp;</p>
-
-![](/uploads/1785220492938-01pvxj.png)
+![](/uploads/1785220492938-01pvxj.webp)
 
 这里一个比较精妙的设计是Fallback，不让用户选择他看不到的东西，这就很友好了，当你什么参考都没有给的时候，不会问你想要什么风格，因为它认定了没有见过视觉的用户压根没法回答这个问题，有效选择只能发生在看到真实视觉之后。
 
 <p>&nbsp;</p>
 
-![](/uploads/1785221074755-r9zs2n.png)
+![](/uploads/1785221074755-r9zs2n.webp)
 
 ## 四.huashu-design的刹车系统
 
@@ -122,8 +120,8 @@ huashu-design这个skills不是一条流水线，而是一个决策树，同一�
 
 主文件SKILL.md是宪法，细节如24篇具体情况的手册全部按需外置。
 
-![](/uploads/1785222575347-voyrk2.png)
+![](/uploads/1785222575347-voyrk2.webp)
 
 huashu-design的秘密不在于提供了多少设计风格，而是把设计师的工作习惯变成了模型的强制行为，并且对抗AI slop，且每一个检查点都把错误拦在还便宜的时候
 
-![](/uploads/1785222732382-d3npol.png)
+![](/uploads/1785222732382-d3npol.webp)
