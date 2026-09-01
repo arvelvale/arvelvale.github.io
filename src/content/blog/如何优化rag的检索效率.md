@@ -14,13 +14,13 @@ updatedDate: '2026-04-27'
 
 2.RAG
 
-3.目前最新的一个解决方案，github项目[https://github.com/supermemoryai/supermemory,](https://github.com/supermemoryai/supermemory,它是包括了RAG，但是不止于RAG,它相当于给了AI一个非常完美的上下文环境,并且还把信息用graph)它是包括了RAG，但是不止于RAG,它相当于给了AI一个非常完美的上下文环境,并且还把信息用graph memory的方式进行存储
+3.目前最新的一个解决方案，GitHub项目 [supermemory](https://github.com/supermemoryai/supermemory)。它是包括了RAG，但是不止于RAG，它相当于给了AI一个非常完整的上下文环境，并且还把信息用graph memory的方式进行存储
 
 这里主要是介绍下RAG以及对RAG的优化。
 
-首先RAG，全称Retrieve Augment Generation，检索增强生成。
+首先RAG，全称Retrieval-Augmented Generation，检索增强生成。
 
-最简单的理解是把用户的输入转化为向量，然后与向量数据库如Chromdb或者qdrant中的文本向量进行匹配，向量是类似于(x1,x2,x3….)这种形式的，向量的距离有的时候会用常见的欧式距离，如下面的公式，但更多的是余弦相似度和点积的方式运算。
+最简单的理解是把用户的输入转化为向量，然后与向量数据库如ChromaDB或者Qdrant中的文本向量进行匹配，向量是类似于(x1,x2,x3….)这种形式的，向量的距离有的时候会用常见的欧式距离，如下面的公式，但更多的是余弦相似度和点积的方式运算。
 
 $\sqrt{(x1-x2)^2 + (y1 - y2)^2 + (z1-z2)^2+...}$
 
@@ -78,9 +78,9 @@ $v = \frac{1}{n} \times \sum_{i=1}^{n} h_i$
 
 A社，Anthropic就提出了一个概念，Contextual retrieve，即上下文检索，这篇文章主要就是讲述的这种优化方式。
 
-想要知道如何优化就先要知道RAG的不足，比如RAG虽然能进行语义上的理解，但很难把握住一些精准的字符串，如错误码TS-999这种，或者类名，表明，API路径是啥，这些需要精确命中的东西。
+想要知道如何优化就先要知道RAG的不足，比如RAG虽然能进行语义上的理解，但很难把握住一些精准的字符串，如错误码TS-999这种，或者类名，表名，API路径是啥，这些需要精确命中的东西。
 
-先介绍一个算法TF-TDF
+先介绍一个算法TF-IDF
 
 TF：Term Frequency，词频，指的是某个词在某篇chunk出现的越多，越重要
 
