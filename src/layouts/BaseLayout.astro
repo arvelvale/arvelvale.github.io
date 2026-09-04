@@ -1,18 +1,23 @@
 ---
 import '../styles/global.css';
 import 'katex/dist/katex.min.css';
+import { t, type Lang } from '../scripts/i18n';
 
 export interface Props {
   title: string;
   description?: string;
   pubDate?: Date;
+  titleKey?: string;
+  titleVar?: string;
 }
 
-const { title, description = 'Thoughts on AI, Building, Markets, and Life.', pubDate } = Astro.props;
+const { title, description = 'Thoughts on AI, Building, Markets, and Life.', pubDate, titleKey, titleVar } = Astro.props;
+const lang = (Astro.currentLocale ?? 'en') as Lang;
+const pageTitle = titleKey ? t(lang, titleKey, titleVar !== undefined ? { n: titleVar } : undefined) : title;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,12 +34,9 @@ const { title, description = 'Thoughts on AI, Building, Markets, and Life.', pub
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700;900&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <title>{title} | ArvelVale</title>
+    <title>{pageTitle} | ArvelVale</title>
   </head>
   <body class="flex min-h-screen flex-col bg-paper text-ink antialiased">
-    <script>
-      import '../scripts/i18n';
-    </script>
     <slot />
   </body>
 </html>

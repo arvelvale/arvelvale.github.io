@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocalIcon from '../components/LocalIcon.astro';
+import { getCollection } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { t, type Lang } from '../scripts/i18n';
+
+const lang = (Astro.currentLocale ?? 'en') as Lang;
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+function formatDot(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}.${m}.${d}`;
+}
+---
+
+<BaseLayout title="搜索" titleKey="search.title" description="搜索 ArvelVale 的博客文章">
+  <Header />
+
+  <main class="mx-auto w-full max-w-3xl flex-1 px-6">
+    <section class="pt-14 md:pt-20">
+      <h1 class="font-serif text-4xl font-bold text-ink">{t(lang, 'search.title')}</h1>
+      <p class="mt-4 text-[15px] leading-7 text-ink-faint">
+        {t(lang, 'search.intro')}
+      </p>
+
+      <label
+        class="mt-8 flex items-center gap-3 border-b-2 border-line-strong pb-3 transition-colors focus-within:border-ember"
+      >
+        <LocalIcon name="search" class="h-5 w-5 shrink-0 text-ink-ghost" />
+        <input
+          id="search-input"
+          type="search"
+          placeholder={t(lang, 'search.placeholder')}
+          class="min-w-0 flex-1 bg-transparent text-lg text-ink outline-none placeholder:text-ink-ghost"
+          autocomplete="off"
+        />
+      </label>
+    </section>
+
+    <section class="pb-20 pt-10">
+      <p id="search-count" class="font-mono text-[13px] tabular-nums text-ink-ghost">
+        {t(lang, 'search.count.all', { n: posts.length })}
+      </p>
+
+      <ul id="search-results" class="mt-2 divide-y divide-line/70">
+        {posts.map((post) => {
+          const searchableText = [
+            post.data.title,
+            post.data.description,
+            post.data.category,
+            ...post.data.tags,
+            post.body,
+          ]
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase();
+
+          return (
+            <li data-search-card data-search={searchableText}>
+              <a href={getRelativeLocaleUrl(lang, `/blog/${post.id}`)} class="group block py-4 sm:flex sm:items-baseline sm:gap-6">
+                <time
+                  datetime={post.data.pubDate.toISOString()}
+                  class="block font-mono text-[13px] tabular-nums text-ink-ghost sm:w-[88px] sm:shrink-0"
+                >
+                  {formatDot(post.data.pubDate)}
+                </time>
+                <div class="mt-1 min-w-0 sm:mt-0">
+                  <h2 class="text-[17px] font-medium leading-snug text-ink transition-colors group-hover:text-ember">
+                    {post.data.title}
+                  </h2>
+                  {post.data.description && (
+                    <p class="mt-1 line-clamp-1 text-sm leading-6 text-ink-faint">{post.data.description}</p>
+                  )}
+                  <p class="mt-1.5 text-xs text-ink-ghost">{post.data.category}</p>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <p id="search-empty" class="hidden py-16 text-center text-ink-faint">
+        {t(lang, 'search.none')}
+      </p>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  import { ct } from '../scripts/i18n';
+
+  const input = document.getElementById('search-input');
+  const count = document.getElementById('search-count');
+  const empty = document.getElementById('search-empty');
+  const cards = Array.from(document.querySelectorAll('[data-search-card]'));
+
+  function normalize(value) {
+    return value.trim().toLowerCase();
+  }
+
+  function updateSearch() {
+    if (!(input instanceof HTMLInputElement)) return;
+    const query = normalize(input.value);
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      if (!(card instanceof HTMLElement)) return;
+      const text = card.dataset.search ?? '';
+      const visible = !query || text.includes(query);
+      card.classList.toggle('hidden', !visible);
+      if (visible) visibleCount += 1;
+    });
+
+    if (count) count.textContent = query
+      ? ct('search.count.found', { n: visibleCount })
+      : ct('search.count.all', { n: cards.length });
+    empty?.classList.toggle('hidden', visibleCount !== 0);
+  }
+
+  if (input instanceof HTMLInputElement) {
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get('q');
+    if (initialQuery) input.value = initialQuery;
+    input.addEventListener('input', updateSearch);
+    updateSearch();
+  }
+</script>

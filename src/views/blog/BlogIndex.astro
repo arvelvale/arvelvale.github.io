@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { t, type Lang } from '../../scripts/i18n';
+
+const lang = (Astro.currentLocale ?? 'en') as Lang;
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const categoryMap = posts.reduce((acc, post) => {
+  const key = post.data.category || '未分类';
+  acc.set(key, (acc.get(key) || 0) + 1);
+  return acc;
+}, new Map<string, number>());
+const categories = Array.from(categoryMap.entries()).sort((a, b) => b[1] - a[1]);
+
+// 按年分组，时间线式归档
+const postsByYear = new Map<number, typeof posts>();
+for (const post of posts) {
+  const year = post.data.pubDate.getFullYear();
+  if (!postsByYear.has(year)) postsByYear.set(year, []);
+  postsByYear.get(year)?.push(post);
+}
+const years = Array.from(postsByYear.keys()).sort((a, b) => b - a);
+
+function formatDot(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}.${m}.${d}`;
+}
+---
+
+<BaseLayout title="文章" titleKey="nav.blog" description="ArvelVale 的所有博客文章">
+  <Header />
+
+  <main class="mx-auto w-full max-w-5xl flex-1 px-6">
+    <section class="pb-4 pt-14 md:pt-20">
+      <h1 class="font-serif text-4xl font-bold text-ink">{t(lang, 'nav.blog')}</h1>
+      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint">
+        {t(lang, 'blog.intro.pre')}
+        <span class="tabular-nums text-ink">{posts.length}</span>
+        {t(lang, 'blog.intro.post')}
+      </p>
+    </section>
+
+    <div class="grid gap-12 pb-20 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-14">
+      <div>
+        {years.map((year) => (
+          <section class="mt-10 first:mt-8" aria-label={`${year} 年的文章`}>
+            <div class="flex items-center gap-4">
+              <h2 class="shrink-0 font-mono text-sm tabular-nums tracking-[0.12em] text-ink-ghost">
+                {year}
+              </h2>
+              <span class="h-px flex-1 bg-line" aria-hidden="true"></span>
+            </div>
+            <ul class="mt-2 divide-y divide-line/70">
+              {postsByYear.get(year)?.map((post) => {
+                const readingMinutes = Math.max(1, Math.ceil((post.body?.length || 800) / 420));
+                return (
+                  <li>
+                    <a href={getRelativeLocaleUrl(lang, `/blog/${post.id}`)} class="group block py-4 sm:flex sm:items-baseline sm:gap-6">
+                      <time
+                        datetime={post.data.pubDate.toISOString()}
+                        class="block font-mono text-[13px] tabular-nums text-ink-ghost sm:w-[88px] sm:shrink-0"
+                      >
+                        {formatDot(post.data.pubDate)}
+                      </time>
+                      <div class="mt-1 min-w-0 sm:mt-0">
+                        <h3 class="text-[17px] font-medium leading-snug text-ink transition-colors group-hover:text-ember">
+                          {post.data.title}
+                        </h3>
+                        {post.data.description && (
+                          <p class="mt-1 line-clamp-1 text-sm leading-6 text-ink-faint">
+                            {post.data.description}
+                          </p>
+                        )}
+                        <p class="mt-1.5 text-xs text-ink-ghost">
+                          {post.data.category}
+                          <span class="mx-1 text-line-strong">·</span>
+                          {t(lang, 'post.readMinutes', { n: readingMinutes })}
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
+
+        {posts.length === 0 && (
+          <p class="py-16 text-center text-ink-faint">{t(lang, 'blog.empty')}</p>
+        )}
+      </div>
+
+      <aside class="lg:pt-[4.7rem]">
+        <div class="lg:sticky lg:top-24">
+          <h2 class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">{t(lang, 'blog.categoryOverview')}</h2>
+          <ul class="mt-4 space-y-2.5">
+            {categories.map(([name, count]) => (
+              <li>
+                <a
+                  href={getRelativeLocaleUrl(lang, `/categories/${encodeURIComponent(name)}`)}
+                  class="group flex items-baseline justify-between gap-3 text-[14px]"
+                >
+                  <span class="text-ink-soft transition-colors group-hover:text-ember">{name}</span>
+                  <span class="font-mono text-xs tabular-nums text-ink-ghost">{count}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,8 +1,11 @@
-// 全站 UI 文案中英双语。文章正文不翻译，仅站点框架（导航、页脚、列表页、文章页外壳）。
-// 使用方式：静态文案加 data-i18n="key"；placeholder 加 data-i18n-ph="key"；
-// 客户端动态文案用 window.__t('key', { n: 5 })。
+// 全站 UI 文案中英双语。文章正文不翻译，仅站点框架。
+// 构建期（SSG）：页面用 t(Astro.currentLocale, key) 直接渲染对应语言；
+// 客户端动态文案用 ct(key, vars)，从 <html lang> 读取当前语言。
 
-export type Lang = 'zh' | 'en';
+export type Lang = 'en' | 'zh';
+
+export const langs: Lang[] = ['en', 'zh'];
+export const defaultLang: Lang = 'en';
 
 const dict: Record<string, { zh: string; en: string }> = {
   // 导航 / 页脚
@@ -11,7 +14,6 @@ const dict: Record<string, { zh: string; en: string }> = {
   'nav.categories': { zh: '分类', en: 'Categories' },
   'nav.series': { zh: '专栏', en: 'Series' },
   'nav.search': { zh: '搜索', en: 'Search' },
-  'footer.built': { zh: '用 Astro 构建 · 托管于 GitHub Pages', en: 'Built with Astro · Hosted on GitHub Pages' },
   'footer.built.pre': { zh: '用', en: 'Built with' },
   'footer.built.mid': { zh: '构建 · 托管于', en: '· Hosted on' },
 
@@ -49,8 +51,8 @@ const dict: Record<string, { zh: string; en: string }> = {
     en: 'Topics grouped into clearer partitions. Categories exist not to box content in, but to help you find the next thread worth pulling.',
   },
   'categories.latest': { zh: '最近：', en: 'Latest: ' },
-  'categories.count': { zh: '篇', en: 'posts' },
   'common.count.posts': { zh: '{n} 篇', en: '{n} posts' },
+  'meta.category': { zh: '{n} 分类', en: '{n}' },
   'categories.back': { zh: '返回分类总览', en: 'Back to categories' },
   'categories.index.pre': { zh: '这个分类下目前有', en: '' },
   'categories.index.post': { zh: '篇文章。', en: 'posts in this category.' },
@@ -61,7 +63,6 @@ const dict: Record<string, { zh: string; en: string }> = {
     zh: '值得连续写的话题，按顺序沉淀成专栏。连载比散篇更能看清一条思考的轨迹。',
     en: 'Topics worth writing about continuously, collected in order. A series shows the trajectory of a thought better than scattered posts.',
   },
-  'series.count': { zh: '篇', en: 'posts' },
   'series.updatedTo': { zh: '更新至', en: 'updated' },
   'series.empty': { zh: '暂无专栏，敬请期待……', en: 'No series yet. Stay tuned…' },
   'series.nav': { zh: '专栏', en: 'Series' },
@@ -83,7 +84,6 @@ const dict: Record<string, { zh: string; en: string }> = {
   'post.updated': { zh: '更新于', en: 'Updated' },
   'post.readMinutes': { zh: '约 {n} 分钟', en: '~{n} min' },
   'post.words': { zh: '{n} 字', en: '{n} words' },
-  'post.minutes.suffix': { zh: '分钟', en: 'min' },
   'post.prev': { zh: '上一篇', en: 'Previous' },
   'post.next': { zh: '下一篇', en: 'Next' },
   'progress.label': { zh: '阅读进度 {n}%', en: 'Reading {n}%' },
@@ -95,58 +95,22 @@ const dict: Record<string, { zh: string; en: string }> = {
   'copy.fail': { zh: '复制失败', en: 'Failed' },
 };
 
-export function getLang(): Lang {
-  try {
-    return localStorage.getItem('lang') === 'en' ? 'en' : 'zh';
-  } catch {
-    return 'zh';
-  }
-}
-
-export function t(key: string, vars?: Record<string, string | number>): string {
+/** 构建期/通用：按语言取文案，支持 {n} 占位 */
+export function t(lang: Lang, key: string, vars?: Record<string, string | number>): string {
   const entry = dict[key];
-  let s = entry ? entry[getLang()] : key;
+  let s = entry ? entry[lang] : key;
   if (vars) for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, String(v));
   return s;
 }
 
-export function applyLang(lang: Lang) {
-  document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
-  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
-    const entry = dict[el.dataset.i18n!];
-    if (entry) el.textContent = entry[lang];
-  });
-  document.querySelectorAll<HTMLElement>('[data-i18n-ph]').forEach((el) => {
-    const entry = dict[el.dataset.i18nPh!];
-    if (entry) el.setAttribute('placeholder', entry[lang]);
-  });
-  document.querySelectorAll<HTMLElement>('[data-i18n-tpl]').forEach((el) => {
-    const entry = dict[el.dataset.i18nTpl!];
-    if (!entry) return;
-    let s = entry[lang];
-    if (el.dataset.n !== undefined) s = s.replace('{n}', el.dataset.n);
-    el.textContent = s;
-  });
-  document.querySelectorAll<HTMLElement>('[data-lang-toggle]').forEach((el) => {
-    el.textContent = lang === 'en' ? '中' : 'EN';
-  });
+/** 客户端：从 <html lang> 读当前语言 */
+export function getClientLang(): Lang {
+  return typeof document !== 'undefined' && document.documentElement.lang.startsWith('zh')
+    ? 'zh'
+    : 'en';
 }
 
-declare global {
-  interface Window {
-    __t: typeof t;
-    __setLang: (lang: Lang) => void;
-  }
+/** 客户端动态文案 */
+export function ct(key: string, vars?: Record<string, string | number>): string {
+  return t(getClientLang(), key, vars);
 }
-
-window.__t = t;
-window.__setLang = (lang: Lang) => {
-  try {
-    localStorage.setItem('lang', lang);
-  } catch { /* ignore */ }
-  applyLang(lang);
-  // 让各页面内脚本（进度条、搜索计数等）重算一遍动态文案
-  window.dispatchEvent(new CustomEvent('langchange'));
-};
-
-applyLang(getLang());

@@ -7,6 +7,13 @@ import rehypeKatex from 'rehype-katex';
 export default defineConfig({
   site: 'https://arvelvale.github.io',
   base: '/',
+  i18n: {
+    locales: ['en', 'zh'],
+    defaultLocale: 'en',
+    routing: {
+      prefixDefaultLocale: true,
+    },
+  },
   integrations: [
     mdx(),
     tailwind(),

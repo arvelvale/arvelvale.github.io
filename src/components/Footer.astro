@@ -1,5 +1,7 @@
 ---
+import { t, type Lang } from '../scripts/i18n';
 const currentYear = new Date().getFullYear();
+const lang = (Astro.currentLocale ?? 'en') as Lang;
 ---
 
 <footer class="mt-auto border-t border-line">
@@ -8,14 +10,14 @@ const currentYear = new Date().getFullYear();
   >
     <p>© {currentYear} ArvelVale</p>
     <p>
-      <span data-i18n="footer.built.pre">用</span>
+      <span>{t(lang, 'footer.built.pre')}</span>
       <a
         href="https://astro.build"
         target="_blank"
         rel="noopener noreferrer"
         class="transition-colors hover:text-ember">Astro</a
       >
-      <span data-i18n="footer.built.mid">构建 · 托管于</span>
+      <span>{t(lang, 'footer.built.mid')}</span>
       <a
         href="https://pages.github.com"
         target="_blank"

@@ -1,0 +1,72 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { ...post },
+  }));
+}
+
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content, headings } = await post.render();
+
+const rawHeadings: Array<{ depth: number; text: string }> = [];
+const lines = post.body.split('\n');
+let inFence = false;
+for (const line of lines) {
+  if (/^\s*```/.test(line)) {
+    inFence = !inFence;
+    continue;
+  }
+  if (inFence) continue;
+  const m = /^(#{1,6})\s+(.*?)\s*#*\s*$/.exec(line);
+  if (m) rawHeadings.push({ depth: m[1].length, text: m[2] });
+}
+
+const enrichedHeadings = headings.map((h) => {
+  const idx = rawHeadings.findIndex((r) => r.depth === h.depth);
+  if (idx >= 0) {
+    const raw = rawHeadings.splice(idx, 1)[0];
+    return { ...h, text: raw.text };
+  }
+  return h;
+});
+
+// 系列导航：同 series 内按 seriesOrder 找前后篇
+let seriesNav;
+if (post.data.series) {
+  const siblings = (await getCollection('blog'))
+    .filter((p) => p.data.series === post.data.series)
+    .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
+  const index = siblings.findIndex((p) => p.id === post.id);
+  const toRef = (p: (typeof siblings)[number] | undefined) =>
+    p ? { slug: p.id, title: p.data.title } : undefined;
+  seriesNav = {
+    series: post.data.series,
+    prev: toRef(index > 0 ? siblings[index - 1] : undefined),
+    next: toRef(index >= 0 && index < siblings.length - 1 ? siblings[index + 1] : undefined),
+  };
+}
+---
+
+<BlogPost
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  category={post.data.category}
+  tags={post.data.tags}
+  headings={enrichedHeadings}
+  body={post.body}
+  seriesNav={seriesNav}
+>
+  <Content />
+</BlogPost>

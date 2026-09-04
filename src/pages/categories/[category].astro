@@ -1,79 +1,26 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
+// 旧分类路径：跳到默认语言版本
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   const categories = Array.from(new Set(posts.map((post) => post.data.category || '未分类')));
-  return categories.map((category) => ({
-    params: { category },
-    props: { category },
-  }));
+  return categories.map((category) => ({ params: { category } }));
 }
 
-const { category } = Astro.props;
-const posts = (await getCollection('blog'))
-  .filter((post) => (post.data.category || '未分类') === category)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-function formatDot(date: Date): string {
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${date.getFullYear()}.${m}.${d}`;
-}
+const target = `/en/categories/${encodeURIComponent(Astro.params.category)}/`;
 ---
-
-<BaseLayout title={`${category} 分类`} description={`浏览 ${category} 分类下的博客文章`}>
-  <Header />
-
-  <main class="mx-auto w-full max-w-3xl flex-1 px-6">
-    <section class="pt-14 md:pt-20">
-      <a href="/categories" class="text-[13px] text-ink-faint transition-colors hover:text-ember">
-        <span aria-hidden="true">←</span> <span data-i18n="categories.back">返回分类总览</span>
-      </a>
-      <h1 class="mt-5 font-serif text-4xl font-bold text-ink">{category}</h1>
-      <p class="mt-3 text-sm text-ink-faint">
-        <span data-i18n="categories.index.pre">这个分类下目前有</span> <span class="tabular-nums text-ink">{posts.length}</span> <span data-i18n="categories.index.post">篇文章。</span>
-      </p>
-    </section>
-
-    <ul class="divide-y divide-line/70 pb-20 pt-6">
-      {posts.map((post) => {
-        const readingMinutes = Math.max(1, Math.ceil((post.body?.length || 800) / 420));
-        return (
-          <li>
-            <a href={`/blog/${post.id}`} class="group block py-4 sm:flex sm:items-baseline sm:gap-6">
-              <time
-                datetime={post.data.pubDate.toISOString()}
-                class="block font-mono text-[13px] tabular-nums text-ink-ghost sm:w-[88px] sm:shrink-0"
-              >
-                {formatDot(post.data.pubDate)}
-              </time>
-              <div class="mt-1 min-w-0 sm:mt-0">
-                <h2 class="text-[17px] font-medium leading-snug text-ink transition-colors group-hover:text-ember">
-                  {post.data.title}
-                </h2>
-                {post.data.description && (
-                  <p class="mt-1 line-clamp-1 text-sm leading-6 text-ink-faint">{post.data.description}</p>
-                )}
-                <p class="mt-1.5 text-xs text-ink-ghost">
-                  <span data-i18n-tpl="post.readMinutes" data-n={readingMinutes}>约 {readingMinutes} 分钟</span>
-                  {post.data.tags.length > 0 && (
-                    <>
-                      <span class="mx-1 text-line-strong">·</span>
-                      {post.data.tags.join(' / ')}
-                    </>
-                  )}
-                </p>
-              </div>
-            </a>
-          </li>
-        );
-      })}
-    </ul>
-  </main>
-
-  <Footer />
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>ArvelVale</title>
+  </head>
+  <body>
+    <script is:inline>
+      location.replace('/en' + location.pathname + location.search + location.hash);
+    </script>
+  </body>
+</html>
