@@ -3,11 +3,11 @@ import LocalIcon from './LocalIcon.astro';
 const currentPath = Astro.url.pathname;
 
 const navItems = [
-  { href: '/', label: '首页', active: currentPath === '/' },
-  { href: '/blog', label: '文章', active: currentPath.startsWith('/blog') },
-  { href: '/categories', label: '分类', active: currentPath.startsWith('/categories') },
-  { href: '/series', label: '专栏', active: currentPath.startsWith('/series') },
-  { href: '/search', label: '搜索', active: currentPath.startsWith('/search') },
+  { href: '/', label: '首页', i18n: 'nav.home', active: currentPath === '/' },
+  { href: '/blog', label: '文章', i18n: 'nav.blog', active: currentPath.startsWith('/blog') },
+  { href: '/categories', label: '分类', i18n: 'nav.categories', active: currentPath.startsWith('/categories') },
+  { href: '/series', label: '专栏', i18n: 'nav.series', active: currentPath.startsWith('/series') },
+  { href: '/search', label: '搜索', i18n: 'nav.search', active: currentPath.startsWith('/search') },
 ];
 ---
 
@@ -23,6 +23,7 @@ const navItems = [
       {navItems.map((item) => (
         <a
           href={item.href}
+          data-i18n={item.i18n}
           class:list={[
             'relative pb-1 transition-colors duration-200',
             item.active
@@ -33,6 +34,15 @@ const navItems = [
           {item.label}
         </a>
       ))}
+      <button
+        type="button"
+        data-lang-toggle
+        onclick="window.__setLang(document.documentElement.lang === 'en' ? 'zh' : 'en')"
+        aria-label="Switch language / 切换语言"
+        class="rounded border border-line px-2 py-0.5 font-mono text-[12px] text-ink-faint transition-colors hover:border-ember/50 hover:text-ember"
+      >
+        EN
+      </button>
       <a
         href="https://github.com/arvelvale"
         target="_blank"
@@ -56,6 +66,7 @@ const navItems = [
         {navItems.map((item) => (
           <a
             href={item.href}
+            data-i18n={item.i18n}
             class:list={[
               'block rounded px-3 py-2 transition-colors',
               item.active ? 'bg-ember/5 text-ember' : 'text-ink-soft hover:bg-paper-deep',
@@ -72,6 +83,14 @@ const navItems = [
         >
           GitHub
         </a>
+        <button
+          type="button"
+          data-lang-toggle
+          onclick="window.__setLang(document.documentElement.lang === 'en' ? 'zh' : 'en')"
+          class="block w-full rounded px-3 py-2 text-left font-mono text-[13px] text-ink-soft transition-colors hover:bg-paper-deep"
+        >
+          EN
+        </button>
       </div>
     </details>
   </nav>

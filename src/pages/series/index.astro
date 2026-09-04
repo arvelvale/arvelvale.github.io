@@ -30,8 +30,8 @@ const seriesList = Array.from(seriesMap.entries())
 
   <main class="mx-auto w-full max-w-3xl flex-1 px-6">
     <section class="pt-14 md:pt-20">
-      <h1 class="font-serif text-4xl font-bold text-ink">专栏</h1>
-      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint">
+      <h1 class="font-serif text-4xl font-bold text-ink" data-i18n="series.title">专栏</h1>
+      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint" data-i18n="series.intro">
         值得连续写的话题，按顺序沉淀成专栏。连载比散篇更能看清一条思考的轨迹。
       </p>
     </section>
@@ -42,7 +42,7 @@ const seriesList = Array.from(seriesMap.entries())
           <div class="flex items-baseline justify-between gap-6 border-b border-ink/80 pb-3">
             <h2 class="font-serif text-2xl font-bold text-ink">{series.name}</h2>
             <span class="shrink-0 font-mono text-sm tabular-nums text-ink-ghost">
-              {series.items.length} 篇 · 更新至 {series.latest.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric' })}
+              <span data-i18n-tpl="common.count.posts" data-n={series.items.length}>{series.items.length} 篇</span> · <span data-i18n="series.updatedTo">更新至</span> {series.latest.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric' })}
             </span>
           </div>
           <ol class="divide-y divide-line/70">
@@ -69,7 +69,7 @@ const seriesList = Array.from(seriesMap.entries())
       ))}
 
       {seriesList.length === 0 && (
-        <p class="pt-10 text-center text-ink-faint">暂无专栏，敬请期待……</p>
+        <p class="pt-10 text-center text-ink-faint" data-i18n="series.empty">暂无专栏，敬请期待……</p>
       )}
     </div>
   </main>

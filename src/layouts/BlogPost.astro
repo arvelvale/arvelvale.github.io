@@ -84,12 +84,13 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     <div class="border-b border-line bg-paper/92 backdrop-blur-md">
       <div class="mx-auto flex max-w-5xl items-center gap-4 px-6 py-2">
         <span id="fixed-progress-label" class="whitespace-nowrap font-mono text-[11px] tabular-nums text-ink-faint"
+          data-i18n-tpl="progress.label" data-n="0"
           >阅读进度 0%</span
         >
         <div class="h-[3px] flex-1 overflow-hidden rounded-full bg-line/60">
           <div id="fixed-progress-bar" class="h-full w-0 rounded-full bg-ember transition-[width] duration-150"></div>
         </div>
-        <span id="fixed-remaining-label" class="whitespace-nowrap text-[11px] text-ink-ghost">继续阅读</span>
+        <span id="fixed-remaining-label" class="whitespace-nowrap text-[11px] text-ink-ghost" data-i18n="progress.continue">继续阅读</span>
       </div>
     </div>
   </div>
@@ -100,7 +101,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
       {tocItems.length > 0 && (
       <aside class="hidden lg:block">
         <div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pb-4">
-          <h2 class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">目录</h2>
+          <h2 class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost" data-i18n="post.toc">目录</h2>
           <nav class="mt-4 space-y-1 border-l border-line" aria-label="文章目录">
             {tocItems.map((item, index) => (
               <a
@@ -125,7 +126,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
         <!-- 文章头 -->
         <header>
           <a href="/blog" class="text-[13px] text-ink-faint transition-colors hover:text-ember">
-            <span aria-hidden="true">←</span> 全部文章
+            <span aria-hidden="true">←</span> <span data-i18n="post.allPosts">全部文章</span>
           </a>
 
           <div class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[13px]">
@@ -154,9 +155,9 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
             class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[13px] tabular-nums text-ink-ghost"
           >
             {formattedDate && <time datetime={pubDate?.toISOString()}>{formattedDate}</time>}
-            {formattedUpdated && <span>更新于 {formattedUpdated}</span>}
-            <span>{wordCount}</span>
-            <span>约 {readMinutes} 分钟</span>
+            {formattedUpdated && <span><span data-i18n="post.updated">更新于</span> {formattedUpdated}</span>}
+            <span data-i18n-tpl="post.words" data-n={displayWordCount}>{wordCount}</span>
+            <span data-i18n-tpl="post.readMinutes" data-n={readMinutes}>约 {readMinutes} 分钟</span>
           </div>
         </header>
 
@@ -166,8 +167,8 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
             <div id="reading-progress-bar" class="h-full w-0 rounded-full bg-ember transition-[width] duration-150"></div>
           </div>
           <div class="mt-2 flex items-center justify-between font-mono text-[11px] tabular-nums text-ink-ghost">
-            <span id="reading-progress-label">阅读进度 0%</span>
-            <span id="reading-remaining-label">继续阅读</span>
+            <span id="reading-progress-label" data-i18n-tpl="progress.label" data-n="0">阅读进度 0%</span>
+            <span id="reading-remaining-label" data-i18n="progress.continue">继续阅读</span>
           </div>
         </div>
 
@@ -186,12 +187,12 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
         {seriesNav && (
           <nav class="mt-14 border-t border-line pt-8" aria-label="系列导航">
             <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">
-              专栏 · {seriesNav.series}
+              <span data-i18n="series.nav">专栏</span> · {seriesNav.series}
             </p>
             <div class="mt-4 flex flex-wrap items-start justify-between gap-4">
               {seriesNav.prev ? (
                 <a href={`/blog/${seriesNav.prev.slug}`} class="group max-w-[46%]">
-                  <span class="block text-[13px] text-ink-ghost">上一篇</span>
+                  <span class="block text-[13px] text-ink-ghost" data-i18n="post.prev">上一篇</span>
                   <span class="mt-1 block text-[15px] font-medium text-ink transition-colors group-hover:text-ember">
                     {seriesNav.prev.title}
                   </span>
@@ -199,7 +200,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
               ) : <span />}
               {seriesNav.next ? (
                 <a href={`/blog/${seriesNav.next.slug}`} class="group max-w-[46%] text-right">
-                  <span class="block text-[13px] text-ink-ghost">下一篇</span>
+                  <span class="block text-[13px] text-ink-ghost" data-i18n="post.next">下一篇</span>
                   <span class="mt-1 block text-[15px] font-medium text-ink transition-colors group-hover:text-ember">
                     {seriesNav.next.title}
                   </span>
@@ -213,13 +214,13 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
         <footer class="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-8">
           <div class="flex items-center gap-4">
             <img
-              src="/头像.png"
+              src="/avatar.webp"
               alt="ArvelVale 的头像"
               class="h-12 w-12 rounded-full object-cover ring-1 ring-line-strong"
             />
             <div>
               <p class="text-[15px] font-medium text-ink">ArvelVale</p>
-              <p class="mt-0.5 text-[13px] text-ink-faint">写代码，也写点别的</p>
+              <p class="mt-0.5 text-[13px] text-ink-faint" data-i18n="home.tagline">写代码，也写点别的</p>
             </div>
           </div>
           <a
@@ -239,6 +240,8 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 </BaseLayout>
 
 <script>
+  import { t } from '../scripts/i18n';
+
   const articleContent = document.getElementById('article-content');
   const progressBar = document.getElementById('reading-progress-bar');
   const progressLabel = document.getElementById('reading-progress-label');
@@ -362,13 +365,13 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
       const copyButton = document.createElement('button');
       copyButton.className = 'code-copy-button';
       copyButton.type = 'button';
-      copyButton.setAttribute('aria-label', '复制代码');
+      copyButton.setAttribute('aria-label', t('copy.copy'));
       copyButton.innerHTML = `
         <svg viewBox="0 0 24 24" aria-hidden="true" class="code-copy-icon">
           <rect x="9" y="9" width="11" height="11" rx="2"></rect>
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
         </svg>
-        <span>复制</span>
+        <span>${t('copy.copy')}</span>
       `;
 
       copyButton.addEventListener('click', async () => {
@@ -376,16 +379,16 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
         try {
           await navigator.clipboard.writeText(text);
           copyButton.classList.add('is-copied');
-          copyButton.querySelector('span').textContent = '已复制';
+          copyButton.querySelector('span').textContent = t('copy.copied');
           window.setTimeout(() => {
             copyButton.classList.remove('is-copied');
-            copyButton.querySelector('span').textContent = '复制';
+            copyButton.querySelector('span').textContent = t('copy.copy');
           }, 1600);
         } catch (err) {
           console.error('Copy code failed:', err);
-          copyButton.querySelector('span').textContent = '复制失败';
+          copyButton.querySelector('span').textContent = t('copy.fail');
           window.setTimeout(() => {
-            copyButton.querySelector('span').textContent = '复制';
+            copyButton.querySelector('span').textContent = t('copy.copy');
           }, 1600);
         }
       });
@@ -408,19 +411,21 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     const percent = Math.min(100, Math.max(0, Math.round((progressed / totalScrollable) * 100)));
 
     progressBar.style.width = `${percent}%`;
-    progressLabel.textContent = `阅读进度 ${percent}%`;
+    progressLabel.textContent = t('progress.label', { n: percent });
 
     const remaining = totalWords > 0
       ? Math.max(1, Math.ceil((totalWords * (100 - percent)) / 42000))
       : Math.max(1, Math.ceil(((100 - percent) / 100) * 5));
-    const remainingText = percent >= 96 ? '即将读完' : `预计剩余约 ${remaining} 分钟`;
+    const remainingText = percent >= 96 ? t('progress.almost') : t('progress.remaining', { n: remaining });
     remainingLabel.textContent = remainingText;
 
     // 固定迷你进度条与原进度条同步更新
     if (fixedProgressBar instanceof HTMLElement) fixedProgressBar.style.width = `${percent}%`;
-    if (fixedProgressLabel instanceof HTMLElement) fixedProgressLabel.textContent = `阅读进度 ${percent}%`;
+    if (fixedProgressLabel instanceof HTMLElement) fixedProgressLabel.textContent = t('progress.label', { n: percent });
     if (fixedRemainingLabel instanceof HTMLElement) fixedRemainingLabel.textContent = remainingText;
   }
+
+  window.addEventListener('langchange', updateReadingProgress);
 
   // 固定条贴在站点 Header 正下方，Header 高度随响应式变化，需动态测量
   function positionFixedProgress() {

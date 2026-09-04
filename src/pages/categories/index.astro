@@ -27,8 +27,8 @@ const categories = Array.from(categoryMap.entries()).sort((a, b) => {
 
   <main class="mx-auto w-full max-w-3xl flex-1 px-6">
     <section class="pt-14 md:pt-20">
-      <h1 class="font-serif text-4xl font-bold text-ink">分类</h1>
-      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint">
+      <h1 class="font-serif text-4xl font-bold text-ink" data-i18n="categories.title">分类</h1>
+      <p class="mt-4 max-w-xl text-[15px] leading-7 text-ink-faint" data-i18n="categories.intro">
         把技术探索按主题整理成更清晰的知识分区。分类不是为了把内容关进盒子，而是为了更快找到下一条值得深入的线索。
       </p>
     </section>
@@ -45,10 +45,10 @@ const categories = Array.from(categoryMap.entries()).sort((a, b) => {
                 {category}
               </h2>
               <p class="mt-1 line-clamp-1 text-sm text-ink-faint">
-                最近：<span class="font-kai">{items[0]?.data.title}</span>
+                <span data-i18n="categories.latest">最近：</span><span class="font-kai">{items[0]?.data.title}</span>
               </p>
             </div>
-            <span class="shrink-0 font-mono text-sm tabular-nums text-ink-ghost">{items.length} 篇</span>
+            <span class="shrink-0 font-mono text-sm tabular-nums text-ink-ghost" data-i18n-tpl="common.count.posts" data-n={items.length}>{items.length} 篇</span>
           </a>
         </li>
       ))}
