@@ -8,16 +8,16 @@ const lang = (Astro.currentLocale ?? 'en') as Lang;
 
 const projects = [
   {
-    name: 'Human Index',
+    name: 'Humanindex',
     url: 'https://humanindex.fun',
     domain: 'humanindex.fun',
     descKey: 'projects.humanindex.desc',
   },
   {
-    name: '栖光 Yingji',
+    name: lang === 'zh' ? '喵灵 MindOff' : 'MindOff',
     url: 'https://yingjiapp.com',
     domain: 'yingjiapp.com',
-    descKey: 'projects.yingji.desc',
+    descKey: 'projects.mindoff.desc',
   },
 ];
 ---

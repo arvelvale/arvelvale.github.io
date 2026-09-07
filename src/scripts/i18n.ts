@@ -23,15 +23,15 @@ const dict: Record<string, { zh: string; en: string }> = {
     en: 'Things I have built. Click a card to visit the site.',
   },
   'projects.humanindex.desc': {
-    zh: 'Human Index——我的作品站点之一。',
-    en: 'Human Index — one of my projects.',
+    zh: '一个通过个人主页与趣味排行榜发现彼此的社交平台。展示自己，参与排名，认识有意思的人。',
+    en: 'A social discovery platform built around personal profiles and playful leaderboards. Share who you are, join a board, and meet interesting people.',
   },
-  'projects.yingji.desc': {
-    zh: '栖光——我的作品站点之一。',
-    en: 'Yingji — one of my projects.',
+  'projects.mindoff.desc': {
+    zh: '一个帮你安放思绪的 AI 陪伴应用。通过对话整理日常，让记忆、来信和桌宠陪伴连接起每一天。',
+    en: 'An AI companion that helps you make room for your thoughts. Reflect through conversation, with memories, letters, and a virtual pet connecting one day to the next.',
   },
   'projects.elsewhere': { zh: '也可以在别处找到我', en: 'Elsewhere' },
-  'projects.twitter': { zh: '推特', en: 'X (Twitter)' },
+  'projects.twitter': { zh: 'X', en: 'X' },
   'footer.built.pre': { zh: '用', en: 'Built with' },
   'footer.built.mid': { zh: '构建 · 托管于', en: '· Hosted on' },
 
