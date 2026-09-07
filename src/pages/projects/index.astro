@@ -1,0 +1,16 @@
+---
+// 旧路径：跳到默认语言的作品页
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=/en/projects/" />
+    <title>ArvelVale</title>
+  </head>
+  <body>
+    <script is:inline>
+      location.replace('/en/projects/' + location.search + location.hash);
+    </script>
+  </body>
+</html>

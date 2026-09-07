@@ -14,6 +14,24 @@ const dict: Record<string, { zh: string; en: string }> = {
   'nav.categories': { zh: '分类', en: 'Categories' },
   'nav.series': { zh: '专栏', en: 'Series' },
   'nav.search': { zh: '搜索', en: 'Search' },
+  'nav.projects': { zh: '作品', en: 'Projects' },
+
+  // 作品页
+  'projects.title': { zh: '作品', en: 'Projects' },
+  'projects.intro': {
+    zh: '我做的一些东西。点击卡片访问对应的站点。',
+    en: 'Things I have built. Click a card to visit the site.',
+  },
+  'projects.humanindex.desc': {
+    zh: 'Human Index——我的作品站点之一。',
+    en: 'Human Index — one of my projects.',
+  },
+  'projects.yingji.desc': {
+    zh: '栖光——我的作品站点之一。',
+    en: 'Yingji — one of my projects.',
+  },
+  'projects.elsewhere': { zh: '也可以在别处找到我', en: 'Elsewhere' },
+  'projects.twitter': { zh: '推特', en: 'X (Twitter)' },
   'footer.built.pre': { zh: '用', en: 'Built with' },
   'footer.built.mid': { zh: '构建 · 托管于', en: '· Hosted on' },
 
