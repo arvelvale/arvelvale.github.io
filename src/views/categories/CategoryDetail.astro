@@ -8,17 +8,9 @@ import { t, type Lang } from '../../scripts/i18n';
 
 const lang = (Astro.currentLocale ?? 'en') as Lang;
 
-export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  const categories = Array.from(new Set(posts.map((post) => post.data.category || '未分类')));
-  return categories.map((category) => ({
-    params: { category },
-    props: { category },
-  }));
-}
-
 const { category } = Astro.props;
 const posts = (await getCollection('blog'))
+  .filter((post) => (post.data.lang ?? 'zh') === lang)
   .filter((post) => (post.data.category || '未分类') === category)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 

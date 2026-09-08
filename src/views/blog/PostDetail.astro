@@ -2,17 +2,6 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 
-export async function getStaticPaths() {
-  const posts = (await getCollection('blog')).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-  );
-
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { ...post },
-  }));
-}
-
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
@@ -44,6 +33,7 @@ const enrichedHeadings = headings.map((h) => {
 let seriesNav;
 if (post.data.series) {
   const siblings = (await getCollection('blog'))
+    .filter((p) => (p.data.lang ?? 'zh') === (post.data.lang ?? 'zh'))
     .filter((p) => p.data.series === post.data.series)
     .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
   const index = siblings.findIndex((p) => p.id === post.id);
@@ -57,16 +47,30 @@ if (post.data.series) {
 }
 ---
 
-<BlogPost
-  title={post.data.title}
-  description={post.data.description}
-  pubDate={post.data.pubDate}
-  updatedDate={post.data.updatedDate}
-  category={post.data.category}
-  tags={post.data.tags}
-  headings={enrichedHeadings}
-  body={post.body}
-  seriesNav={seriesNav}
->
+{
+  (() => {
+    const postLang = post.data.lang ?? 'zh';
+    const otherLang = postLang === 'en' ? 'zh' : 'en';
+    const translationHref = post.data.translationSlug
+      ? `/${otherLang}/blog/${post.data.translationSlug}/`
+      : undefined;
+    return (
+      <BlogPost
+        title={post.data.title}
+        description={post.data.description}
+        pubDate={post.data.pubDate}
+        updatedDate={post.data.updatedDate}
+        category={post.data.category}
+        tags={post.data.tags}
+        headings={enrichedHeadings}
+        body={post.body}
+        seriesNav={seriesNav}
+        translationHref={translationHref}
+      >
+        <Content />
+      </BlogPost>
+    );
+  })()
+}
   <Content />
 </BlogPost>

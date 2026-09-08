@@ -9,9 +9,9 @@ import { t, type Lang } from '../scripts/i18n';
 
 const lang = (Astro.currentLocale ?? 'en') as Lang;
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = (await getCollection('blog'))
+  .filter((post) => (post.data.lang ?? 'zh') === lang)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 function formatDot(date: Date): string {
   const m = String(date.getMonth() + 1).padStart(2, '0');

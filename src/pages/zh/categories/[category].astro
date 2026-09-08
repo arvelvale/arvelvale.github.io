@@ -1,6 +1,17 @@
 ---
+import { getCollection } from 'astro:content';
 import CategoryDetail from '../../../views/categories/CategoryDetail.astro';
-export { getStaticPaths } from '../../../views/categories/CategoryDetail.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter(
+    (post) => (post.data.lang ?? 'zh') === 'zh'
+  );
+  const categories = Array.from(new Set(posts.map((post) => post.data.category || '未分类')));
+  return categories.map((category) => ({
+    params: { category },
+    props: { category },
+  }));
+}
 ---
 
 <CategoryDetail {...Astro.props} />

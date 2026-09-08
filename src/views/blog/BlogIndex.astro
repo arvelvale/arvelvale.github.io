@@ -8,9 +8,9 @@ import { t, type Lang } from '../../scripts/i18n';
 
 const lang = (Astro.currentLocale ?? 'en') as Lang;
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = (await getCollection('blog'))
+  .filter((post) => (post.data.lang ?? 'zh') === lang)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const categoryMap = posts.reduce((acc, post) => {
   const key = post.data.category || '未分类';
@@ -46,6 +46,14 @@ function formatDot(date: Date): string {
         <span class="tabular-nums text-ink">{posts.length}</span>
         {t(lang, 'blog.intro.post')}
       </p>
+      {lang === 'en' && (
+        <p class="mt-4 max-w-xl rounded-lg border border-line bg-paper px-4 py-3 text-[13.5px] leading-6 text-ink-faint">
+          The English edition is still growing — only a few posts so far.{' '}
+          <a href="/zh/blog/" class="text-ember hover:underline">
+            Browse the full archive in Chinese →
+          </a>
+        </p>
+      )}
     </section>
 
     <div class="grid gap-12 pb-20 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-14">

@@ -54,9 +54,10 @@ export interface Props {
     slug: string;
     text: string;
   }>;
+  translationHref?: string;
 }
 
-const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav } = Astro.props;
+const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref } = Astro.props;
 
 function formatCN(date: Date): string {
   return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -81,7 +82,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 ---
 
 <BaseLayout title={title} description={description} pubDate={pubDate}>
-  <Header />
+  <Header switchHref={translationHref} />
 
   {/* 滚动阅读时出现的固定迷你进度条（默认隐藏，原进度条滚出视口后显示） */}
   <div id="reading-progress-fixed" aria-hidden="true">

@@ -8,7 +8,11 @@ tags:
   - Astro
   - 教程
 updatedDate: '2026-04-18'
+translationSlug: 'build-blog-with-astro.md'
 ---
+
+> [English version](/en/blog/build-blog-with-astro.md/)
+
 ## 前言
 
 如果你想要一个 **加载飞快、SEO 友好、样式自由** 的博客，Astro 是目前最好的选择之一。

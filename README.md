@@ -1,39 +1,42 @@
-# ArvelVale 的个人博客
+**English** | [简体中文](./README.zh-CN.md)
 
-晨熠（ArvelVale）的个人博客 —— 记录技术探索、思考与成长。
+# ArvelVale's Personal Blog
 
-线上地址：https://arvelvale.github.io
+The personal blog of 晨熠 (ArvelVale) — notes on technical explorations, thinking, and growing up.
 
-## 技术栈
+Live site: https://arvelvale.github.io (English by default, Chinese available at `/zh/`)
 
-- [Astro](https://astro.build) 5（静态站点生成，Content Collections）
+## Tech Stack
+
+- [Astro](https://astro.build) 5 (static site generation with Content Collections)
 - Tailwind CSS 3 + @tailwindcss/typography
-- KaTeX（数学公式）、Mermaid（图表）、自研思维导图渲染（MDX 已集成，现有文章均为 .md）
-- GitHub Actions 自动部署到 GitHub Pages（推送 `main` 即发布）
+- KaTeX (math), Mermaid (diagrams), homegrown mindmap rendering (MDX integrated; existing posts are all `.md`)
+- GitHub Actions auto-deploy to GitHub Pages (push to `main` to publish)
 
-## 本地开发
+## Local Development
 
 ```bash
 npm install
-npm run dev      # 本地预览
-npm run build    # 构建到 dist/
+npm run dev      # local preview
+npm run build    # build to dist/
 ```
 
-## 目录结构
+## Directory Structure
 
 ```
-src/content/blog/    # 文章（Markdown，frontmatter 含 title/pubDate/category/tags/series）
-src/pages/           # 页面：首页 / 文章 / 分类 / 专栏 / 搜索
-src/layouts/         # 页面布局（含文章排版与阅读进度）
-public/uploads/      # 文章配图（WebP 优先，单张尽量 < 500KB）
+src/content/blog/    # posts (Markdown, frontmatter: title/pubDate/category/tags/series/lang)
+src/pages/           # pages: home / posts / categories / series / search (en/ + zh/ trees)
+src/layouts/         # layouts (post typography + reading progress)
+public/uploads/      # post images (WebP preferred, keep single images < 500KB)
 ```
 
-## 写作规范
+## Writing Conventions
 
-- 文件名与标题保持一致，但禁止全角符号、空格、逗号等 URL 不友好字符（这类情况改用全小写英文 slug + 连字符）；系列文章使用「系列名-序号-主题」命名，并设置 frontmatter 的 `series` / `seriesOrder`
-- 配图优先使用 WebP；PNG 截图超过 500KB 先压缩再提交
-- 配套桌面编辑器：[blog-editor](../blog-editor)（支持单篇发布/撤回）
+- Keep filenames consistent with titles, but avoid URL-unfriendly characters such as full-width symbols, spaces, or commas (use lowercase English slugs with hyphens instead); series posts use the `series-name-number-topic` pattern with `series` / `seriesOrder` in frontmatter
+- Prefer WebP for images; compress PNG screenshots over 500KB before committing
+- Companion desktop editor: [blog-editor](../blog-editor) (single-post publish/unpublish support)
+- Posts default to Chinese (`lang: zh`); English posts set `lang: en` with an English slug, and link to each other (`English version` / `中文版` notes)
 
 ## License
 
-文章版权归作者所有；站点代码以 [MIT](./LICENSE) 开源。
+Post content © the author; site code open-sourced under [MIT](./LICENSE).

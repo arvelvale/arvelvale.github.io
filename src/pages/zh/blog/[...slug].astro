@@ -1,6 +1,17 @@
 ---
+import { getCollection } from 'astro:content';
 import PostDetail from '../../../views/blog/PostDetail.astro';
-export { getStaticPaths } from '../../../views/blog/PostDetail.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog'))
+    .filter((post) => (post.data.lang ?? 'zh') === 'zh')
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { ...post },
+  }));
+}
 ---
 
 <PostDetail {...Astro.props} />

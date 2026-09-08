@@ -18,7 +18,8 @@ const navItems = [
   { path: '/search', key: 'nav.search', active: rawPath.startsWith('/search') },
 ];
 
-const switchHref = getRelativeLocaleUrl(otherLang, rawPath === '/' ? '' : rawPath);
+const { switchHref: switchHrefOverride } = Astro.props as { switchHref?: string };
+const switchHref = switchHrefOverride ?? getRelativeLocaleUrl(otherLang, rawPath === '/' ? '' : rawPath);
 ---
 
 <header class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">

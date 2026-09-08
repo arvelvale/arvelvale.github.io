@@ -7,7 +7,11 @@ tags:
   - AI
   - vibe coding
 updatedDate: '2026-05-11'
+translationSlug: 'html-vs-markdown-in-vibe-coding.md'
 ---
+
+> [English version](/en/blog/html-vs-markdown-in-vibe-coding.md/)
+
 在vibe coding中，AI 经常会用又长又臭的MD文档输出计划、总结、PR 说明和执行报告。MD的确简洁、省 token、适合版本管理，但它的问题是：它更适合生成文本，不一定适合让人审阅复杂决策。
 
 当agent开始承担更复杂的工程任务时，我们需要的不是更长的Markdown，而是更高信息密度、更可视化、更容易被人类参与和控制的输出界面。HTML artifact 正好提供了这种可能。
