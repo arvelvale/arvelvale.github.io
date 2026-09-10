@@ -24,7 +24,10 @@ const categories = Array.from(categoryMap.entries()).sort((a, b) => b[1] - a[1])
 const categoryCount = categories.length;
 
 const tagMap = posts.reduce((acc, post) => {
-  for (const tag of post.data.tags) {
+  for (const rawTag of post.data.tags) {
+    // 与 blog-editor 的 normalizeTagName 对齐：去首尾空格、压缩连续空白，避免 " AI" 与 "AI" 分裂成两个标签
+    const tag = String(rawTag ?? '').trim().replace(/\s+/g, ' ');
+    if (!tag) continue;
     acc.set(tag, (acc.get(tag) || 0) + 1);
   }
   return acc;
