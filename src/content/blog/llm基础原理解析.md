@@ -6,6 +6,8 @@ category: AI
 tags:
   - LLM
 updatedDate: '2026-04-29'
+lang: zh
+translationSlug: 'llm-fundamentals-explained.md'
 ---
 要了解AI，首先要对AI的底层原理有一定的了解，现代大模型一般都是基于神经网络和深度学习的，准确来说是多层神经网络。
 

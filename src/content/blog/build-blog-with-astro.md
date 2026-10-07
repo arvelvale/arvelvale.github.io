@@ -10,6 +10,7 @@ tags:
 updatedDate: '2026-04-18'
 lang: en
 translationSlug: '如何用Astro搭建你的个人博客.md'
+originalLang: zh
 ---
 
 > 中文版：[如何用Astro搭建你的个人博客](/zh/blog/如何用Astro搭建你的个人博客.md/)

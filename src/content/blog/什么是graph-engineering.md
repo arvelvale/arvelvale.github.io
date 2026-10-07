@@ -7,6 +7,8 @@ tags:
   - AI
   - 知识工程
 updatedDate: '2026-07-29'
+lang: zh
+translationSlug: 'what-is-graph-engineering.md'
 ---
 ## 一.什么是图工程
 

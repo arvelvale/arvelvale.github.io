@@ -7,6 +7,8 @@ tags:
   - AI
   - RAG
 updatedDate: '2026-04-27'
+lang: zh
+translationSlug: 'how-to-improve-rag-retrieval-efficiency.md'
 ---
 如果要给AI在某些专业的领域变得更强，一般有几种方法
 

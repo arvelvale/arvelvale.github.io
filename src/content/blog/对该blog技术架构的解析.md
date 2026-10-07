@@ -2,11 +2,13 @@
 title: 对该blog技术架构的解析
 description: ''
 pubDate: '2026-04-22'
-category: 博客搭建
+category: blog building
 tags:
   - blog
   - 架构原理分析
 updatedDate: '2026-04-22'
+lang: zh
+translationSlug: 'anatomy-of-this-blog.md'
 ---
 这篇博客主要使用的是Astro来构建的，并且在本地使用了一个可以随时把内容上传同步至github的编辑器，模仿notion风格，而不是直接改原始的md文档。
 

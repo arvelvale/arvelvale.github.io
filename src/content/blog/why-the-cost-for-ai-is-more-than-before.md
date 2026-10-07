@@ -2,11 +2,14 @@
 title: Why the cost for AI is more than before
 description: ''
 pubDate: '2026-08-25'
-category: 思考
+category: Thinking
 tags:
-  - 思考
+  - Thinking
   - AI
 updatedDate: '2026-08-25'
+lang: en
+originalLang: en
+translationSlug: '为什么AI的成本比以前更高了.md'
 ---
 Recently, two small changes caught my attention.Deepseek improve it's API price, and codex 5-hour limit is coming back after remporarily lifting it, Neither change is dramatic on its own, but together they made me think: is the era of extremely cheap frontier intelligence beginning to end?
 

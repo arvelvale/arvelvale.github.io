@@ -2,10 +2,12 @@
 title: 从一条请求看懂身份认证：Auth、Token、JWT、OAuth到请求签名的底层逻辑
 description: 从一条请求开始，带你看懂身份认证到底是个什么东西
 pubDate: '2026-05-06'
-category: 网络安全
+category: Cyber security
 tags:
   - cyber security
 updatedDate: '2026-05-06'
+lang: zh
+translationSlug: 'understanding-auth-tokens-jwt-oauth-and-request-signing.md'
 ---
 ## 引言：
 

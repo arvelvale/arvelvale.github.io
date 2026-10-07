@@ -7,7 +7,9 @@ tags:
   - AI
   - vibe coding
 updatedDate: '2026-05-11'
+lang: zh
 translationSlug: 'html-vs-markdown-in-vibe-coding.md'
+originalLang: zh
 ---
 
 > [English version](/en/blog/html-vs-markdown-in-vibe-coding.md/)

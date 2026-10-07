@@ -1,35 +1,41 @@
 ---
-title: Hello，World
-description: 这个博客的第一篇文章，说说为什么要搭它、怎么搭的。
+title: Hello, World
+description: 'My first post. A short note on why I started this blog and what I plan to write about.'
 pubDate: '2026-04-18'
-category: 博客搭建
-tags:
-  - 博客
 updatedDate: '2026-04-18'
+category: Tutorial
+tags:
+  - Blog
+lang: en
+originalLang: zh
+translationSlug: '我的第一篇博客.md'
 ---
-## 你好，世界
 
-这是这个博客的第一篇文章。
+> 中文版：[我的第一篇博客](/zh/blog/我的第一篇博客.md/)
 
-### 为什么写博客？
+## Hello, World
 
-学东西的时候经常有这种感觉：看的时候都懂，过两周就剩个印象。写下来能逼自己把模糊的地方想清楚，也方便以后翻回来查。这个博客就是干这个用的。
+This is the first post on this blog.
 
-### 这个博客是怎么搭建的？
+### Why write a blog?
 
-技术栈很简单：
+When I'm learning something I keep running into the same feeling: it all makes sense while I'm reading it, and two weeks later only a vague impression is left. Writing it down forces me to think through the fuzzy parts, and it's easy to look things back up later. That's what this blog is for.
 
--   **Astro** — 内容型网站的静态框架，快
--   **Tailwind CSS** — 原子化 CSS，调样式方便
--   **MDX** — Markdown 里能嵌组件
--   **GitHub Pages** — 免费托管，推代码就自动部署
+### How I built this blog
 
-写作和发布用的是我自己做的一个桌面编辑器，支持直接同步到 GitHub。
+The stack is simple:
 
-### 接下来会写什么
+-   **Astro** — a static framework for content sites, and it's fast
+-   **Tailwind CSS** — utility CSS, easy to tweak styles
+-   **MDX** — you can embed components in Markdown
+-   **GitHub Pages** — free hosting, push the code and it deploys automatically
 
-1.  技术学习笔记（最近在学 AI 和软件设计）
-1.  项目开发记录
-1.  偶尔的读书笔记和想法
+I write and publish through a desktop editor I built myself, which syncs straight to GitHub.
 
-更新不保证频率，但尽量保证每篇都是自己想过一遍的东西。
+### What I'll write next
+
+1.  Notes on what I'm learning (lately AI and software design)
+1.  Project development logs
+1.  The occasional reading note or random thought
+
+I can't promise a regular posting schedule, but I'll try to make sure every post is something I've actually thought through.

@@ -7,6 +7,8 @@ tags:
   - AI
   - Skills
 updatedDate: '2026-07-28'
+lang: zh
+translationSlug: 'why-huashu-design-skills-work-so-well.md'
 ---
 ## 一.AI slop：默认即平庸
 

@@ -55,9 +55,10 @@ export interface Props {
     text: string;
   }>;
   translationHref?: string;
+  translationNote?: string;
 }
 
-const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref } = Astro.props;
+const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref, translationNote } = Astro.props;
 
 function formatCN(date: Date): string {
   return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -163,6 +164,25 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
             <span>{t(lang, 'post.words', { n: displayWordCount })}</span>
             <span>{t(lang, 'post.readMinutes', { n: readMinutes })}</span>
           </div>
+
+          {/* 翻译声明：本篇由 AI 译自另一语言（作者非英语母语者） */}
+          {translationNote && (
+            <p
+              class="mt-5 border-l-2 border-ember/40 pl-3 text-[13px] leading-6 text-ink-faint"
+              data-translation-note
+            >
+              {translationNote}
+              {translationHref && (
+                <>
+                  {' '}
+                  <a href={translationHref} class="text-ember transition-colors hover:text-ember-deep">
+                    {t(lang, 'post.note.readOriginal')}
+                    <span aria-hidden="true"> →</span>
+                  </a>
+                </>
+              )}
+            </p>
+          )}
         </header>
 
         {/* 文内阅读进度条（滚出视口后由固定迷你条接管） */}

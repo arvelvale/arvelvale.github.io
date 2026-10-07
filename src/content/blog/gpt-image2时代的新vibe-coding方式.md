@@ -7,6 +7,8 @@ tags:
   - AI
   - vibe coding
 updatedDate: '2026-04-26'
+lang: zh
+translationSlug: 'vibe-coding-in-the-gpt-image-2-era.md'
 ---
 最近在vibe coding一个项目，最开始的前端是有点丑，包括之前的博客也是，虽然我还是知道什么好看，什么不好看的，但一点点修改起来还是有点难的，幸好最近OpenAI发布了Image-2，以及gpt 5.5，不过用其它模型也可以，目前看来5.5可以实现个7788的效果。
 

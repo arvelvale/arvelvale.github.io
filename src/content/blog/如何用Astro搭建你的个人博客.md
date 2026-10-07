@@ -2,13 +2,15 @@
 title: 如何用Astro搭建你的个人博客
 description: 一步步教你用 Astro + Tailwind CSS + MDX 搭建一个暗色主题的个人博客，并部署到 GitHub Pages。
 pubDate: '2026-04-18'
-category: 博客搭建
+category: blog building
 tags:
   - 技术
   - Astro
   - 教程
 updatedDate: '2026-04-18'
-translationSlug: 'build-blog-with-astro.md'
+lang: zh
+translationSlug: build-blog-with-astro.md
+originalLang: zh
 ---
 
 > [English version](/en/blog/build-blog-with-astro.md/)

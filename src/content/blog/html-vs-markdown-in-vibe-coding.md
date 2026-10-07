@@ -1,14 +1,15 @@
 ---
 title: Pros and Cons of Using HTML in Vibe Coding
-description: 'What I learned from Anthropic engineer Thariq on expressive AI output.'
+description: What I learned from Anthropic engineer Thariq on expressive AI output.
 pubDate: '2026-05-10'
 category: AI
 tags:
   - AI
-  - Vibe Coding
+  - vibe coding
 updatedDate: '2026-05-11'
 lang: en
-translationSlug: '在vibe-coding中使用html的利与弊.md'
+translationSlug: 在vibe-coding中使用html的利与弊.md
+originalLang: zh
 ---
 
 > 中文版：[在vibe-coding中使用html的利与弊](/zh/blog/在vibe-coding中使用html的利与弊.md/)

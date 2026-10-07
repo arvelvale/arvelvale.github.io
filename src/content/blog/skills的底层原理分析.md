@@ -7,6 +7,8 @@ tags:
   - AI
   - Skills
 updatedDate: '2026-05-09'
+lang: zh
+translationSlug: 'the-underlying-principles-of-skills.md'
 ---
 ## 一.什么是skills
 

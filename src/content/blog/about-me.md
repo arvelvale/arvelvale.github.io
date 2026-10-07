@@ -9,6 +9,7 @@ tags:
 updatedDate: '2026-04-22'
 lang: en
 translationSlug: '自我介绍.md'
+originalLang: zh
 ---
 
 > 中文版：[自我介绍](/zh/blog/自我介绍.md/)
@@ -32,3 +33,7 @@ Later I tried Vue, React, TypeScript, Go, Node.js and other stacks — learning 
 Actually I'm not only into vibe coding — I've also studied a bit of the *I Ching* with Professor Zeng Shiqiang, though not very deeply. I'm interested in traditional Chinese culture, and I love traveling, exploring places I've never been. Somehow I never seem to get bored in a new place — maybe because I just hadn't explored enough before. Later I ran into communities like waytoAGI and Datawhale, plus offline hackathons, which opened up an even bigger world and planted the idea that I want to do something different — to walk a road of my own.
 
 Hoping to make progress together with all of you!
+
+---
+
+> A note on language: English is not my first language. The English posts on this site are AI translations of my Chinese originals, so treat them as rough readings only — the Chinese versions are the source of truth.

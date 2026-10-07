@@ -1,13 +1,16 @@
 ---
 title: I Used to Think First Principles Was Just About Breaking Things Down
-description: 'From Musk-style cost breakdowns to the Eastern expression of the same idea in the Tao Te Ching.'
+description: >-
+  From Musk-style cost breakdowns to the Eastern expression of the same idea in
+  the Tao Te Ching.
 pubDate: '2026-05-06'
 category: Thinking
 tags:
   - Thinking
 updatedDate: '2026-05-07'
 lang: en
-translationSlug: '对第一性原理的解析.md'
+translationSlug: 对第一性原理的解析.md
+originalLang: zh
 ---
 
 > 中文版：[我曾经误以为第一性原理仅仅只是拆解](/zh/blog/对第一性原理的解析.md/)

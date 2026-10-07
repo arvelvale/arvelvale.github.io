@@ -50,10 +50,21 @@ const dict: Record<string, { zh: string; en: string }> = {
   'home.tags': { zh: '标签', en: 'Tags' },
   'home.about': { zh: '关于', en: 'About' },
   'home.about.body': {
-    zh: '我是 ArvelVale，做开发的，最近在学 AI 和软件设计。这里放学习笔记、项目记录，偶尔有些读书笔记和想法。更新不勤，但每篇都是自己想过一遍的。',
-    en: "I'm ArvelVale, a developer currently learning AI and software design. This site holds my study notes, project logs, and the occasional book note or stray thought. I don't post often, but every piece is something I've actually thought through.",
+    zh: '我是 ArvelVale，做开发的，最近在学 AI 和软件设计。这里放学习笔记、项目记录，偶尔有些读书笔记和想法。更新不勤，但每篇都是自己想过一遍的。英文不是我的母语，站内的英文文章都是 AI 翻译自中文原文，仅供参考。',
+    en: "I'm ArvelVale, a developer currently learning AI and software design. This site holds my study notes, project logs, and the occasional book note or stray thought. I don't post often, but every piece is something I've actually thought through. English is not my first language, so the English posts here are AI translations of my Chinese originals.",
   },
   'home.about.visitGithub': { zh: '访问 GitHub', en: 'Visit GitHub' },
+
+  // 翻译声明：原文非当前语言时，文章页顶部提示「AI 翻译 + 非英语母语」
+  'post.note.aiFromZh': {
+    zh: '英文不是我的母语。本站的英文文章均由 AI 翻译自中文原文，仅供快速阅读，如有歧义请以中文原版为准。',
+    en: "English is not my first language. The English posts on this site are AI translations of my Chinese originals, written for quick reading only — if anything reads oddly, the Chinese version is the source of truth.",
+  },
+  'post.note.aiFromEn': {
+    zh: '本文由 AI 自英文原文翻译而成，仅供快速阅读，如有歧义请以英文原版为准。',
+    en: 'This post is an AI translation of an English original, written for quick reading only — if anything reads oddly, the English version is the source of truth.',
+  },
+  'post.note.readOriginal': { zh: '阅读原文', en: 'Read the original' },
 
   // 文章列表页
   'blog.title': { zh: '文章', en: 'Posts' },
