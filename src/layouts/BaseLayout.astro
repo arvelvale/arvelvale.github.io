@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import 'katex/dist/katex.min.css';
 import { t, type Lang } from '../scripts/i18n';
+import Starfield from '../components/Starfield.astro';
 
 export interface Props {
   title: string;
@@ -37,6 +38,7 @@ const pageTitle = titleKey ? t(lang, titleKey, titleVar !== undefined ? { n: tit
     <title>{pageTitle} | ArvelVale</title>
   </head>
   <body class="flex min-h-screen flex-col bg-paper text-ink antialiased">
+    <Starfield />
     <slot />
   </body>
 </html>

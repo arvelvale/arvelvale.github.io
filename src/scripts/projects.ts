@@ -9,6 +9,7 @@ export interface Project {
   category: string;
   year: string;
   stack: string[];
+  logo: string;
 }
 
 export function getProjects(lang: Lang): Project[] {
@@ -21,6 +22,7 @@ export function getProjects(lang: Lang): Project[] {
       category: t(lang, 'projects.cat.desktop'),
       year: '2026',
       stack: ['Tauri 2', 'Rust', 'JavaScript', 'MIT'],
+      logo: '/projects/orrery.png',
     },
     {
       name: '喵灵',
@@ -30,6 +32,7 @@ export function getProjects(lang: Lang): Project[] {
       category: t(lang, 'projects.cat.ai'),
       year: '2026',
       stack: ['AI', 'Android', 'HarmonyOS'],
+      logo: '/projects/miaoling.png',
     },
     {
       name: lang === 'zh' ? '这个博客' : 'This blog',
@@ -39,6 +42,7 @@ export function getProjects(lang: Lang): Project[] {
       category: t(lang, 'projects.cat.web'),
       year: '2026',
       stack: ['Astro', 'Tailwind', 'GitHub Pages'],
+      logo: '/projects/blog.webp',
     },
   ];
 }

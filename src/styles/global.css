@@ -237,3 +237,7 @@
     }
   }
 }
+
+/* 文章页压低星空亮度，不干扰阅读 */
+body:has(.article-prose) #starfield { opacity: 0.3; }
+

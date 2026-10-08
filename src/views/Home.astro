@@ -216,9 +216,12 @@ function formatDot(date: Date): string {
                 rel="noopener noreferrer"
                 class="card-lift group flex h-full flex-col rounded-lg border border-line bg-raised p-6"
               >
-                <span class="font-serif text-4xl font-black leading-none text-line-strong transition-colors group-hover:text-ember/70">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+                <div class="flex items-center justify-between">
+                  <img src={p.logo} alt={p.name + ' logo'} width="52" height="52" loading="lazy" class="h-[52px] w-[52px] rounded-xl object-cover ring-1 ring-line-strong" />
+                  <span class="font-serif text-3xl font-black leading-none text-line-strong transition-colors group-hover:text-ember/70">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
                 <p class="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint">{p.category} · {p.year}</p>
                 <h3 class="mt-2 font-serif text-xl font-bold text-ink transition-colors group-hover:text-ember">{p.name}</h3>
                 <p class="mt-2 line-clamp-4 text-sm leading-7 text-ink-soft">{p.desc}</p>

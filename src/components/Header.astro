@@ -25,8 +25,9 @@ const switchHref = switchHrefOverride ?? getRelativeLocaleUrl(otherLang, rawPath
   <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
     <a
       href={getRelativeLocaleUrl(lang, '')}
-      class="font-serif text-[22px] font-bold tracking-wide text-ink transition-colors hover:text-ember"
+      class="flex items-center gap-2.5 font-serif text-[22px] font-bold tracking-wide text-ink transition-colors hover:text-ember"
     >
+      <img src="/avatar.webp" alt="" width="30" height="30" class="h-[30px] w-[30px] rounded-full object-cover ring-1 ring-ember/50" />
       ArvelVale
     </a>
     <div class="hidden items-center gap-8 text-[15px] md:flex">
