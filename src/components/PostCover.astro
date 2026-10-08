@@ -1,15 +1,29 @@
 ---
-// 文章封面：构建期按「种子 + 分类」用代码画出来的 SVG，不依赖任何图片文件。
-// 同一个种子永远画出同一张图（中英配对文章用同一个种子，封面一致）；分类决定色相和图案：
-//   AI → 神经网络　Architecture → 等距分层　Thinking → 轨道　Security → 六边形网格
-//   Divination/国学 → 六爻　其余 → 星座连线
+// 文章封面：构建期用代码按「文章内容」画出来的 SVG，不依赖任何图片文件。
+// - 图案：对标题、标签、分类和二级标题做关键词打分选主题（AI→网络、架构→分层、思考→轨道、
+//   安全→六边形、易学→六爻），没有命中就按内容哈希随机；几何细节全部由内容哈希决定。
+// - 色相：主题基准色相 ± 70°，每篇不同。
+// - 文字：标题（自动换行/缩字号）、分类、前三个标签、章节数刻度。
 interface Props {
   seed: string;
+  title: string;
   category?: string;
+  tags?: string[];
+  body?: string;
   class?: string;
 }
 
-const { seed, category = '', class: className = '' } = Astro.props;
+const { seed, title, category = '', tags = [], body = '', class: className = '' } = Astro.props;
+
+// 二级标题：既参与主题判断，也画成右下角的章节刻度
+const FENCE = '`'.repeat(3);
+const h2s = body
+  .split(FENCE)
+  .filter((_, i) => i % 2 === 0)
+  .join('\n')
+  .split('\n')
+  .filter((l) => l.startsWith('## '))
+  .map((l) => l.slice(3).trim());
 
 function hash(str: string): number {
   let h = 2166136261;
@@ -28,31 +42,31 @@ function mulberry32(a: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const W = 800;
 const H = 450;
-const sid = hash(seed);
+const sid = hash(seed + '|' + title);
 const rnd = mulberry32(sid);
 const r = (min: number, max: number) => min + rnd() * (max - min);
 const f = (n: number) => n.toFixed(1);
 
 type Kind = 'network' | 'layers' | 'orbits' | 'hex' | 'hexagram' | 'constellation';
-const key = category.trim().toLowerCase();
-const theme: Record<string, [number, Kind]> = {
-  ai: [190, 'network'],
-  architecture: [222, 'layers'],
-  thinking: [265, 'orbits'],
-  security: [158, 'hex'],
-  'cyber security': [158, 'hex'],
-  divination: [34, 'hexagram'],
-  国学: [34, 'hexagram'],
-  tutorial: [205, 'constellation'],
-  'blog building': [320, 'constellation'],
-  'self introduce': [175, 'constellation'],
-  essay: [285, 'constellation'],
+const kinds: Kind[] = ['network', 'layers', 'orbits', 'hex', 'hexagram', 'constellation'];
+const baseHues: Record<Kind, number> = { network: 190, layers: 222, orbits: 265, hex: 158, hexagram: 34, constellation: 320 };
+const keywords: Record<Kind, string[]> = {
+  network: ['ai', 'llm', 'agent', 'rag', 'graph', 'gpt', 'prompt', 'skill', 'vibe', 'model', 'html', '图', '网络', '模型', '智能', '检索', '提示', '工程', '成本'],
+  layers: ['architecture', 'design', 'module', 'software', 'complexity', 'system', 'astro', 'blog', '架构', '设计', '模块', '系统', '软件', '复杂', '信息隐藏', '博客'],
+  orbits: ['thinking', 'principle', 'seed', 'self', 'mind', 'psychology', 'biography', 'boom', 'altman', '第一性', '种子', '自我', '思维', '心理', '传', '热潮', '时机'],
+  hex: ['security', 'password', 'jwt', 'oauth', 'auth', 'token', 'sign', '安全', '密码', '认证', '签名'],
+  hexagram: ['i ching', 'divination', 'yi', '易', '卦', '国学', '周易'],
+  constellation: ['hello', 'about', 'intro', 'first', 'tutorial', 'essay', '自我介绍', '第一篇', '随笔', '教程', '你好'],
 };
-const [baseHue, kind] = theme[key] ?? [200, 'constellation'];
-const hue = (baseHue + Math.round(r(-8, 8)) + 360) % 360;
+const haystack = [title, category, ...tags, ...h2s].join(' ').toLowerCase();
+const scores = kinds.map((k) => keywords[k].reduce((n, w) => n + (haystack.includes(w) ? 1 : 0), 0));
+const best = Math.max(...scores);
+const kind: Kind = best > 0 ? kinds[scores.indexOf(best)] : kinds[sid % kinds.length];
+const hue = (baseHues[kind] + Math.round(r(-70, 70)) + 360) % 360;
 const accent = (a: number, l = 68) => `hsla(${hue}, 85%, ${l}%, ${a})`;
 const accent2 = (a: number) => `hsla(${(hue + 40) % 360}, 80%, 72%, ${a})`;
 
@@ -60,11 +74,14 @@ const parts: string[] = [];
 
 // 背景小星点
 for (let i = 0; i < 46; i++) {
-  parts.push(`<circle cx="${f(r(0, W))}" cy="${f(r(0, H))}" r="${f(r(0.4, 1.3))}" fill="#fff" opacity="${f(r(0.15, 0.55))}"/>`);
+  parts.push(`<circle cx="${f(r(0, W))}" cy="${f(r(0, H))}" r="${f(r(0.4, 1.3))}" fill="#fff" opacity="${f(r(0.12, 0.5))}"/>`);
 }
 
+// 图案都放在右侧 ~60%，左侧留给文字
+const X0 = 330;
+
 if (kind === 'network') {
-  const nodes = Array.from({ length: 15 }, () => ({ x: r(70, W - 70), y: r(60, H - 60), big: rnd() < 0.2 }));
+  const nodes = Array.from({ length: 16 }, () => ({ x: r(X0, W - 40), y: r(50, H - 50), big: rnd() < 0.2 }));
   const edges = new Set<string>();
   nodes.forEach((a, i) => {
     nodes
@@ -76,7 +93,7 @@ if (kind === 'network') {
   });
   edges.forEach((e) => {
     const [i, j] = e.split('-').map(Number);
-    parts.push(`<line x1="${f(nodes[i].x)}" y1="${f(nodes[i].y)}" x2="${f(nodes[j].x)}" y2="${f(nodes[j].y)}" stroke="${accent(0.35)}" stroke-width="1.2"/>`);
+    parts.push(`<line x1="${f(nodes[i].x)}" y1="${f(nodes[i].y)}" x2="${f(nodes[j].x)}" y2="${f(nodes[j].y)}" stroke="${accent(0.4)}" stroke-width="1.2"/>`);
   });
   nodes.forEach((n) => {
     const rad = n.big ? r(9, 14) : r(3.5, 6);
@@ -84,44 +101,42 @@ if (kind === 'network') {
     parts.push(`<circle cx="${f(n.x)}" cy="${f(n.y)}" r="${f(rad)}" fill="${n.big ? accent(0.95, 75) : accent(0.8)}"/>`);
   });
 } else if (kind === 'layers') {
-  const cx = r(340, 460);
-  const top = r(90, 130);
-  const lw = 260;
-  const lh = 120;
+  const cx = r(540, 640);
+  const top = r(100, 140);
+  const lw = 280;
+  const lh = 130;
   const n = 4;
   for (let i = 0; i < n; i++) {
-    const cy = top + i * 52;
+    const cy = top + i * 56;
     const d = `M${f(cx)} ${f(cy - lh / 2)} L${f(cx + lw / 2)} ${f(cy)} L${f(cx)} ${f(cy + lh / 2)} L${f(cx - lw / 2)} ${f(cy)} Z`;
     parts.push(`<path d="${d}" fill="${accent(0.05 + i * 0.03)}" stroke="${accent(0.35 + i * 0.15)}" stroke-width="1.4"/>`);
   }
-  const last = top + (n - 1) * 52;
+  const last = top + (n - 1) * 56;
   [[-lw / 2, 0], [lw / 2, 0], [0, lh / 2]].forEach(([dx, dy]) => {
     parts.push(`<line x1="${f(cx + dx)}" y1="${f(top + dy)}" x2="${f(cx + dx)}" y2="${f(last + dy)}" stroke="${accent(0.22)}" stroke-dasharray="4 5"/>`);
   });
   for (let i = 0; i < 3; i++) {
-    const t = rnd();
-    const k = Math.floor(r(0, n));
-    parts.push(`<circle cx="${f(cx + (t - 0.5) * lw * 0.5)}" cy="${f(top + k * 52 + (rnd() - 0.5) * 30)}" r="4" fill="${accent2(0.95)}"/>`);
+    parts.push(`<circle cx="${f(cx + (rnd() - 0.5) * lw * 0.5)}" cy="${f(top + Math.floor(r(0, n)) * 56 + (rnd() - 0.5) * 30)}" r="4" fill="${accent2(0.95)}"/>`);
   }
 } else if (kind === 'orbits') {
-  const cx = r(380, 520);
+  const cx = r(530, 610);
   const cy = r(190, 260);
-  parts.push(`<circle cx="${f(cx)}" cy="${f(cy)}" r="90" fill="url(#g${sid})"/>`);
+  parts.push(`<circle cx="${f(cx)}" cy="${f(cy)}" r="95" fill="url(#g${sid})"/>`);
   parts.push(`<circle cx="${f(cx)}" cy="${f(cy)}" r="9" fill="${accent(1, 80)}"/>`);
   const rot = r(-35, 35);
   for (let i = 0; i < 5; i++) {
-    const rx = 70 + i * 52;
+    const rx = 60 + i * 46;
     const ry = rx * r(0.32, 0.5);
-    parts.push(`<g transform="rotate(${f(rot + i * 6)} ${f(cx)} ${f(cy)})"><ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${rx}" ry="${f(ry)}" fill="none" stroke="${accent(0.18 + (4 - i) * 0.06)}" stroke-width="1.2"/>`);
+    parts.push(`<g transform="rotate(${f(rot + i * 6)} ${f(cx)} ${f(cy)})"><ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${rx}" ry="${f(ry)}" fill="none" stroke="${accent(0.2 + (4 - i) * 0.06)}" stroke-width="1.2"/>`);
     const a = r(0, Math.PI * 2);
     parts.push(`<circle cx="${f(cx + Math.cos(a) * rx)}" cy="${f(cy + Math.sin(a) * ry)}" r="${f(r(3.5, 7))}" fill="${i % 2 ? accent2(0.95) : accent(0.95, 78)}"/></g>`);
   }
 } else if (kind === 'hex') {
   const s = 30;
   const hw = Math.sqrt(3) * s;
-  const ccx = r(430, 560);
-  const ccy = r(160, 290);
-  const rad = r(190, 230);
+  const ccx = r(560, 650);
+  const ccy = r(170, 280);
+  const rad = r(180, 220);
   for (let row = -2; row < 12; row++) {
     for (let col = -2; col < 14; col++) {
       const x = col * hw + (row % 2 ? hw / 2 : 0);
@@ -132,7 +147,7 @@ if (kind === 'network') {
         return `${f(x + Math.cos(a) * (s - 2))},${f(y + Math.sin(a) * (s - 2))}`;
       }).join(' ');
       const lit = rnd() < 0.14;
-      parts.push(`<polygon points="${pts}" fill="${lit ? accent(0.28) : 'none'}" stroke="${accent(lit ? 0.9 : 0.2)}" stroke-width="${lit ? 1.6 : 1}"/>`);
+      parts.push(`<polygon points="${pts}" fill="${lit ? accent(0.28) : 'none'}" stroke="${accent(lit ? 0.9 : 0.22)}" stroke-width="${lit ? 1.6 : 1}"/>`);
     }
   }
 } else if (kind === 'hexagram') {
@@ -149,12 +164,12 @@ if (kind === 'network') {
     });
   };
   const bitsOf = () => Array.from({ length: 6 }, () => (rnd() < 0.5 ? 1 : 0));
-  drawHex(W - 330, 70, 170, 20, 24, 0.9, bitsOf());
-  drawHex(W - 520, 120, 100, 12, 17, 0.35, bitsOf());
-  drawHex(W - 130, 230, 70, 9, 13, 0.25, bitsOf());
+  drawHex(W - 330, 90, 170, 20, 24, 0.9, bitsOf());
+  drawHex(W - 530, 140, 100, 12, 17, 0.35, bitsOf());
+  drawHex(W - 130, 240, 70, 9, 13, 0.25, bitsOf());
   parts.push(`<circle cx="${W - 245}" cy="${H / 2}" r="${f(r(150, 190))}" fill="none" stroke="${accent(0.15)}" stroke-width="1.2"/>`);
 } else {
-  const pts = Array.from({ length: 9 }, (_, i) => ({ x: 70 + (i / 8) * (W - 140) + r(-26, 26), y: r(70, H - 120) }));
+  const pts = Array.from({ length: 9 }, (_, i) => ({ x: X0 + 20 + (i / 8) * (W - X0 - 70) + r(-20, 20), y: r(60, H - 130) }));
   parts.push(`<polyline points="${pts.map((p) => `${f(p.x)},${f(p.y)}`).join(' ')}" fill="none" stroke="${accent(0.4)}" stroke-width="1.3" stroke-dasharray="2 6" stroke-linecap="round"/>`);
   pts.forEach((p, i) => {
     const big = i % 3 === 1;
@@ -169,14 +184,67 @@ if (kind === 'network') {
   [0, 1, 2].forEach((k) => {
     let d = '';
     for (let x = 0; x <= W; x += 16) {
-      const y = H - 60 + k * 16 + Math.sin(x / 70 + ph + k) * amp;
-      d += `${x === 0 ? 'M' : 'L'}${x} ${f(y)} `;
+      d += `${x === 0 ? 'M' : 'L'}${x} ${f(H - 70 + k * 16 + Math.sin(x / 70 + ph + k) * amp)} `;
     }
     parts.push(`<path d="${d}" fill="none" stroke="${accent(0.28 - k * 0.07)}" stroke-width="1.3"/>`);
   });
 }
 
-const glowX = r(0.15, 0.85) * W;
+// ── 文字：标题自动换行（CJK 每字一个宽度，西文约 0.56 个字宽），最多三行 ──
+const isWide = (ch: string) => /[　-鿿＀-￯]/.test(ch);
+const measure = (t: string, fs: number) => [...t].reduce((w, ch) => w + (isWide(ch) ? fs : ch === ' ' ? fs * 0.3 : fs * 0.56), 0);
+const MAXW = 450;
+function wrap(text: string, fs: number): string[] {
+  const tokens = text.match(/[A-Za-z0-9'’\-.:?!,()/+]+|\s+|./g) ?? [];
+  const lines: string[] = [];
+  let cur = '';
+  for (const tk of tokens) {
+    if (/^\s+$/.test(tk) && cur === '') continue;
+    if (measure(cur + tk, fs) > MAXW && cur !== '') {
+      lines.push(cur.trimEnd());
+      cur = /^\s+$/.test(tk) ? '' : tk;
+    } else {
+      cur += tk;
+    }
+  }
+  if (cur.trim()) lines.push(cur.trimEnd());
+  return lines;
+}
+let fs = 46;
+let lines = wrap(title, fs);
+for (const size of [46, 40, 34, 30]) {
+  fs = size;
+  lines = wrap(title, fs);
+  if (lines.length <= 3) break;
+}
+if (lines.length > 3) {
+  lines = lines.slice(0, 3);
+  let last = lines[2];
+  while (measure(last + '…', fs) > MAXW && last.length > 1) last = last.slice(0, -1);
+  lines[2] = last + '…';
+}
+const lh = Math.round(fs * 1.32);
+const blockH = lines.length * lh;
+const top = 215 - blockH / 2 + 10;
+const titleSvg = lines
+  .map((ln, i) => `<text x="44" y="${f(top + i * lh + fs * 0.85)}" fill="#f2f7fb" font-size="${fs}" font-weight="700" style="font-family:'Noto Serif SC','LXGW WenKai Screen',serif">${esc(ln)}</text>`)
+  .join('\n');
+const catSvg = category
+  ? `<text x="44" y="${f(top - 22)}" fill="${accent(0.95, 72)}" font-size="13" letter-spacing="3" style="font-family:'JetBrains Mono',ui-monospace,monospace">${esc(category.toUpperCase())}</text>`
+  : '';
+const barSvg = `<rect x="44" y="${f(top - 12)}" width="36" height="2" rx="1" fill="${accent(0.9)}"/>`;
+const tagLine = tags.slice(0, 3).join('  ·  ');
+const tagSvg = tagLine
+  ? `<text x="44" y="${f(top + blockH + 30)}" fill="${accent(0.7, 78)}" font-size="13" style="font-family:'JetBrains Mono',ui-monospace,monospace">${esc(tagLine)}</text>`
+  : '';
+// 章节刻度：每个二级标题一个小竖条，最多 12 个
+const ticks = h2s.slice(0, 12);
+const tickSvg = ticks.length
+  ? ticks.map((_, i) => `<rect x="${W - 44 - (ticks.length - i) * 9}" y="${H - 84}" width="3" height="${i % 3 === 0 ? 16 : 10}" rx="1.5" fill="${accent(0.55)}"/>`).join('') +
+    `<text x="${W - 44}" y="${H - 58}" text-anchor="end" fill="${accent(0.7, 76)}" font-size="12" style="font-family:'JetBrains Mono',ui-monospace,monospace">§ ${String(h2s.length).padStart(2, '0')}</text>`
+  : '';
+
+const glowX = r(0.4, 0.9) * W;
 const glowY = r(0.1, 0.9) * H;
 const inner = `
 <defs>
@@ -192,11 +260,20 @@ const inner = `
     <stop offset="0" stop-color="hsl(${hue}, 90%, 60%)" stop-opacity="0.22"/>
     <stop offset="1" stop-color="hsl(${hue}, 90%, 60%)" stop-opacity="0"/>
   </radialGradient>
+  <linearGradient id="s${sid}" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="hsl(${hue}, 50%, 6%)" stop-opacity="0.8"/>
+    <stop offset="0.62" stop-color="hsl(${hue}, 50%, 6%)" stop-opacity="0"/>
+  </linearGradient>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#b${sid})"/>
 <rect width="${W}" height="${H}" fill="url(#a${sid})"/>
 ${parts.join('\n')}
-<text x="28" y="${H - 26}" fill="${accent(0.7)}" font-size="13" letter-spacing="3" style="font-family:'JetBrains Mono',ui-monospace,monospace">${(category || 'NOTE').toUpperCase().replace(/[<>&]/g, '')} · ${(sid % 9000 + 1000).toString()}</text>
+<rect width="${W}" height="${H}" fill="url(#s${sid})"/>
+${barSvg}
+${catSvg}
+${titleSvg}
+${tagSvg}
+${tickSvg}
 `;
 ---
 
@@ -204,7 +281,7 @@ ${parts.join('\n')}
   viewBox={`0 0 ${W} ${H}`}
   preserveAspectRatio="xMidYMid slice"
   role="img"
-  aria-hidden="true"
+  aria-label={title}
   class={className}
   set:html={inner}
 ></svg>

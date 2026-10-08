@@ -212,7 +212,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
         </header>
 
         {coverSeed && (
-          <PostCover seed={coverSeed} category={category} class="mt-8 aspect-[21/9] w-full rounded-lg border border-line" />
+          <PostCover seed={coverSeed} title={title} category={category} tags={tags} body={body} class="mt-8 aspect-[21/9] w-full rounded-lg border border-line" />
         )}
 
         {/* 文内阅读进度条（滚出视口后由固定迷你条接管） */}

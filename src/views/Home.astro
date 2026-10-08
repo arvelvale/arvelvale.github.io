@@ -157,7 +157,10 @@ function formatDot(date: Date): string {
               ) : (
                 <PostCover
                   seed={coverSeed(post.id, post.data.translationSlug)}
+                  title={post.data.title}
                   category={post.data.category}
+                  tags={post.data.tags}
+                  body={post.body}
                   class:list={['w-full', i === 0 ? 'aspect-[16/9]' : 'aspect-[21/9]']}
                 />
               )}
