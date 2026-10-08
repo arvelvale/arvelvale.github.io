@@ -14,8 +14,8 @@ export default {
         ink: {
           DEFAULT: '#2c2620', // 墨字：标题
           soft: '#4a4237', // 正文
-          faint: '#8b7f6d', // 次要信息
-          ghost: '#b8ac97', // 占位符、极弱信息
+          faint: '#766a58', // 次要信息
+          ghost: '#9a8e79', // 占位符、极弱信息
         },
         ember: {
           DEFAULT: '#c04a1a', // 赤陶橙：全站唯一强调色

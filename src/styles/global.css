@@ -76,3 +76,63 @@
     --tw-prose-td-borders: #e7dfcf;
   }
 }
+
+@layer components {
+  /* 方格纸底：极淡的网格，只在首页/作品页大区块使用 */
+  .grid-paper {
+    background-image:
+      linear-gradient(to right, rgba(214, 202, 178, 0.28) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(214, 202, 178, 0.28) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .card-lift {
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+    border-color: rgba(192, 74, 26, 0.5);
+    box-shadow: 0 14px 32px rgba(44, 38, 32, 0.08);
+  }
+
+  /* 滚动入场：JS 给 html 加 .js-reveal 后才隐藏，没有 JS 时内容照常显示 */
+  .js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .js-reveal .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    .js-reveal .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .marquee-track {
+      animation: none;
+    }
+    .card-lift,
+    .card-lift:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+}
