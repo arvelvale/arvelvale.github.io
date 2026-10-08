@@ -1,7 +1,6 @@
 ---
 title: Why Now Is Not the Best Time to Chase the AI Boom
 description: ''
-cover: /uploads/1787129241643-pcvvg4.webp
 pubDate: '2026-08-19'
 category: Thinking
 tags:

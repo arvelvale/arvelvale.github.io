@@ -1,7 +1,6 @@
 ---
 title: 为什么现在不是追逐 AI 热潮的最佳时机
 description: ''
-cover: /uploads/1787129241643-pcvvg4.webp
 pubDate: '2026-08-19'
 updatedDate: '2026-08-19'
 category: Thinking

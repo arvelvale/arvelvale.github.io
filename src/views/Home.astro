@@ -5,7 +5,8 @@ import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { t, type Lang } from '../scripts/i18n';
-import { getProjects } from '../scripts/projects';
+import { getProjects, coverSeed } from '../scripts/projects';
+import PostCover from '../components/PostCover.astro';
 
 const lang = (Astro.currentLocale ?? 'en') as Lang;
 
@@ -151,8 +152,14 @@ function formatDot(date: Date): string {
                 i === 0 && 'md:row-span-2',
               ]}
             >
-              {post.data.cover && i === 0 && (
-                <img src={post.data.cover} alt="" loading="lazy" class="aspect-[16/9] w-full object-cover" />
+              {post.data.cover ? (
+                <img src={post.data.cover} alt="" loading="lazy" class:list={['w-full object-cover', i === 0 ? 'aspect-[16/9]' : 'aspect-[21/9]']} />
+              ) : (
+                <PostCover
+                  seed={coverSeed(post.id, post.data.translationSlug)}
+                  category={post.data.category}
+                  class:list={['w-full', i === 0 ? 'aspect-[16/9]' : 'aspect-[21/9]']}
+                />
               )}
               <div class:list={['flex flex-1 flex-col p-6', i === 0 && 'md:p-8']}>
                 <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint">

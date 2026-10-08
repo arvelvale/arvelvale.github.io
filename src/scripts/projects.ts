@@ -46,3 +46,8 @@ export function getProjects(lang: Lang): Project[] {
     },
   ];
 }
+
+// 文章封面的种子：中英配对的两篇取两个 id 里字典序较小的，保证封面一致
+export function coverSeed(id: string, translationSlug?: string): string {
+  return translationSlug && translationSlug < id ? translationSlug : id;
+}

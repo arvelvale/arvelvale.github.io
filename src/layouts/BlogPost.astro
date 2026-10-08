@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import LocalIcon from '../components/LocalIcon.astro';
+import PostCover from '../components/PostCover.astro';
 import katex from 'katex';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { t, type Lang } from '../scripts/i18n';
@@ -57,9 +58,10 @@ export interface Props {
   }>;
   translationHref?: string;
   translationNote?: string;
+  coverSeed?: string;
 }
 
-const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref, translationNote } = Astro.props;
+const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref, translationNote, coverSeed } = Astro.props;
 
 // 日期按页面语言格式化：中文页「2026年7月28日」，英文页「Jul 28, 2026」，避免中英混排
 function formatCN(date: Date): string {
@@ -208,6 +210,10 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
             </p>
           )}
         </header>
+
+        {coverSeed && (
+          <PostCover seed={coverSeed} category={category} class="mt-8 aspect-[21/9] w-full rounded-lg border border-line" />
+        )}
 
         {/* 文内阅读进度条（滚出视口后由固定迷你条接管） */}
         <div id="article-progress-summary" class="mt-8">
