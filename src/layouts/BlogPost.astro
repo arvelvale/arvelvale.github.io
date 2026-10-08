@@ -541,7 +541,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     font-size: 1.05rem;
     line-height: 1.85;
     letter-spacing: 0.015em;
-    color: #4a4237;
+    color: #c3cfdb;
   }
 
   .article-prose :global(p) {
@@ -566,15 +566,15 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   .article-prose :global(h3),
   .article-prose :global(h4) {
     font-family: 'LXGW WenKai Screen', 'Noto Serif SC', 'Songti SC', serif;
-    color: #2c2620;
+    color: #ecf2f8;
     font-weight: 700;
     letter-spacing: 0.01em;
     line-height: 1.35;
   }
 
   .article-prose :global(blockquote) {
-    border-left: 2px solid #c04a1a;
-    background: rgba(192, 74, 26, 0.04);
+    border-left: 2px solid #4adeee;
+    background: rgba(74, 222, 238, 0.06);
     border-radius: 0 6px 6px 0;
     padding: 0.35rem 1.1rem;
     font-style: normal;
@@ -582,20 +582,20 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 
   .article-prose :global(blockquote p) {
     font-family: 'LXGW WenKai Screen', 'Noto Serif SC', 'Songti SC', serif;
-    color: #5d5346;
+    color: #a9b8c7;
     line-height: 1.7;
   }
 
   .article-prose :global(a) {
-    color: #c04a1a;
+    color: #4adeee;
     text-decoration: underline;
-    text-decoration-color: rgba(192, 74, 26, 0.35);
+    text-decoration-color: rgba(74, 222, 238, 0.4);
     text-underline-offset: 3px;
     transition: text-decoration-color 160ms ease;
   }
 
   .article-prose :global(a:hover) {
-    text-decoration-color: #c04a1a;
+    text-decoration-color: #4adeee;
   }
 
   .article-prose :global(img) {
@@ -603,16 +603,16 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   }
 
   .article-prose :global(hr) {
-    border-color: #e7dfcf;
+    border-color: #1b2534;
   }
 
   /* 行内代码：安静的纸片，不再用橙色渐变药丸 */
   .article-prose :global(:not(pre) > code) {
-    border: 1px solid rgba(192, 74, 26, 0.16);
+    border: 1px solid rgba(74, 222, 238, 0.22);
     border-radius: 4px;
-    background: rgba(192, 74, 26, 0.05);
+    background: rgba(74, 222, 238, 0.08);
     padding: 0.1rem 0.35rem;
-    color: #9c3a12;
+    color: #7ee9f5;
     font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.86em;
     font-weight: 500;
@@ -623,9 +623,9 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     position: relative;
     margin: 1.8rem 0;
     overflow: hidden;
-    border: 1px solid #e0d6c2;
+    border: 1px solid #223049;
     border-radius: 10px;
-    background: #f7f2e6;
+    background: #0a111b;
   }
 
   .article-prose :global(.code-block-toolbar) {
@@ -637,16 +637,16 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     justify-content: flex-end;
     gap: 0.45rem;
     min-height: 2.45rem;
-    border-bottom: 1px solid rgba(214, 202, 178, 0.6);
-    background: rgba(247, 242, 230, 0.92);
+    border-bottom: 1px solid rgba(44, 58, 80, 0.7);
+    background: rgba(10, 17, 27, 0.92);
     padding: 0.35rem 0.55rem 0.35rem 0.85rem;
     backdrop-filter: blur(10px);
   }
 
   .article-prose :global(.code-block-language) {
     border-radius: 4px;
-    background: rgba(255, 253, 249, 0.85);
-    color: #8b7f6d;
+    background: rgba(74, 222, 238, 0.1);
+    color: #8c9aab;
     padding: 0.3rem 0.55rem;
     font-family: 'JetBrains Mono', 'Noto Sans SC', system-ui, sans-serif;
     font-size: 0.75rem;
@@ -658,10 +658,10 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    border: 1px solid #d6cab2;
+    border: 1px solid #2c3a50;
     border-radius: 5px;
-    background: #fffdf9;
-    color: #8b7f6d;
+    background: #101a29;
+    color: #8c9aab;
     padding: 0.3rem 0.52rem;
     font-family: 'Noto Sans SC', system-ui, sans-serif;
     font-size: 0.75rem;
@@ -674,14 +674,14 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   }
 
   .article-prose :global(.code-copy-button:hover) {
-    border-color: #b3a48a;
-    color: #2c2620;
+    border-color: #4adeee;
+    color: #ecf2f8;
   }
 
   .article-prose :global(.code-copy-button.is-copied) {
-    border-color: rgba(192, 74, 26, 0.4);
-    background: rgba(192, 74, 26, 0.07);
-    color: #9c3a12;
+    border-color: rgba(74, 222, 238, 0.5);
+    background: rgba(74, 222, 238, 0.1);
+    color: #7ee9f5;
   }
 
   .article-prose :global(.code-copy-icon) {
@@ -699,7 +699,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     overflow-x: auto;
     padding: 1.05rem 1.25rem 1.2rem;
     background: transparent;
-    color: #2c2620;
+    color: #d6e0ea;
     font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.92rem;
     line-height: 1.75;
@@ -708,7 +708,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 
   .article-prose :global(pre.is-plain-code code),
   .article-prose :global(pre.is-plain-code code *) {
-    color: #2c2620 !important;
+    color: #d6e0ea !important;
   }
 
   .article-prose :global(pre code .line) {
@@ -721,7 +721,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 
   .article-prose :global(pre code::-webkit-scrollbar-thumb) {
     border-radius: 999px;
-    background: rgba(139, 127, 109, 0.42);
+    background: rgba(140, 154, 171, 0.35);
   }
 
   /* Mermaid 图框 */

@@ -55,12 +55,12 @@ function formatDot(date: Date): string {
   <main class="flex-1">
     <!-- Hero：巨型名字 + 取景框头像 -->
     <section class="grid-paper border-b border-line">
-      <div class="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-14 md:py-20 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-14">
+      <div class="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pb-20 pt-14 md:py-24 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-14">
         <div>
           <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-ember">
             <span aria-hidden="true" class="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-ember"></span>{t(lang, 'home.hero.eyebrow')}
           </p>
-          <h1 class="mt-5 font-serif text-[clamp(56px,11vw,148px)] font-black leading-[0.95] tracking-tight text-ink">
+          <h1 class="mt-5 text-glow font-serif pr-3 text-[clamp(48px,8.6vw,128px)] font-black leading-[1.05] tracking-tight">
             ArvelVale
           </h1>
           <p class="mt-7 max-w-lg font-kai text-lg leading-8 text-ink-soft">{t(lang, 'home.intro')}</p>
@@ -81,16 +81,18 @@ function formatDot(date: Date): string {
           </div>
         </div>
 
-        <div class="relative mx-auto w-full max-w-sm">
-          <div class="relative rounded-lg border border-line-strong bg-raised p-3 shadow-[0_18px_40px_rgba(44,38,32,0.08)]">
-            <span aria-hidden="true" class="absolute -left-2 -top-2 h-4 w-4 border-l-2 border-t-2 border-ember"></span>
-            <span aria-hidden="true" class="absolute -bottom-2 -right-2 h-4 w-4 border-b-2 border-r-2 border-ember"></span>
-            <img src="/avatar.webp" alt="ArvelVale" class="aspect-square w-full rounded object-cover" />
-            <div class="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-ink-faint">
-              <span>{t(lang, 'home.hero.subject')} // ARVELVALE</span>
-              <span>DEV · AI · WRITING</span>
-            </div>
-          </div>
+        <div class="relative mx-auto aspect-square w-full max-w-[340px]">
+          <div class="orbit orbit-3" aria-hidden="true"></div>
+          <div class="orbit orbit-2" aria-hidden="true"></div>
+          <div class="orbit" aria-hidden="true"></div>
+          <img
+            src="/avatar.webp"
+            alt="ArvelVale"
+            class="absolute inset-[7%] h-[86%] w-[86%] rounded-full object-cover shadow-[0_0_60px_rgba(74,222,238,0.28)] ring-1 ring-ember/40"
+          />
+          <p class="absolute -bottom-9 left-1/2 w-max -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-faint">
+            {t(lang, 'home.hero.subject')} // ARVELVALE · DEV · AI · WRITING
+          </p>
         </div>
       </div>
 
@@ -298,4 +300,13 @@ function formatDot(date: Date): string {
     );
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
   }
+
+  // 卡片聚光：把鼠标位置写进 CSS 变量，::after 的径向渐变跟着走
+  document.querySelectorAll<HTMLElement>('.card-lift').forEach((el) => {
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', e.clientX - r.left + 'px');
+      el.style.setProperty('--my', e.clientY - r.top + 'px');
+    });
+  });
 </script>

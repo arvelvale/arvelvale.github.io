@@ -5,25 +5,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        // 暖纸文人风色板 —— 与文章页思维导图「稿纸」组件同源（赤陶橙 #c04a1a）
+        // 夜间观测站色板：深空底 + 头像光环青（颜色值在 global.css 的 :root，以 RGB 三元组存放以支持 /透明度）
+        // token 名沿用旧名（ember=全站唯一强调色），避免改动所有页面的类名
         paper: {
-          DEFAULT: '#faf6ee', // 页面底色：暖米白纸面
-          deep: '#f3ecdd', // 略深的纸（代码块、井格底）
-          raised: '#fffdf9', // 抬升的纸面（正文容器）
+          DEFAULT: 'rgb(var(--c-paper) / <alpha-value>)',
+          deep: 'rgb(var(--c-paper-deep) / <alpha-value>)',
+          raised: 'rgb(var(--c-raised) / <alpha-value>)',
         },
         ink: {
-          DEFAULT: '#2c2620', // 墨字：标题
-          soft: '#4a4237', // 正文
-          faint: '#766a58', // 次要信息
-          ghost: '#9a8e79', // 占位符、极弱信息
+          DEFAULT: 'rgb(var(--c-ink) / <alpha-value>)',
+          soft: 'rgb(var(--c-ink-soft) / <alpha-value>)',
+          faint: 'rgb(var(--c-ink-faint) / <alpha-value>)',
+          ghost: 'rgb(var(--c-ink-ghost) / <alpha-value>)',
         },
         ember: {
-          DEFAULT: '#c04a1a', // 赤陶橙：全站唯一强调色
-          deep: '#9c3a12',
+          DEFAULT: 'rgb(var(--c-accent) / <alpha-value>)',
+          deep: 'rgb(var(--c-accent-deep) / <alpha-value>)',
         },
         line: {
-          DEFAULT: '#e7dfcf', // 发丝分隔线
-          strong: '#d6cab2',
+          DEFAULT: 'rgb(var(--c-line) / <alpha-value>)',
+          strong: 'rgb(var(--c-line-strong) / <alpha-value>)',
         },
       },
       fontFamily: {

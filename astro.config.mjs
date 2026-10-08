@@ -22,7 +22,7 @@ export default defineConfig({
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
-      theme: 'github-light',
+      theme: 'github-dark',
       // mindmap 不是 Shiki 语言，不映射的话会降级成 plaintext 并丢掉语言标记，
       // 客户端就认不出这是思维导图了。映射到 markdown 语法后 data-language 保留 "mindmap"。
       langAlias: {

@@ -21,7 +21,7 @@ const { switchHref: switchHrefOverride } = Astro.props as { switchHref?: string 
 const switchHref = switchHrefOverride ?? getRelativeLocaleUrl(otherLang, rawPath === '/' ? '' : rawPath);
 ---
 
-<header class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">
+<header class="sticky top-0 z-50 border-b border-line bg-paper/80 backdrop-blur-xl">
   <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
     <a
       href={getRelativeLocaleUrl(lang, '')}
@@ -75,7 +75,7 @@ const switchHref = switchHrefOverride ?? getRelativeLocaleUrl(otherLang, rawPath
         <LocalIcon name="menu" class="h-[18px] w-[18px]" />
       </summary>
       <div
-        class="absolute right-0 top-11 w-44 rounded-md border border-line bg-raised p-1.5 text-[15px] shadow-[0_12px_32px_rgba(44,38,32,0.12)]"
+        class="absolute right-0 top-11 w-44 rounded-md border border-line bg-raised p-1.5 text-[15px] shadow-[0_12px_32px_rgba(0,0,0,0.5)]"
       >
         {navItems.map((item) => (
           <a

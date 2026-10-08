@@ -23,13 +23,13 @@ export function getProjects(lang: Lang): Project[] {
       stack: ['Tauri 2', 'Rust', 'JavaScript', 'MIT'],
     },
     {
-      name: lang === 'zh' ? '喵灵 MindOff' : 'MindOff',
-      url: 'https://yingjiapp.com',
-      domain: 'yingjiapp.com',
-      desc: t(lang, 'projects.mindoff.desc'),
+      name: '喵灵',
+      url: 'https://arvelvale.github.io/morning-site/',
+      domain: 'arvelvale.github.io/morning-site',
+      desc: t(lang, 'projects.miaoling.desc'),
       category: t(lang, 'projects.cat.ai'),
       year: '2026',
-      stack: ['AI', 'Companion', 'Virtual pet'],
+      stack: ['AI', 'Android', 'HarmonyOS'],
     },
     {
       name: lang === 'zh' ? '这个博客' : 'This blog',

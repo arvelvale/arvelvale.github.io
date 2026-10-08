@@ -47,7 +47,7 @@ const dict: Record<string, { zh: string; en: string }> = {
   'home.contact': { zh: '联系', en: 'Contact' },
   'home.contact.lead': { zh: '想聊聊，或者交换一点想法：', en: 'Want to talk, or trade a few ideas:' },
   'home.marquee': { zh: 'AI · 软件设计 · 系统架构 · 行情研究 · 读书笔记 · 随想', en: 'AI · Software design · Architecture · Markets · Reading notes · Stray thoughts' },
-  'projects.mindoff.desc': {
+  'projects.miaoling.desc': {
     zh: '一个帮你安放思绪的 AI 陪伴应用。通过对话整理日常，让记忆、来信和桌宠陪伴连接起每一天。',
     en: 'An AI companion that helps you make room for your thoughts. Reflect through conversation, with memories, letters, and a virtual pet connecting one day to the next.',
   },
