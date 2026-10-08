@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import LocalIcon from '../components/LocalIcon.astro';
 import katex from 'katex';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { t, type Lang } from '../scripts/i18n';
@@ -88,7 +89,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   {/* 滚动阅读时出现的固定迷你进度条（默认隐藏，原进度条滚出视口后显示） */}
   <div id="reading-progress-fixed" aria-hidden="true">
     <div class="border-b border-line bg-paper/92 backdrop-blur-md">
-      <div class="mx-auto flex max-w-5xl items-center gap-4 px-6 py-2">
+      <div class="mx-auto flex max-w-[calc(760px+3rem)] items-center gap-4 px-6 py-2">
         <span id="fixed-progress-label" class="whitespace-nowrap font-mono text-[11px] tabular-nums text-ink-faint"
           >{t(lang, 'progress.label', { n: 0 })}</span
         >
@@ -100,23 +101,43 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     </div>
   </div>
 
-  <main class="mx-auto w-full max-w-5xl flex-1 px-6">
-    <div class:list={['grid gap-10 pb-16 pt-10', tocItems.length > 0 && 'lg:grid-cols-[200px_minmax(0,1fr)]']}>
-      <!-- 目录：无章节时整栏不渲染，正文占满 -->
+  {/* 版心按黄金分割：正文 760px，目录 = 760 ÷ φ² ≈ 290px（φ=1.618），居中三栏，目录占左栏、右栏留白保持正文居中 */}
+  <main class="mx-auto w-full max-w-[1600px] flex-1 px-6">
+    <div
+      class:list={[
+        'grid gap-x-12 gap-y-10 pb-16 pt-10',
+        tocItems.length > 0
+          ? 'lg:grid-cols-[minmax(230px,1fr)_minmax(0,760px)_minmax(0,1fr)]'
+          : 'mx-auto max-w-[760px]',
+      ]}
+    >
+      <!-- 目录：无章节时整栏不渲染，正文占满；可收起，状态记在 localStorage -->
       {tocItems.length > 0 && (
-      <aside class="hidden lg:block">
-        <div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pb-4">
-          <h2 class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-ghost">{t(lang, 'post.toc')}</h2>
-          <nav class="mt-4 space-y-1 border-l border-line" aria-label="文章目录">
+      <aside class="hidden lg:col-start-1 lg:row-start-1 lg:block" data-toc-root>
+        <div class="sticky top-24 max-h-[calc(100vh-7rem)] max-w-[290px] overflow-y-auto pb-4">
+          <div class="flex items-center justify-between gap-3">
+            <h2 data-toc-title class="font-mono text-xs uppercase tracking-[0.18em] text-ink-faint">{t(lang, 'post.toc')}</h2>
+            <button
+              type="button"
+              data-toc-toggle
+              aria-expanded="true"
+              aria-label={t(lang, 'post.toc.toggle')}
+              title={t(lang, 'post.toc.toggle')}
+              class="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-raised/70 text-ink-faint transition-colors hover:border-ember/50 hover:text-ember"
+            >
+              <LocalIcon name="panel-left-close" class="h-4 w-4 toc-icon-close" />
+              <LocalIcon name="panel-left-open" class="h-4 w-4 toc-icon-open" />
+            </button>
+          </div>
+          <nav data-toc-body class="mt-5 space-y-1 border-l border-line" aria-label="文章目录">
             {tocItems.map((item, index) => (
               <a
-                href={`#${item.slug}`}
+                href={}
                 data-toc-link
                 data-toc-target={item.slug}
                 class:list={[
-                  '-ml-px block border-l-2 border-transparent pl-4 leading-6 text-ink-faint transition-colors hover:text-ink',
-                  'text-[13px]',
-                  item.depth === 3 && 'pl-7',
+                  '-ml-px block border-l-2 border-transparent py-0.5 pl-4 text-[15px] leading-[1.65] text-ink-faint transition-colors hover:text-ink',
+                  item.depth === 3 && 'pl-8 text-[14px]',
                   index === 0 && 'border-ember/70 text-ember',
                 ]}
                 set:html={renderTocItem(item.text)}
@@ -127,7 +148,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
       </aside>
       )}
 
-      <div class="min-w-0">
+      <div class:list={['min-w-0', tocItems.length > 0 && 'lg:col-start-2 lg:row-start-1']}>
         <!-- 文章头 -->
         <header>
           <a href={getRelativeLocaleUrl(lang, '/blog')} class="text-[13px] text-ink-faint transition-colors hover:text-ember">
@@ -503,12 +524,37 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     headingEls.forEach((el) => spy.observe(el));
   }
 
+  // 目录收起/展开
+  function setupTocToggle() {
+    const root = document.querySelector<HTMLElement>('[data-toc-root]');
+    const btn = document.querySelector<HTMLButtonElement>('[data-toc-toggle]');
+    if (!root || !btn) return;
+    const KEY = 'toc-collapsed';
+    const apply = (collapsed: boolean) => {
+      root.dataset.collapsed = String(collapsed);
+      btn.setAttribute('aria-expanded', String(!collapsed));
+    };
+    let saved = false;
+    try {
+      saved = localStorage.getItem(KEY) === '1';
+    } catch {}
+    apply(saved);
+    btn.addEventListener('click', () => {
+      const next = root.dataset.collapsed !== 'true';
+      apply(next);
+      try {
+        localStorage.setItem(KEY, next ? '1' : '0');
+      } catch {}
+    });
+  }
+
   renderMindmapBlocks()
     .then(renderMermaidBlocks)
     .then(enhanceCodeBlocks);
   positionFixedProgress();
   updateReadingProgress();
   setupTocScrollspy();
+  setupTocToggle();
   window.addEventListener('scroll', updateReadingProgress, { passive: true });
   window.addEventListener('resize', () => {
     positionFixedProgress();
@@ -517,6 +563,19 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 </script>
 
 <style>
+  /* 目录收起：只留切换按钮；图标随状态切换 */
+  [data-toc-root] :global(.toc-icon-open) {
+    display: none;
+  }
+  [data-toc-root][data-collapsed="true"] :global(.toc-icon-open) {
+    display: block;
+  }
+  [data-toc-root][data-collapsed="true"] :global(.toc-icon-close),
+  [data-toc-root][data-collapsed="true"] [data-toc-body],
+  [data-toc-root][data-collapsed="true"] [data-toc-title] {
+    display: none;
+  }
+
   /* 固定迷你阅读进度条：默认从 Header 后面滑入，仅当原进度条滚出视口时显示 */
   #reading-progress-fixed {
     position: fixed;

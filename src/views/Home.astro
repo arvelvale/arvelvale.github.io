@@ -55,7 +55,7 @@ function formatDot(date: Date): string {
   <main class="flex-1">
     <!-- Hero：巨型名字 + 取景框头像 -->
     <section class="grid-paper border-b border-line">
-      <div class="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pb-20 pt-14 md:py-24 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-14">
+      <div class="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pb-20 pt-14 md:py-24 lg:grid-cols-[minmax(0,1.618fr)_minmax(0,1fr)] lg:gap-14">
         <div>
           <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-ember">
             <span aria-hidden="true" class="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-ember"></span>{t(lang, 'home.hero.eyebrow')}
@@ -142,7 +142,7 @@ function formatDot(date: Date): string {
           </a>
         </div>
 
-        <div class="mt-8 grid gap-5 md:grid-cols-2 md:grid-rows-2">
+        <div class="mt-8 grid gap-5 md:grid-cols-[1.618fr_1fr] md:grid-rows-2">
           {featuredPosts.map((post, i) => (
             <a
               href={getRelativeLocaleUrl(lang, `/blog/${post.id}`)}
@@ -250,7 +250,7 @@ function formatDot(date: Date): string {
       </section>
 
       <!-- 关于 + 联系 -->
-      <section id="about" aria-labelledby="about-heading" class="reveal mt-20 grid gap-8 border-t border-line pb-20 pt-14 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+      <section id="about" aria-labelledby="about-heading" class="reveal mt-20 grid gap-8 border-t border-line pb-20 pt-14 md:grid-cols-[minmax(0,1fr)_minmax(0,1.618fr)]">
         <div>
           <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-ember">04 / {t(lang, 'home.about')}</p>
           <h2 id="about-heading" class="mt-2 font-serif text-3xl font-bold text-ink md:text-4xl">{t(lang, 'home.about')}</h2>
