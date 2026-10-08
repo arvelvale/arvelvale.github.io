@@ -61,8 +61,11 @@ export interface Props {
 
 const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref, translationNote } = Astro.props;
 
+// 日期按页面语言格式化：中文页「2026年7月28日」，英文页「Jul 28, 2026」，避免中英混排
 function formatCN(date: Date): string {
-  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+  return lang === 'zh'
+    ? date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+    : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 const formattedDate = pubDate ? formatCN(pubDate) : null;
@@ -77,7 +80,7 @@ const plainBody = body
 const chineseCount = (plainBody.match(/[一-鿿]/g) || []).length;
 const wordLikeCount = (plainBody.match(/[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)*/g) || []).length;
 const totalWordCount = chineseCount + wordLikeCount;
-const displayWordCount = totalWordCount.toLocaleString('zh-CN');
+const displayWordCount = totalWordCount.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US');
 const readMinutes = Math.max(1, Math.ceil(totalWordCount / 420));
 const wordCount = `${displayWordCount} 字`;
 const tocItems = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
@@ -132,7 +135,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
           <nav data-toc-body class="mt-5 space-y-1 border-l border-line" aria-label="文章目录">
             {tocItems.map((item, index) => (
               <a
-                href={}
+                href={`#${item.slug}`}
                 data-toc-link
                 data-toc-target={item.slug}
                 class:list={[
@@ -280,6 +283,48 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
       </div>
     </div>
   </main>
+
+  {/* 手机目录抽屉：lg 以下显示悬浮按钮，点开从底部升起 */}
+  {tocItems.length > 0 && (
+    <>
+      <button
+        type="button"
+        data-toc-drawer-open
+        aria-label={t(lang, 'post.toc')}
+        class="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-ember/40 bg-raised/90 text-ember shadow-[0_8px_24px_rgba(0,0,0,0.5)] backdrop-blur lg:hidden"
+      >
+        <LocalIcon name="list" class="h-5 w-5" />
+      </button>
+      <dialog data-toc-drawer class="toc-drawer lg:hidden" aria-label={t(lang, 'post.toc')}>
+        <div class="flex items-center justify-between px-5 pb-2 pt-4">
+          <h2 class="font-mono text-xs uppercase tracking-[0.18em] text-ink-faint">{t(lang, 'post.toc')}</h2>
+          <button
+            type="button"
+            data-toc-drawer-close
+            aria-label={t(lang, 'post.toc.close')}
+            class="flex h-8 w-8 items-center justify-center rounded-md border border-line text-ink-faint"
+          >
+            <LocalIcon name="x" class="h-4 w-4" />
+          </button>
+        </div>
+        <nav class="max-h-[60vh] overflow-y-auto px-3 pb-6" aria-label="文章目录">
+          {tocItems.map((item) => (
+            <a
+              href={`#${item.slug}`}
+              data-toc-link
+              data-toc-target={item.slug}
+              data-toc-drawer-link
+              class:list={[
+                'block rounded-md border-l-2 border-transparent px-3 py-2 text-[15px] leading-6 text-ink-soft transition-colors hover:bg-paper-deep',
+                item.depth === 3 && 'ml-4 text-[14px] text-ink-faint',
+              ]}
+              set:html={renderTocItem(item.text)}
+            />
+          ))}
+        </nav>
+      </dialog>
+    </>
+  )}
 
   <Footer />
 </BaseLayout>
@@ -548,6 +593,19 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
     });
   }
 
+  // 手机目录抽屉：原生 dialog，点背景、点条目、点关闭都会收起
+  function setupTocDrawer() {
+    const dlg = document.querySelector<HTMLDialogElement>('[data-toc-drawer]');
+    const openBtn = document.querySelector('[data-toc-drawer-open]');
+    if (!dlg || !openBtn) return;
+    openBtn.addEventListener('click', () => dlg.showModal());
+    dlg.querySelector('[data-toc-drawer-close]')?.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close();
+    });
+    dlg.querySelectorAll('[data-toc-drawer-link]').forEach((a) => a.addEventListener('click', () => dlg.close()));
+  }
+
   renderMindmapBlocks()
     .then(renderMermaidBlocks)
     .then(enhanceCodeBlocks);
@@ -555,6 +613,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
   updateReadingProgress();
   setupTocScrollspy();
   setupTocToggle();
+  setupTocDrawer();
   window.addEventListener('scroll', updateReadingProgress, { passive: true });
   window.addEventListener('resize', () => {
     positionFixedProgress();
@@ -563,6 +622,36 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 </script>
 
 <style>
+  .toc-drawer {
+    margin: auto 0 0;
+    width: 100%;
+    max-width: none;
+    border: 0;
+    border-top: 1px solid rgb(var(--c-line-strong));
+    border-radius: 18px 18px 0 0;
+    background: rgb(var(--c-raised));
+    color: rgb(var(--c-ink));
+    padding: 0;
+  }
+  .toc-drawer::backdrop {
+    background: rgba(2, 5, 10, 0.6);
+    backdrop-filter: blur(3px);
+  }
+  .toc-drawer[open] {
+    animation: toc-sheet-in 0.25s ease;
+  }
+  @keyframes toc-sheet-in {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .toc-drawer[open] {
+      animation: none;
+    }
+  }
+
   /* 目录收起：只留切换按钮；图标随状态切换 */
   [data-toc-root] :global(.toc-icon-open) {
     display: none;

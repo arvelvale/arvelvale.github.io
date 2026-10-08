@@ -48,7 +48,7 @@ const seriesList = Array.from(seriesMap.entries())
           <div class="flex items-baseline justify-between gap-6 border-b border-ink/80 pb-3">
             <h2 class="font-serif text-2xl font-bold text-ink">{series.name}</h2>
             <span class="shrink-0 font-mono text-sm tabular-nums text-ink-ghost">
-              {t(lang, 'common.count.posts', { n: series.items.length })} · {t(lang, 'series.updatedTo')} {series.latest.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric' })}
+              {t(lang, 'common.count.posts', { n: series.items.length })} · {t(lang, 'series.updatedTo')} {series.latest.data.pubDate.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', lang === 'zh' ? { year: 'numeric', month: 'numeric', day: 'numeric' } : { year: 'numeric', month: 'short', day: 'numeric' })}
             </span>
           </div>
           <ol class="divide-y divide-line/70">
@@ -65,7 +65,7 @@ const seriesList = Array.from(seriesMap.entries())
                     {post.data.title}
                   </span>
                   <span class="shrink-0 font-mono text-[13px] tabular-nums text-ink-ghost">
-                    {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric' })}
+                    {post.data.pubDate.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', lang === 'zh' ? { year: 'numeric', month: 'numeric', day: 'numeric' } : { year: 'numeric', month: 'short', day: 'numeric' })}
                   </span>
                 </a>
               </li>

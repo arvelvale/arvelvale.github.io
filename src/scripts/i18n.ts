@@ -129,6 +129,7 @@ const dict: Record<string, { zh: string; en: string }> = {
   'search.count.found': { zh: '找到 {n} 篇', en: '{n} found' },
 
   // 文章页外壳
+  'post.toc.close': { zh: '关闭目录', en: 'Close contents' },
   'post.toc.toggle': { zh: '收起 / 展开目录', en: 'Collapse / expand contents' },
   'post.toc': { zh: '目录', en: 'Contents' },
   'post.allPosts': { zh: '全部文章', en: 'All posts' },
