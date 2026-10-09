@@ -26,7 +26,7 @@ export function getProjects(lang: Lang): Project[] {
     },
     {
       name: 'KROVIN',
-      url: '/krovin/',
+      url: 'https://arvelvale.github.io/krovin/',
       domain: 'arvelvale.github.io/krovin',
       desc: t(lang, 'projects.krovin.desc'),
       category: t(lang, 'projects.cat.agent'),
