@@ -54,6 +54,26 @@ export function getProjects(lang: Lang): Project[] {
       stack: ['Astro', 'Tailwind', 'GitHub Pages'],
       logo: '/projects/blog.webp',
     },
+    {
+      name: '映记',
+      url: 'https://yingjiapp.com',
+      domain: 'yingjiapp.com',
+      desc: t(lang, 'projects.yingji.desc'),
+      category: t(lang, 'projects.cat.ai'),
+      year: '2026',
+      stack: ['React', 'Vite', 'FastAPI', 'Expo', 'Go'],
+      logo: '/projects/yingji.png',
+    },
+    {
+      name: '栖光',
+      url: 'https://github.com/arvelvale/yinji-private',
+      domain: 'github.com/arvelvale',
+      desc: t(lang, 'projects.qiguang.desc'),
+      category: t(lang, 'projects.cat.ai'),
+      year: '2026',
+      stack: ['React Native', 'Expo', 'FastAPI', 'PostgreSQL'],
+      logo: '/projects/qiguang.png',
+    },
   ];
 }
 

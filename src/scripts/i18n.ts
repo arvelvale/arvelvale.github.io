@@ -56,6 +56,14 @@ const dict: Record<string, { zh: string; en: string }> = {
     zh: '一个帮你安放思绪的 AI 陪伴应用。通过对话整理日常，让记忆、来信和桌宠陪伴连接起每一天。',
     en: 'An AI companion that helps you make room for your thoughts. Reflect through conversation, with memories, letters, and a virtual pet connecting one day to the next.',
   },
+  'projects.yingji.desc': {
+    zh: 'AI 心理日记与个人成长应用：用萨提亚冰山模型解读每天写下的东西。Web、移动端和 Go 边缘服务一套代码，线上跑在 yingjiapp.com。',
+    en: 'An AI diary for self-reflection and personal growth: what you write each day, read through the Satir iceberg model. Web, mobile and Go edge services in one codebase, live at yingjiapp.com.',
+  },
+  'projects.qiguang.desc': {
+    zh: '主动陪伴系统：不说教、不强迫、不过度打扰，在日常生活里潜移默化地带来改变。FastAPI 后端加 React Native 客户端，源码在私有仓库。',
+    en: 'A proactive companionship system that improves daily life without lecturing, pushing or hovering. A FastAPI backend with a React Native app; the source lives in a private repo.',
+  },
   'projects.elsewhere': { zh: '也可以在别处找到我', en: 'Elsewhere' },
   'projects.twitter': { zh: 'X', en: 'X' },
   'footer.built.pre': { zh: '用', en: 'Built with' },
