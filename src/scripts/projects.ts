@@ -25,6 +25,16 @@ export function getProjects(lang: Lang): Project[] {
       logo: '/projects/orrery.png',
     },
     {
+      name: 'KROVIN',
+      url: '/krovin/',
+      domain: 'arvelvale.github.io/krovin',
+      desc: t(lang, 'projects.krovin.desc'),
+      category: t(lang, 'projects.cat.agent'),
+      year: '2026',
+      stack: ['DGX Spark', 'vLLM', 'Python', 'TypeScript'],
+      logo: '/projects/krovin.png',
+    },
+    {
       name: '喵灵',
       url: 'https://arvelvale.github.io/morning-site/',
       domain: 'arvelvale.github.io/morning-site',

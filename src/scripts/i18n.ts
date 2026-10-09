@@ -30,6 +30,11 @@ const dict: Record<string, { zh: string; en: string }> = {
     zh: '你正在看的这个站。Astro + Tailwind 的静态博客，中英双语、思维导图稿纸组件、暖纸风格，托管在 GitHub Pages。',
     en: 'The site you are reading. A static blog on Astro and Tailwind: bilingual, with a mind-map manuscript component and a warm-paper look, hosted on GitHub Pages.',
   },
+  'projects.krovin.desc': {
+    zh: '跑在 NVIDIA DGX Spark 上的开发流 Agent：读 Linear issue 与 Obsidian 纪要，完成拆解、计划、开发与同步。JEV 决策层把技能选择、模型路由、工具门控都写进可度量的决策轨迹。DGX Spark Hackathon 参赛项目。',
+    en: 'A dev-flow agent on NVIDIA DGX Spark: reads Linear issues and Obsidian notes, then breaks down, plans, codes and syncs. A JEV decision layer logs skill selection, model routing and tool gating into a measurable trace. Built for the DGX Spark Hackathon.',
+  },
+  'projects.cat.agent': { zh: '开发流 Agent', en: 'Dev-flow agent' },
   'projects.cat.ai': { zh: 'AI 应用', en: 'AI app' },
   'projects.cat.desktop': { zh: '桌面工具', en: 'Desktop tool' },
   'projects.cat.web': { zh: '网站', en: 'Website' },

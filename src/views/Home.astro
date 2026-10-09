@@ -16,7 +16,7 @@ const posts = (await getCollection('blog'))
 
 const featuredPosts = posts.slice(0, 3);
 const morePosts = posts.slice(3, 9);
-const projects = getProjects(lang);
+const projects = getProjects(lang).slice(0, 3);
 const latest = posts[0]?.data.pubDate;
 const minutes = (p: (typeof posts)[number]) => Math.max(1, Math.ceil((p.body?.length || 800) / 420));
 const postCount = posts.length;
