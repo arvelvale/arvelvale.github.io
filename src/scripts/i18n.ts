@@ -14,6 +14,8 @@ const dict: Record<string, { zh: string; en: string }> = {
   'nav.categories': { zh: '分类', en: 'Categories' },
   'nav.series': { zh: '专栏', en: 'Series' },
   'nav.search': { zh: '搜索', en: 'Search' },
+  'nav.about': { zh: '关于', en: 'About' },
+  'home.about.more': { zh: '完整的个人介绍', en: 'Full introduction' },
   'nav.projects': { zh: '作品', en: 'Projects' },
 
   // 作品页

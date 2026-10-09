@@ -1,0 +1,323 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { t, type Lang } from '../scripts/i18n';
+
+const lang = (Astro.currentLocale ?? 'en') as Lang;
+
+// 公开页面：不写姓名、学校、公司名、籍贯、生日和任何联系方式，联系只给 GitHub 和 X。
+const copy = {
+  zh: {
+    title: '关于',
+    eyebrow: 'ABOUT · 个人介绍',
+    lead: '写代码、做产品，也写点别的。',
+    intro: [
+      '我是 ArvelVale，一名学计算机的学生，主要做 AI 应用和全栈开发。从一个想法到上线，我喜欢把整条链路自己走通：设计、写代码、部署，再回头看哪里不对。',
+      '大一从机械专业转到计算机科学与技术，英语六级从第一次的 349 分提到 475 分。那之后我养成了一个习惯：想学什么，就先做一个东西出来。',
+      '我对「怎么让 AI 真正替人做事，又不让人失去掌控」特别着迷，所以做过会话管理工具、开发流 Agent、陪伴类应用，也在博客里写这些思考。',
+    ],
+    stats: [
+      ['6+', '做过并公开的项目'],
+      ['26', '博客文章（中英双语）'],
+      ['475', 'CET-6 分数，比首次 +129'],
+    ],
+    doing: {
+      h: '我在做什么',
+      items: [
+        ['AI 应用与 Agent', '开发流 Agent、会话驾驶舱、陪伴类应用。关心的是决策能不能被看见、写操作能不能被拦住。'],
+        ['全栈与部署', '从前端、后端到上线运维都自己做：React、TypeScript、Python、FastAPI、Tauri，以及 Linux 与静态站点部署。'],
+        ['写作与可视化', '用文章和可视化把学到的东西讲清楚：软件设计、架构、AI 原理，偶尔也写读书笔记和易学。'],
+      ],
+      more: '看作品',
+    },
+    story: {
+      h: '经历',
+      items: [
+        ['转专业', '大一上学期从机械专业转入计算机，从零补起。'],
+        ['社区与比赛', '参加过 Datawhale 暑期夏令营，获「最受欢迎的 20 位 AI 超级个体」；在 WaytoAGI 全球黑客松拿过三等奖；也参加了渝客松、AdventureX、南客松 S2 等黑客松，没得奖，但每次都做出了能演示的东西。'],
+        ['做东西', '团队作品《栖光》《基于国产大模型的智能实验教学辅助系统》拿过奖；也参与过企业级 AI 教学平台的全栈开发。个人项目见作品页。'],
+        ['校园', '做过班级心理委员、校团委工作人员、校网络安全社宣传部负责人，是云支教的优秀志愿者。'],
+      ],
+    },
+    awards: {
+      h: '奖项',
+      note: '以下为部分，团队作品已注明；年份与名称以证书为准。',
+      groups: [
+        ['计算机作品赛', [
+          ['2026', '中国大学生计算机设计大赛（第 19 届）', '国赛三等奖', '团队作品：智能实验教学辅助系统'],
+          ['2026', '海峡两岸暨港澳地区大学生计算机创新作品赛', '重庆市级赛：一等奖', '团队作品：栖光'],
+          ['', '海峡两岸暨港澳地区大学生计算机创新作品赛', '国赛三等奖', ''],
+          ['', '中国大学生计算机设计大赛', '校赛、市赛、省赛二等奖', ''],
+        ]],
+        ['AI 与社区', [
+          ['', 'WaytoAGI 全球黑客松', '三等奖', ''],
+          ['', 'Datawhale 暑期夏令营', '最受欢迎的 20 位 AI 超级个体', '含实践证书'],
+          ['', '传智杯', '二等奖', ''],
+        ]],
+        ['网络安全', [
+          ['', '巴渝杯网络安全挑战赛', 'CTF 二等奖、作品赛三等奖', ''],
+          ['', '重庆市网络安全竞赛', '二等奖', ''],
+        ]],
+      ],
+    },
+    skills: {
+      h: '技能与工具',
+      note: '自评，按用得多不多排序。',
+      groups: [
+        ['AI 应用', ['LangChain', 'RAG', 'LangGraph', 'Prompt / Skills 设计', '工作流（Coze 等）']],
+        ['AI 辅助开发', ['Claude Code', 'Codex', 'Cursor', 'Obsidian 知识库']],
+        ['前端与客户端', ['React', 'TypeScript', 'Astro', 'Tailwind', 'Vite', 'React Native / Expo', 'Tauri']],
+        ['后端与部署', ['Python', 'FastAPI', 'Rust', 'Linux', 'nginx', 'GitHub Actions']],
+        ['安全', ['OWASP Top 10', 'Burp Suite', 'sqlmap', 'Nmap', 'CTF']],
+      ],
+    },
+    life: {
+      h: '工作之外',
+      items: [
+        ['读书', '《乔布斯传》《马斯克传》《隐藏的潜能》《斯坦福大学人生设计课》。大二才开始读书，现在想把它变成长期习惯。'],
+        ['看世界', '喜欢旅行，也喜欢在路上做东西。'],
+        ['记梦', '记了几十个梦，几千字，没打算解释，只是觉得有趣。'],
+        ['其他', '动漫，英剧《神秘博士》，心理学、天文学，还有一点易学（博客里有两篇《说易》）。'],
+      ],
+    },
+    goals: {
+      h: '接下来',
+      items: ['成为能稳定使用英语的双语者', '在大学期间做到经济独立', '从 i 人向 e 人成长，多认识各地做东西的人'],
+    },
+    contact: { h: '联系', body: '想聊 AI、Agent 和做东西，欢迎在 GitHub 或 X 上找我。', blog: '读我的文章' },
+  },
+  en: {
+    title: 'About',
+    eyebrow: 'ABOUT · INTRODUCTION',
+    lead: 'I write code, build things, and write a few other things.',
+    intro: [
+      "I'm ArvelVale, a computer science student working on AI applications and full-stack development. From idea to launch, I like to walk the whole chain myself: design, code, deploy, and then look back at what went wrong.",
+      'In my first year I switched from mechanical engineering to computer science, and my CET-6 score went from 349 on the first try to 475. Since then I have kept one habit: when I want to learn something, I build something with it first.',
+      "I am fascinated by how to let AI genuinely act for people without people losing control. That is why I built a session manager, a dev-flow agent and a companion app, and why I write about it here.",
+    ],
+    stats: [
+      ['6+', 'public projects'],
+      ['26', 'blog posts, bilingual'],
+      ['475', 'CET-6 score, +129 from the first try'],
+    ],
+    doing: {
+      h: 'What I work on',
+      items: [
+        ['AI apps and agents', 'A dev-flow agent, a session cockpit, a companion app. I care about whether decisions can be seen and writes can be stopped.'],
+        ['Full stack and deployment', 'Front end, back end and operations, all by myself: React, TypeScript, Python, FastAPI, Tauri, plus Linux and static-site deployment.'],
+        ['Writing and visuals', 'Articles and visualizations to make what I learn clear: software design, architecture, how AI works, and now and then reading notes and the I Ching.'],
+      ],
+      more: 'See projects',
+    },
+    story: {
+      h: 'Background',
+      items: [
+        ['Switching majors', 'I moved from mechanical engineering to computer science in the first term of my first year, and caught up from scratch.'],
+        ['Community and contests', 'At the Datawhale summer camp I was named one of the 20 most popular AI super-individuals; I won third prize at the WaytoAGI global hackathon; and I joined hackathons like Yukesong, AdventureX and Nankesong S2. No prizes there, but I shipped something demoable every time.'],
+        ['Building', 'Team projects Qiguang and an LLM-powered lab-teaching assistant have won awards; I have also worked on the full stack of an enterprise AI teaching platform. Personal projects are on the projects page.'],
+        ['Campus', 'Class psychology officer, youth league staff, head of publicity for a university cybersecurity club, and an outstanding volunteer in a remote-teaching program.'],
+      ],
+    },
+    awards: {
+      h: 'Awards',
+      note: 'A selection. Team work is marked; years and names follow the certificates.',
+      groups: [
+        ['Computing contests', [
+          ['2026', 'China College Students Computer Design Contest (19th)', 'National third prize', 'Team work: an LLM-powered lab-teaching assistant'],
+          ['2026', 'Cross-Strait & HK/Macao College Computer Innovation Contest', 'First prize, Chongqing round', 'Team work: Qiguang'],
+          ['', 'Cross-Strait & HK/Macao College Computer Innovation Contest', 'National third prize', ''],
+          ['', 'China College Students Computer Design Contest', 'Second prize at school, city and province rounds', ''],
+        ]],
+        ['AI and community', [
+          ['', 'WaytoAGI Global Hackathon', 'Third prize', ''],
+          ['', 'Datawhale Summer Camp', 'Top 20 most popular AI super-individuals', 'with a practice certificate'],
+          ['', 'Chuanzhi Cup', 'Second prize', ''],
+        ]],
+        ['Cybersecurity', [
+          ['', 'Bayu Cup Cybersecurity Challenge', 'CTF second prize; works third prize', ''],
+          ['', 'Chongqing Cybersecurity Contest', 'Second prize', ''],
+        ]],
+      ],
+    },
+    skills: {
+      h: 'Skills and tools',
+      note: 'Self-assessed, roughly by how much I use them.',
+      groups: [
+        ['AI applications', ['LangChain', 'RAG', 'LangGraph', 'Prompt / Skills design', 'Workflows (Coze, etc.)']],
+        ['AI-assisted development', ['Claude Code', 'Codex', 'Cursor', 'Obsidian vault']],
+        ['Front end and clients', ['React', 'TypeScript', 'Astro', 'Tailwind', 'Vite', 'React Native / Expo', 'Tauri']],
+        ['Back end and deployment', ['Python', 'FastAPI', 'Rust', 'Linux', 'nginx', 'GitHub Actions']],
+        ['Security', ['OWASP Top 10', 'Burp Suite', 'sqlmap', 'Nmap', 'CTF']],
+      ],
+    },
+    life: {
+      h: 'Outside work',
+      items: [
+        ['Books', "Steve Jobs, Elon Musk, Hidden Potential, Designing Your Life. I only started reading in my second year and want it to become a long-term habit."],
+        ['Travel', 'I like traveling, and I like building things on the road.'],
+        ['Dreams', "I've written down dozens of dreams, thousands of words. I don't try to explain them; they are just fun."],
+        ['Other', 'Anime, the British series Doctor Who, psychology, astronomy, and a little I Ching (two posts on it here).'],
+      ],
+    },
+    goals: {
+      h: "What's next",
+      items: ['Become a bilingual who uses English comfortably', 'Reach financial independence during college', 'Grow from an introvert toward an extrovert and meet more builders'],
+    },
+    contact: { h: 'Contact', body: 'If you want to talk about AI, agents or building things, find me on GitHub or X.', blog: 'Read my writing' },
+  },
+}[lang];
+---
+
+<BaseLayout title={copy.title} titleKey="nav.about" description={copy.lead}>
+  <Header />
+
+  <main class="mx-auto w-full max-w-6xl flex-1 px-6">
+    <!-- 开场：黄金分割两栏，左边头像和标题，右边介绍 -->
+    <section class="grid items-start gap-10 pb-16 pt-14 md:pt-20 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-ember">{copy.eyebrow}</p>
+        <h1 class="mt-3 font-serif text-5xl font-black leading-none text-ink md:text-7xl">{copy.title}</h1>
+        <p class="mt-5 max-w-sm font-kai text-[19px] leading-8 text-ink-soft">{copy.lead}</p>
+        <img
+          src="/avatar.webp"
+          alt="ArvelVale"
+          width="144"
+          height="144"
+          class="mt-8 h-36 w-36 rounded-full object-cover shadow-[0_0_50px_rgba(74,222,238,0.25)] ring-1 ring-ember/40"
+        />
+      </div>
+      <div>
+        {copy.intro.map((p) => <p class="mb-5 text-[16px] leading-8 text-ink-soft">{p}</p>)}
+        <dl class="mt-8 grid grid-cols-3 gap-4 border-t border-line pt-6">
+          {copy.stats.map(([n, label]) => (
+            <div>
+              <dd class="font-serif text-4xl font-bold tabular-nums text-ink">{n}</dd>
+              <dt class="mt-1 text-xs leading-5 text-ink-faint">{label}</dt>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <!-- 我在做什么 -->
+    <section class="grid gap-8 border-t border-line py-14 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <h2 class="font-serif text-3xl font-bold text-ink md:text-4xl">{copy.doing.h}</h2>
+      <div class="grid gap-4">
+        {copy.doing.items.map(([h, p]) => (
+          <div class="card-lift rounded-lg border border-line p-6">
+            <h3 class="font-serif text-xl font-bold text-ink">{h}</h3>
+            <p class="mt-2 text-[15px] leading-7 text-ink-soft">{p}</p>
+          </div>
+        ))}
+        <a href={getRelativeLocaleUrl(lang, '/projects')} class="group w-fit text-sm text-ink-faint transition-colors hover:text-ember">
+          {copy.doing.more} <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 经历 -->
+    <section class="grid gap-8 border-t border-line py-14 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <h2 class="font-serif text-3xl font-bold text-ink md:text-4xl">{copy.story.h}</h2>
+      <ol class="relative space-y-8 border-l border-line-strong pl-7">
+        {copy.story.items.map(([h, p]) => (
+          <li class="relative">
+            <span aria-hidden="true" class="absolute -left-[33px] top-2 h-2.5 w-2.5 rounded-full bg-ember shadow-[0_0_12px_rgba(74,222,238,0.8)]"></span>
+            <h3 class="font-serif text-xl font-bold text-ink">{h}</h3>
+            <p class="mt-2 text-[15px] leading-7 text-ink-soft">{p}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- 奖项 -->
+    <section class="grid gap-8 border-t border-line py-14 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <div>
+        <h2 class="font-serif text-3xl font-bold text-ink md:text-4xl">{copy.awards.h}</h2>
+        <p class="mt-3 max-w-xs text-sm leading-6 text-ink-faint">{copy.awards.note}</p>
+      </div>
+      <div class="space-y-8">
+        {copy.awards.groups.map(([g, rows]) => (
+          <div>
+            <h3 class="font-mono text-[11px] uppercase tracking-[0.18em] text-ember">{g}</h3>
+            <ul class="mt-3 divide-y divide-line/70 border-y border-line/70">
+              {(rows as string[][]).map(([year, name, prize, note]) => (
+                <li class="grid gap-x-5 gap-y-1 py-3.5 sm:grid-cols-[52px_1fr]">
+                  <span class="font-mono text-[13px] tabular-nums text-ink-faint">{year || '·'}</span>
+                  <div>
+                    <p class="text-[15px] leading-6 text-ink">{name}</p>
+                    <p class="text-[14px] leading-6 text-ember">{prize}{note && <span class="text-ink-faint"> · {note}</span>}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 技能 -->
+    <section class="grid gap-8 border-t border-line py-14 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <div>
+        <h2 class="font-serif text-3xl font-bold text-ink md:text-4xl">{copy.skills.h}</h2>
+        <p class="mt-3 max-w-xs text-sm leading-6 text-ink-faint">{copy.skills.note}</p>
+      </div>
+      <div class="space-y-6">
+        {copy.skills.groups.map(([g, items]) => (
+          <div>
+            <h3 class="text-sm text-ink-faint">{g}</h3>
+            <ul class="mt-2 flex flex-wrap gap-2">
+              {(items as string[]).map((s) => (
+                <li class="rounded-full border border-line bg-raised/70 px-3.5 py-1 font-mono text-[12.5px] text-ink-soft">{s}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 工作之外 + 接下来 -->
+    <section class="grid gap-8 border-t border-line py-14 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <h2 class="font-serif text-3xl font-bold text-ink md:text-4xl">{copy.life.h}</h2>
+      <dl class="grid gap-5 sm:grid-cols-2">
+        {copy.life.items.map(([h, p]) => (
+          <div class="rounded-lg border border-line p-5">
+            <dt class="font-serif text-lg font-bold text-ink">{h}</dt>
+            <dd class="mt-1.5 text-[14.5px] leading-7 text-ink-soft">{p}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="grid gap-8 border-t border-line py-14 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <h2 class="font-serif text-3xl font-bold text-ink md:text-4xl">{copy.goals.h}</h2>
+      <ul class="space-y-3">
+        {copy.goals.items.map((g, i) => (
+          <li class="flex gap-4 text-[16px] leading-7 text-ink-soft">
+            <span class="font-mono text-[13px] tabular-nums text-ember">{String(i + 1).padStart(2, '0')}</span>{g}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- 联系：只给公开账号，不放邮箱和电话 -->
+    <section class="grid gap-8 border-t border-line pb-24 pt-14 lg:grid-cols-[1fr_1.618fr] lg:gap-16">
+      <h2 class="font-serif text-3xl font-bold text-ink md:text-4xl">{copy.contact.h}</h2>
+      <div>
+        <p class="max-w-lg text-[16px] leading-8 text-ink-soft">{copy.contact.body}</p>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a href="https://github.com/arvelvale" target="_blank" rel="noopener noreferrer" class="card-lift rounded-lg border border-line bg-raised px-5 py-3 text-sm text-ink-soft">
+            GitHub <span class="font-mono text-xs text-ink-faint">@arvelvale</span> →
+          </a>
+          <a href="https://x.com/Arvelvale" target="_blank" rel="noopener noreferrer" class="card-lift rounded-lg border border-line bg-raised px-5 py-3 text-sm text-ink-soft">
+            X <span class="font-mono text-xs text-ink-faint">@Arvelvale</span> →
+          </a>
+          <a href={getRelativeLocaleUrl(lang, '/blog')} class="card-lift rounded-lg border border-line bg-raised px-5 py-3 text-sm text-ink-soft">{copy.contact.blog} →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

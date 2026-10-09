@@ -267,6 +267,7 @@ function formatDot(date: Date): string {
         </div>
         <div>
           <p class="max-w-2xl font-kai text-[16px] leading-8 text-ink-soft">{t(lang, 'home.about.body')}</p>
+          <a href={getRelativeLocaleUrl(lang, '/about')} class="group mt-5 inline-block text-sm text-ember transition-colors hover:text-ember-deep">{t(lang, 'home.about.more')} <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-0.5">→</span></a>
           <p class="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-faint">{t(lang, 'home.contact')}</p>
           <p class="mt-2 text-sm text-ink-soft">{t(lang, 'home.contact.lead')}</p>
           <div class="mt-4 flex flex-wrap gap-3">
