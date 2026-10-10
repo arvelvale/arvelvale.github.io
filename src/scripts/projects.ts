@@ -55,16 +55,6 @@ export function getProjects(lang: Lang): Project[] {
       logo: '/projects/blog.webp',
     },
     {
-      name: '映记',
-      url: 'https://yingjiapp.com',
-      domain: 'yingjiapp.com',
-      desc: t(lang, 'projects.yingji.desc'),
-      category: t(lang, 'projects.cat.ai'),
-      year: '2026',
-      stack: ['React', 'Vite', 'FastAPI', 'Expo', 'Go'],
-      logo: '/projects/yingji.png',
-    },
-    {
       name: '栖光',
       url: 'https://github.com/arvelvale/yinji-private',
       domain: 'github.com/arvelvale',
