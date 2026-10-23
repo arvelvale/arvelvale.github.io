@@ -1,4 +1,5 @@
 ---
+import AdSense from '../../components/AdSense.astro';
 // 旧分类路径：跳到默认语言版本
 import { getCollection } from 'astro:content';
 
@@ -14,6 +15,7 @@ const target = `/en/categories/${encodeURIComponent(Astro.params.category)}/`;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <AdSense />
     <meta http-equiv="refresh" content={`0; url=${target}`} />
     <link rel="canonical" href={target} />
     <title>ArvelVale</title>

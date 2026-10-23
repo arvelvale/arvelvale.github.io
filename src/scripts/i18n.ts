@@ -66,6 +66,7 @@ const dict: Record<string, { zh: string; en: string }> = {
   'projects.twitter': { zh: 'X', en: 'X' },
   'footer.built.pre': { zh: '用', en: 'Built with' },
   'footer.built.mid': { zh: '构建 · 托管于', en: '· Hosted on' },
+  'footer.privacy': { zh: '隐私与 Cookie', en: 'Privacy & cookies' },
 
   // 首页
   'home.tagline': { zh: '写代码，也写点别的', en: 'I write code, and a few other things' },

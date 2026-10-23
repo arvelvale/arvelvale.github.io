@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { Lang } from '../scripts/i18n';
+
+const lang = (Astro.currentLocale ?? 'en') as Lang;
+const copy = {
+  zh: {
+    title: '隐私与 Cookie',
+    updated: '更新日期：2026 年 10 月 23 日',
+    description: 'ArvelVale 博客的隐私、Google AdSense 广告和 Cookie 使用说明。',
+    intro: '这里说明你浏览 ArvelVale 博客时，本站和第三方服务如何使用数据，以及你可以做出的选择。',
+    siteTitle: '本站与托管服务',
+    site: '本站是托管于 GitHub Pages 的静态博客，没有用户注册或登录功能。GitHub 可能为提供托管服务和保障安全而处理访问日志（例如 IP 地址）。本站使用 Google Fonts 和 jsDelivr 加载字体及样式；浏览器向这些服务请求资源时，会传输 IP 地址等连接信息。',
+    localTitle: '本地存储',
+    local: '本站使用浏览器 localStorage 保存文章目录的折叠偏好。此设置保留在你的浏览器中，可通过浏览器的网站数据设置清除。',
+    adsTitle: 'Google AdSense 与广告 Cookie',
+    ads: '本站使用 Google AdSense 自动广告。Google 及其他第三方广告供应商可能使用 Cookie，根据你此前对本站或其他网站的访问展示广告。Google 的广告 Cookie 使其及合作伙伴能够依据这些访问记录提供个性化广告，具体取决于你的同意选择、地区和广告设置。',
+    adsData: '广告服务可能处理 IP 地址、浏览器和设备信息、Cookie 标识符及广告互动数据，用于投放广告、衡量效果和防止欺诈。适用的数据处理方式请参阅 Google 的说明；参与投放的其他广告供应商也可能按其隐私政策处理数据。',
+    choicesTitle: '你的选择',
+    choices: '你可以在 Google 的广告设置中管理个性化广告，也可以通过 AboutAds 了解并退出部分第三方供应商的个性化广告 Cookie。你还可以在浏览器中限制或删除 Cookie；关闭个性化广告不一定停止所有广告或所有 Cookie。',
+    consent: '如果你所在地区提供广告隐私或同意管理提示，请通过提示管理可用选项，并按其提供的入口重新查看选择。本说明本身不代表你已同意使用广告 Cookie。',
+    contactTitle: '联系与更新',
+    contact: '服务变化时，本页也会更新。如有隐私问题，可以通过本站公开的 GitHub 账号联系我；请勿在公开内容中提交敏感个人信息。',
+    links: {
+      google: 'Google 如何使用采用其服务的网站或应用收集的信息',
+      policy: 'Google 隐私政策',
+      settings: 'Google 广告设置',
+      aboutads: 'AboutAds：第三方广告选择',
+      github: 'GitHub 隐私声明',
+      jsdelivr: 'jsDelivr 隐私政策',
+      contact: 'GitHub · ArvelVale',
+    },
+  },
+  en: {
+    title: 'Privacy & cookies',
+    updated: 'Last updated: October 23, 2026',
+    description: 'Privacy, Google AdSense advertising, and cookie use on the ArvelVale blog.',
+    intro: 'This page explains how this blog and third-party services use data when you visit, and the choices available to you.',
+    siteTitle: 'This site and hosting',
+    site: 'This is a static blog hosted on GitHub Pages, with no registration or sign-in. GitHub may process access logs, including IP addresses, to provide hosting and security. The site loads fonts and styles from Google Fonts and jsDelivr; requests to these services transmit connection information such as your IP address.',
+    localTitle: 'Local storage',
+    local: 'The site uses browser localStorage to remember whether the article contents panel is collapsed. This preference stays in your browser and can be removed through its site-data settings.',
+    adsTitle: 'Google AdSense and advertising cookies',
+    ads: 'This site uses Google AdSense Auto ads. Google and other third-party advertising vendors may use cookies to show ads based on your earlier visits to this site or other websites. Google advertising cookies allow Google and its partners to personalize ads using those visits, depending on your consent choices, location, and advertising settings.',
+    adsData: 'Advertising services may process your IP address, browser and device information, cookie identifiers, and ad interactions to deliver and measure ads and prevent fraud. See Google’s information below for details. Other participating advertising vendors may also process data under their own privacy policies.',
+    choicesTitle: 'Your choices',
+    choices: 'You can manage personalized advertising in Google’s ad settings, or use AboutAds to learn about and opt out of some third-party vendors’ personalized advertising cookies. You can also restrict or delete cookies in your browser. Turning off personalization does not necessarily stop all ads or all cookies.',
+    consent: 'If an advertising privacy or consent message is available in your region, use it to manage the choices offered and follow its instructions to revisit them. This policy does not itself give consent to advertising cookies.',
+    contactTitle: 'Contact and updates',
+    contact: 'This page will be updated when services change. For privacy questions, contact me through my public GitHub profile. Please avoid sharing sensitive personal information in public posts.',
+    links: {
+      google: 'How Google uses information from sites or apps that use its services',
+      policy: 'Google Privacy Policy',
+      settings: 'Google ad settings',
+      aboutads: 'AboutAds: third-party advertising choices',
+      github: 'GitHub Privacy Statement',
+      jsdelivr: 'jsDelivr Privacy Policy',
+      contact: 'GitHub · ArvelVale',
+    },
+  },
+}[lang];
+---
+
+<BaseLayout title={copy.title} description={copy.description}>
+  <Header />
+  <main class="mx-auto w-full max-w-3xl flex-1 px-6 pb-20 pt-14 md:pt-20">
+    <h1 class="font-serif text-4xl font-bold text-ink">{copy.title}</h1>
+    <p class="mt-4 text-[13px] text-ink-faint">{copy.updated}</p>
+    <div class="prose mt-8 max-w-none break-words text-ink-soft prose-headings:font-serif prose-headings:text-ink prose-a:text-ember prose-strong:text-ink prose-li:marker:text-ink-faint">
+      <p>{copy.intro}</p>
+      <h2>{copy.siteTitle}</h2>
+      <p>{copy.site}</p>
+      <ul>
+        <li><a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">{copy.links.github}</a></li>
+        <li><a href="https://www.jsdelivr.com/terms/privacy-policy">{copy.links.jsdelivr}</a></li>
+      </ul>
+      <h2>{copy.localTitle}</h2>
+      <p>{copy.local}</p>
+      <h2>{copy.adsTitle}</h2>
+      <p>{copy.ads}</p>
+      <p>{copy.adsData}</p>
+      <ul>
+        <li><a href="https://policies.google.com/technologies/partner-sites">{copy.links.google}</a></li>
+        <li><a href="https://policies.google.com/privacy">{copy.links.policy}</a></li>
+      </ul>
+      <h2>{copy.choicesTitle}</h2>
+      <p>{copy.choices}</p>
+      <ul>
+        <li><a href="https://myadcenter.google.com/">{copy.links.settings}</a></li>
+        <li><a href="https://youradchoices.com/">{copy.links.aboutads}</a></li>
+      </ul>
+      <p>{copy.consent}</p>
+      <h2>{copy.contactTitle}</h2>
+      <p>{copy.contact}</p>
+      <p><a href="https://github.com/arvelvale">{copy.links.contact}</a></p>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

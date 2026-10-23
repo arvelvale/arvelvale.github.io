@@ -1,4 +1,5 @@
 ---
+import AdSense from '../../components/AdSense.astro';
 // 旧路径：跳到默认语言的对应页面
 const target = '/en' + Astro.url.pathname.replace(/\/$/, '') + '/';
 ---
@@ -6,6 +7,7 @@ const target = '/en' + Astro.url.pathname.replace(/\/$/, '') + '/';
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <AdSense />
     <meta http-equiv="refresh" content={`0; url=${target}`} />
     <link rel="canonical" href={target} />
     <title>ArvelVale</title>

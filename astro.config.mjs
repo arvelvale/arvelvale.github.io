@@ -12,6 +12,8 @@ export default defineConfig({
     defaultLocale: 'en',
     routing: {
       prefixDefaultLocale: true,
+      // Keep our root redirect page so its shared head includes the AdSense loader.
+      redirectToDefaultLocale: false,
     },
   },
   integrations: [

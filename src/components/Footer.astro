@@ -1,4 +1,5 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { t, type Lang } from '../scripts/i18n';
 const currentYear = new Date().getFullYear();
 const lang = (Astro.currentLocale ?? 'en') as Lang;
@@ -9,6 +10,9 @@ const lang = (Astro.currentLocale ?? 'en') as Lang;
     class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-8 text-[13px] text-ink-faint sm:flex-row"
   >
     <p>© {currentYear} ArvelVale</p>
+    <a href={getRelativeLocaleUrl(lang, '/privacy/')} class="transition-colors hover:text-ember">
+      {t(lang, 'footer.privacy')}
+    </a>
     <p>
       <span>{t(lang, 'footer.built.pre')}</span>
       <a
