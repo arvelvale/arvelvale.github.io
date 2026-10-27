@@ -64,6 +64,8 @@ const dict: Record<string, { zh: string; en: string }> = {
   },
   'projects.elsewhere': { zh: '也可以在别处找到我', en: 'Elsewhere' },
   'projects.twitter': { zh: 'X', en: 'X' },
+  'projects.xhs': { zh: '小红书', en: 'Xiaohongshu' },
+  'projects.bilibili': { zh: 'B 站', en: 'Bilibili' },
   'footer.built.pre': { zh: '用', en: 'Built with' },
   'footer.built.mid': { zh: '构建 · 托管于', en: '· Hosted on' },
   'footer.privacy': { zh: '隐私与 Cookie', en: 'Privacy & cookies' },

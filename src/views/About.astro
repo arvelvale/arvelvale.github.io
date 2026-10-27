@@ -90,7 +90,7 @@ const copy = {
       h: '接下来',
       items: ['成为能稳定使用英语的双语者', '毕业后认真试一段时间自己的产品和内容，做出真正有人持续在用的东西', '从 i 人向 e 人成长，多认识各地做东西的人'],
     },
-    contact: { h: '联系', body: '想聊 AI、Agent 和做东西，欢迎在 GitHub 或 X 上找我。', blog: '读我的文章' },
+    contact: { h: '联系', body: '想聊 AI、Agent 和做东西，欢迎在 GitHub、X 上找我，想看我做的视频，也可以去小红书和 B 站。', blog: '读我的文章' },
   },
   en: {
     title: 'About',
@@ -173,7 +173,7 @@ const copy = {
       h: "What's next",
       items: ['Become a bilingual who uses English comfortably', 'After graduation, give my own products and content a serious try, and build something people really keep using', 'Grow from an introvert toward an extrovert and meet more builders'],
     },
-    contact: { h: 'Contact', body: 'If you want to talk about AI, agents or building things, find me on GitHub or X.', blog: 'Read my writing' },
+    contact: { h: 'Contact', body: 'If you want to talk about AI, agents or building things, find me on GitHub or X. My videos are on Xiaohongshu and Bilibili.', blog: 'Read my writing' },
   },
 }[lang];
 ---
@@ -320,6 +320,12 @@ const copy = {
           </a>
           <a href="https://x.com/Arvelvale" target="_blank" rel="noopener noreferrer" class="card-lift rounded-lg border border-line bg-raised px-5 py-3 text-sm text-ink-soft">
             X <span class="font-mono text-xs text-ink-faint">@Arvelvale</span> →
+          </a>
+          <a href="https://xhslink.cn/o/22ITwjVdfoY" target="_blank" rel="noopener noreferrer" class="card-lift rounded-lg border border-line bg-raised px-5 py-3 text-sm text-ink-soft">
+            {lang === 'zh' ? '小红书' : 'Xiaohongshu'} <span class="font-mono text-xs text-ink-faint">ArvelVale</span> →
+          </a>
+          <a href="https://b23.tv/hXSYl2H" target="_blank" rel="noopener noreferrer" class="card-lift rounded-lg border border-line bg-raised px-5 py-3 text-sm text-ink-soft">
+            {lang === 'zh' ? 'B 站' : 'Bilibili'} <span class="font-mono text-xs text-ink-faint">艾维尔vale</span> →
           </a>
           <a href={getRelativeLocaleUrl(lang, '/blog')} class="card-lift rounded-lg border border-line bg-raised px-5 py-3 text-sm text-ink-soft">{copy.contact.blog} →</a>
         </div>
