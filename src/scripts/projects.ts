@@ -45,6 +45,16 @@ export function getProjects(lang: Lang): Project[] {
       logo: '/projects/miaoling.png',
     },
     {
+      name: lang === 'zh' ? '一键理桌' : 'TidyHome',
+      url: 'https://arvelvale.github.io/tidyhome/',
+      domain: 'arvelvale.github.io/tidyhome',
+      desc: t(lang, 'projects.tidyhome.desc'),
+      category: t(lang, 'projects.cat.android'),
+      year: '2026',
+      stack: ['Kotlin', 'Android', 'Accessibility'],
+      logo: '/projects/tidyhome.png',
+    },
+    {
       name: lang === 'zh' ? '这个博客' : 'This blog',
       url: 'https://github.com/arvelvale/arvelvale.github.io',
       domain: 'github.com/arvelvale',

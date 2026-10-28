@@ -62,6 +62,11 @@ const dict: Record<string, { zh: string; en: string }> = {
     zh: '主动陪伴系统：不说教、不强迫、不过度打扰，在日常生活里潜移默化地带来改变。FastAPI 后端加 React Native 客户端，源码在私有仓库。',
     en: 'A proactive companionship system that improves daily life without lecturing, pushing or hovering. A FastAPI backend with a React Native app; the source lives in a private repo.',
   },
+  'projects.tidyhome.desc': {
+    zh: '一键把安卓桌面上散乱的图标，按类别收进文件夹。读取真实桌面，用无障碍服务模拟手指拖动，全程离线，音量键随时喊停。开发中，已在一加 13 / ColorOS 上验证读取与拖动。',
+    en: 'Sorts the scattered icons on an Android home screen into category folders. It reads the real home screen and simulates finger drags through the accessibility service, fully offline, with a volume key to stop. In development; reading and dragging are verified on a OnePlus 13 / ColorOS.',
+  },
+  'projects.cat.android': { zh: '安卓应用', en: 'Android app' },
   'projects.elsewhere': { zh: '也可以在别处找到我', en: 'Elsewhere' },
   'projects.twitter': { zh: 'X', en: 'X' },
   'projects.xhs': { zh: '小红书', en: 'Xiaohongshu' },
