@@ -51,7 +51,7 @@ export function getProjects(lang: Lang): Project[] {
       desc: t(lang, 'projects.tidyhome.desc'),
       category: t(lang, 'projects.cat.android'),
       year: '2026',
-      stack: ['Kotlin', 'Android', 'Accessibility'],
+      stack: ['Kotlin', 'Android', 'Accessibility', 'MIT'],
       logo: '/projects/tidyhome.png',
     },
     {
