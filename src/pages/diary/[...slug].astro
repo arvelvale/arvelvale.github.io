@@ -1,0 +1,28 @@
+---
+import AdSense from '../../components/AdSense.astro';
+import { getCollection } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('diary');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { lang: entry.data.lang } }));
+}
+
+const { lang } = Astro.props;
+const target = getRelativeLocaleUrl(lang, `/diary/${Astro.params.slug}/`);
+---
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <AdSense />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>ArvelVale</title>
+  </head>
+  <body>
+    <script is:inline define:vars={{ target }}>
+      location.replace(target + location.search + location.hash);
+    </script>
+  </body>
+</html>

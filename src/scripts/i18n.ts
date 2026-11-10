@@ -17,6 +17,18 @@ const dict: Record<string, { zh: string; en: string }> = {
   'nav.about': { zh: '关于', en: 'About' },
   'home.about.more': { zh: '完整的个人介绍', en: 'Full introduction' },
   'nav.projects': { zh: '作品', en: 'Projects' },
+  'nav.diary': { zh: '日记', en: 'Diary' },
+
+  // 日记（独立板块，不属于分类体系）
+  'diary.title': { zh: '日记', en: 'Diary' },
+  'diary.intro': {
+    zh: '零散的念头和随手记下的事，都按日子放在这里。',
+    en: 'A place for passing thoughts and everyday notes, kept by date.',
+  },
+  'diary.count.one': { zh: '共 {n} 篇。', en: '{n} entry.' },
+  'diary.count.many': { zh: '共 {n} 篇。', en: '{n} entries.' },
+  'diary.empty': { zh: '还没有日记。', en: 'No entries yet.' },
+  'diary.back': { zh: '返回日记', en: 'Back to diary' },
 
   // 作品页
   'projects.title': { zh: '作品', en: 'Projects' },
@@ -139,13 +151,15 @@ const dict: Record<string, { zh: string; en: string }> = {
   // 搜索
   'search.title': { zh: '搜索', en: 'Search' },
   'search.intro': {
-    zh: '输入标题、分类、标签或正文片段，快速找到想看的记录。',
-    en: 'Search by title, category, tag, or a fragment of the text.',
+    zh: '输入标题、分类、标签或正文片段，在文章与日记中查找。',
+    en: 'Search by title, category, tag, or a fragment of the text, across posts and diary entries.',
   },
   'search.placeholder': { zh: '搜索标题、标签、分类或正文...', en: 'Search titles, tags, categories, or content...' },
-  'search.none': { zh: '没有匹配的文章，换个关键词试试。', en: 'No matching posts. Try another keyword.' },
-  'search.count.all': { zh: '共 {n} 篇', en: '{n} posts' },
-  'search.count.found': { zh: '找到 {n} 篇', en: '{n} found' },
+  'search.none': { zh: '没有匹配的内容，换个关键词试试。', en: 'No matches. Try another keyword.' },
+  'search.count.all': { zh: '共 {n} 条', en: '{n} entries' },
+  'search.count.found': { zh: '找到 {n} 条', en: '{n} found' },
+  'search.type.post': { zh: '文章', en: 'Post' },
+  'search.type.diary': { zh: '日记', en: 'Diary' },
 
   // 文章页外壳
   'post.toc.close': { zh: '关闭目录', en: 'Close contents' },

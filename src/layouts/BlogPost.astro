@@ -40,7 +40,10 @@ function renderTocItem(text: string): string {
 
 export interface Props {
   title: string;
+  // diary 沿用文章版式，但不渲染分类 / 标签，返回链接也指向日记板块
+  kind?: 'post' | 'diary';
   description?: string;
+  cover?: string;
   pubDate?: Date;
   updatedDate?: Date;
   category?: string;
@@ -61,7 +64,12 @@ export interface Props {
   coverSeed?: string;
 }
 
-const { title, description, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref, translationNote, coverSeed } = Astro.props;
+const { title, kind = 'post', description, cover, pubDate, updatedDate, category = '未分类', tags = [], headings = [], body = '', seriesNav, translationHref, translationNote, coverSeed } = Astro.props;
+
+const isDiary = kind === 'diary';
+const backHref = getRelativeLocaleUrl(lang, isDiary ? '/diary' : '/blog');
+const backLabel = isDiary ? t(lang, 'diary.back') : t(lang, 'post.allPosts');
+const switchHref = translationHref ?? (isDiary ? getRelativeLocaleUrl(lang === 'zh' ? 'en' : 'zh', '/diary') : undefined);
 
 // 日期按页面语言格式化：中文页「2026年7月28日」，英文页「Jul 28, 2026」，避免中英混排
 function formatCN(date: Date): string {
@@ -89,7 +97,7 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
 ---
 
 <BaseLayout title={title} description={description} pubDate={pubDate}>
-  <Header switchHref={translationHref} />
+  <Header switchHref={switchHref} />
 
   {/* 滚动阅读时出现的固定迷你进度条（默认隐藏，原进度条滚出视口后显示） */}
   <div id="reading-progress-fixed" aria-hidden="true">
@@ -156,23 +164,25 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
       <div class:list={['min-w-0', tocItems.length > 0 && 'lg:col-start-2 lg:row-start-1']}>
         <!-- 文章头 -->
         <header>
-          <a href={getRelativeLocaleUrl(lang, '/blog')} class="text-[13px] text-ink-faint transition-colors hover:text-ember">
-            <span aria-hidden="true">←</span> {t(lang, 'post.allPosts')}
+          <a href={backHref} class="text-[13px] text-ink-faint transition-colors hover:text-ember">
+            <span aria-hidden="true">←</span> {backLabel}
           </a>
 
-          <div class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[13px]">
-            <a
-              href={`/categories/${encodeURIComponent(category)}`}
-              class="text-ember transition-colors hover:text-ember-deep"
-            >
-              {category}
-            </a>
-            {tags.map((tag) => (
-              <span class="text-ink-ghost">
-                <span class="mr-3 text-line-strong" aria-hidden="true">·</span>{tag}
-              </span>
-            ))}
-          </div>
+          {!isDiary && (
+            <div class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[13px]">
+              <a
+                href={getRelativeLocaleUrl(lang, `/categories/${encodeURIComponent(category)}`)}
+                class="text-ember transition-colors hover:text-ember-deep"
+              >
+                {category}
+              </a>
+              {tags.map((tag) => (
+                <span class="text-ink-ghost">
+                  <span class="mr-3 text-line-strong" aria-hidden="true">·</span>{tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           <h1 class="mt-4 font-serif text-[32px] font-bold leading-[1.32] text-ink md:text-[40px]">
             {title}
@@ -211,8 +221,10 @@ const tocItems = headings.filter((heading) => heading.depth === 2 || heading.dep
           )}
         </header>
 
-        {coverSeed && (
-          <PostCover seed={coverSeed} title={title} category={category} tags={tags} body={body} class="mt-8 aspect-[21/9] w-full rounded-lg border border-line" />
+        {cover ? (
+          <img src={cover} alt="" class="mt-8 aspect-[21/9] w-full rounded-lg border border-line object-cover" />
+        ) : coverSeed && (
+          <PostCover seed={coverSeed} title={title} category={isDiary ? '' : category} tags={isDiary ? [] : tags} body={body} class="mt-8 aspect-[21/9] w-full rounded-lg border border-line" />
         )}
 
         {/* 文内阅读进度条（滚出视口后由固定迷你条接管） */}

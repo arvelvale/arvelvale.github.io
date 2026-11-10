@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import DiaryDetail from '../../../views/diary/DiaryDetail.astro';
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('diary'))
+    .filter((entry) => (entry.data.lang ?? 'zh') === 'zh')
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { ...entry },
+  }));
+}
+---
+
+<DiaryDetail {...Astro.props} />

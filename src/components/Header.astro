@@ -12,6 +12,7 @@ const rawPath = Astro.url.pathname.replace(/^\/(en|zh)(?=\/|$)/, '') || '/';
 const navItems = [
   { path: '/', key: 'nav.home', active: rawPath === '/' },
   { path: '/blog', key: 'nav.blog', active: rawPath.startsWith('/blog') },
+  { path: '/diary', key: 'nav.diary', active: rawPath.startsWith('/diary') },
   { path: '/categories', key: 'nav.categories', active: rawPath.startsWith('/categories') },
   { path: '/projects', key: 'nav.projects', active: rawPath.startsWith('/projects') },
   { path: '/about', key: 'nav.about', active: rawPath.startsWith('/about') },
